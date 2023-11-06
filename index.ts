@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import "dotenv/config"
 
 import itemsRoute from "./routes/itemsRoute.js"
+import categoryRoute from "./routes/categoriesRoute.js"
 import productsRoute from "./routes/productsRoute.js"
 import { loggingMiddleware } from "./middlewares/logging.js"
 import { apiErrorHandler } from "./middlewares/error.js"
@@ -23,6 +24,8 @@ app.get("/hello", loggingMiddleware, (_, res) => {
 
 app.use("/api/v1/items", itemsRoute)
 app.use("/api/v1/products", productsRoute)
+app.use("/api/v1/categories", categoryRoute)
+
 
 app.use(apiErrorHandler)
 app.use(routeNotFound)
