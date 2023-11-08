@@ -7,41 +7,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import ProductRepo from "../models/Product.js";
+import mongoose from "mongoose";
+import UserRepo from "../models/User.js";
+const usersRepo = new UserRepo();
 function findAll() {
     return __awaiter(this, void 0, void 0, function* () {
-        const products = yield ProductRepo.find().exec();
-        return products;
+        const users = yield UserRepo.find().exec();
+        return users;
     });
 }
-function findOne(productId) {
+function findOne(userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const product = yield ProductRepo.findById(productId);
-        return product;
+        const id = new mongoose.Types.ObjectId(userId);
+        const user = yield UserRepo.findById(userId);
+        return user;
     });
 }
-function createOne(product) {
+function createOne(user) {
     return __awaiter(this, void 0, void 0, function* () {
-        const newProduct = new ProductRepo(product);
-        return yield newProduct.save();
+        const newUser = new UserRepo(user);
+        return yield newUser.save();
     });
 }
-function updateOne(productId, updatedProduct) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const product = yield ProductRepo.findByIdAndUpdate(productId, updatedProduct, { new: true });
-        return product;
-    });
-}
-function deleteOne(productId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const product = yield ProductRepo.findByIdAndDelete(productId);
-        return product;
-    });
-}
+// async function findIndex(userId: number) {
+//   const userIndex = UserRepo.findIndex(userId);
+//   return userIndex;
+// }
+// function updateUser(userIndex: number, user: User) {
+//   const updateUser = UserRepo.updateUser(userIndex, user);
+//   return updateUser;
+// } 
+// function deleteUser(userIndex: number) {
+//   const user = useUserRepo.deleteUser(userIndex);
+//   return user;
+// }
 export default {
     findOne,
     findAll,
     createOne,
-    updateOne,
-    deleteOne,
+    // findIndex,
+    // updateUser,
+    // deleteUser
 };

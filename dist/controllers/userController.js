@@ -7,41 +7,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import ProductRepo from "../models/Product.js";
-function findAll() {
+import UsersService from "../services/userService.js";
+import { ApiError } from "../errors/ApiError.js";
+export function findAllUser(_, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const products = yield ProductRepo.find().exec();
-        return products;
+        const users = yield UsersService.findAll();
+        res.json({ users });
     });
 }
-function findOne(productId) {
+export function findOneUser(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const product = yield ProductRepo.findById(productId);
-        return product;
+        const userId = Number(req.params.userId);
+        const user = yield UsersService.findOne(userId);
+        if (!user) {
+            next(ApiError.resourceNotFound("user not found."));
+            return;
+        }
+        res.json({ user });
     });
 }
-function createOne(product) {
+export function createOneUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const newProduct = new ProductRepo(product);
-        return yield newProduct.save();
-    });
-}
-function updateOne(productId, updatedProduct) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const product = yield ProductRepo.findByIdAndUpdate(productId, updatedProduct, { new: true });
-        return product;
-    });
-}
-function deleteOne(productId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const product = yield ProductRepo.findByIdAndDelete(productId);
-        return product;
+        const newUser = req.body;
+        const user = yield UsersService.createOne(newUser);
+        res.status(201).json({ user });
     });
 }
 export default {
-    findOne,
-    findAll,
-    createOne,
-    updateOne,
-    deleteOne,
+    findOneUser,
+    findAllUser,
+    createOneUser,
+    // updateUser,
+    // deleteUser,
 };

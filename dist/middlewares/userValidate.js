@@ -7,11 +7,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { productSchema } from "../schemas/productSchema.js";
-export function validateProduct(req, res, next) {
+import { requestSchema } from "../schemas/userSchema.js";
+export function validateUser(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield productSchema.parseAsync(req.body);
+            yield requestSchema.parseAsync({
+                body: req.body,
+                query: req.query,
+                params: req.params,
+            });
             return next();
         }
         catch (error) {

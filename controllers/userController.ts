@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import UsersService from "../services/usersService.js";
+import UsersService from "../services/userService.js";
 import { ApiError } from "../errors/ApiError.js";
 
 export async function findAllUser(_: Request, res: Response) {
