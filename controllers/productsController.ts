@@ -1,40 +1,61 @@
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, Request, Response } from "express";
+import ProductsService from "../services/productsService.js";
+import { ApiError } from "../errors/ApiError.js";
+import { Product } from "../types/productsTypes.js";
 
-import ProductsService from "../services/productsService.js"
-import { ApiError } from "../errors/ApiError.js"
-import { ObjectId } from "mongoose"
+const ProductController = {
+  async findAllProduct(_: Request, res: Response) {
+    const products = await ProductsService.findAll();
+    res.json({ products });
+  },
 
-export async function findAllProduct(_: Request, res: Response) {
-  const products = await ProductsService.findAll()
+  async findOneProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const productId = req.params.productId;
+    const product = await ProductsService.findOne(productId);
 
-  res.json({ products })
-}
+    if (!product) {
+      next(ApiError.resourceNotFound("Product not found."));
+      return;
+    }
 
-export async function findOneProduct(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const productId = req.params.productId
-  const product = await ProductsService.findOne(productId)
+    res.json({ product });
+  },
 
-  if (!product) {
-    next(ApiError.resourceNotFound("Product not found."))
-    return
-  }
+  async createOneProduct(req: Request, res: Response) {
+    const newProduct: Product = req.body;
+    const product = await ProductsService.createOne(newProduct);
 
-  res.json({ product })
-}
+    res.status(201).json({ product });
+  },
 
-export async function createOneProduct(req: Request, res: Response) {
-  const newProduct = req.body
-  const product = await ProductsService.createOne(newProduct)
+  async updateProduct(req: Request, res: Response, next: NextFunction) {
+    const productId = req.params.productId;
+    const updatedProduct: Product = req.body;
+    const product = await ProductsService.updateOne(productId, updatedProduct);
 
-  res.status(201).json({ product })
-}
+    if (!product) {
+      next(ApiError.resourceNotFound("Product not found."));
+      return;
+    }
 
-export default {
-  findOneProduct,
-  findAllProduct,
-  createOneProduct,
-}
+    res.json({ product });
+  },
+
+  async deleteProduct(req: Request, res: Response, next: NextFunction) {
+    const productId = req.params.productId;
+    const deletedProduct = await ProductsService.deleteOne(productId);
+
+    if (!deletedProduct) {
+      next(ApiError.resourceNotFound("Product not found."));
+      return;
+    }
+
+    res.json({ message: "Product deleted successfully" });
+  },
+};
+
+export default ProductController;

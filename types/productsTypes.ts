@@ -14,3 +14,5 @@ export const productSchema = z.object({
     required_error: "Image URL is required",
   }),
 });
+
+export type Product = z.infer<typeof productSchema> & { _id: string };

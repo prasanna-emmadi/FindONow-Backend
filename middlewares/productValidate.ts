@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response } from "express"
-import { z } from "zod"
+import { NextFunction, Request, Response } from "express";
 
-import { requestSchema } from "../schemas/productSchema.js"
+import { productSchema } from "../schemas/productSchema.js";
 
 export async function validateProduct(
   req: Request,
@@ -9,13 +8,9 @@ export async function validateProduct(
   next: NextFunction
 ) {
   try {
-    await requestSchema.parseAsync({
-      body: req.body,
-      query: req.query,
-      params: req.params,
-    })
-    return next()
+    await productSchema.parseAsync(req.body);
+    return next();
   } catch (error) {
-    return res.status(400).json(error)
+    return res.status(400).json(error);
   }
 }
