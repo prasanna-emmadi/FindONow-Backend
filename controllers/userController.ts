@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import UsersService from "../services/userService.js";
+import UsersService from "../services/usersService.js";
 import { ApiError } from "../errors/ApiError.js";
 
 export async function findAllUser(_: Request, res: Response) {
@@ -24,11 +24,35 @@ export async function createOneUser(req: Request, res: Response) {
   res.status(201).json({ user });
 }
 
+export async function findOneAndUpdate(req: Request,res: Response,next: NextFunction) {
+    const newUser = req.body;
+    const userId = req.params.userId;
+    const updatedUser = await UsersService.findOneAndUpdate(userId, newUser);
+  
+    if (!updatedUser) {
+      next(ApiError.resourceNotFound("User not found."));
+      return;
+    }
+     res.status(200).json({ updatedUser });
+}
+
+export async function findOneAndDelete( req: Request, res: Response, next: NextFunction ) {
+    const userId = req.params.userId;
+    const deletedUser = await UsersService.findOneAndDelete(userId);
+
+    if(!deletedUser) {
+        next(ApiError.resourceNotFound("User not found."));
+        return;
+    }
+    res.status(200).json({ deletedUser });
+    res.status(200).json("User deleted ...");
+}
+
 
 export default {
   findOneUser,
   findAllUser,
   createOneUser,
-  // updateUser,
-  // deleteUser,
+  findOneAndUpdate,
+  findOneAndDelete,
 };

@@ -20,26 +20,20 @@ async function createOne(user: User) {
   return await newUser.save()
 }
 
-// async function findIndex(userId: number) {
-//   const userIndex = UserRepo.findIndex(userId);
-//   return userIndex;
-// }
+async function findOneAndUpdate(userId: string, user: User) {
+    const id = new mongoose.Types.ObjectId(userId);
+    return await UserRepo.findByIdAndUpdate(id, user);
+}
 
-// function updateUser(userIndex: number, user: User) {
-//   const updateUser = UserRepo.updateUser(userIndex, user);
-//   return updateUser;
-// } 
-
-// function deleteUser(userIndex: number) {
-//   const user = useUserRepo.deleteUser(userIndex);
-//   return user;
-// }
-
+async function findOneAndDelete(userId: string) {
+    const id = new mongoose.Types.ObjectId(userId);
+    return await UserRepo.findByIdAndDelete(id);
+  }
+ 
 export default {
   findOne,
   findAll,
   createOne,
-  // findIndex,
-  // updateUser,
-  // deleteUser
+  findOneAndUpdate,
+  findOneAndDelete,
 }
