@@ -1,5 +1,5 @@
-import ProductRepo from "../models/ProductModel.js";
-import { Product } from "../types/productsTypes.js";
+import ProductRepo from "../models/Product.js";
+import { Product } from "../types/products.js";
 
 async function findAll() {
   const products = await ProductRepo.find().exec();
