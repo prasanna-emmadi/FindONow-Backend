@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { requestSchema } from "../schemas/orderSchema.js";
-export function validateCategory(req, res, next) {
+export function validateOrder(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield requestSchema.parseAsync({

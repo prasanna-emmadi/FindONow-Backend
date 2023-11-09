@@ -1,21 +1,21 @@
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, Request, Response } from "express";
 import { z } from "zod"
 
-import { requestSchema } from "../schemas/orderSchema.js"
+import { requestSchema } from "../schemas/orderSchema.js";
 
-export async function validateCategory(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    await requestSchema.parseAsync({
-      body: req.body,
-      query: req.query,
-      params: req.params,
-    })
-    return next()
-  } catch (error) {
-    return res.status(400).json(error)
-  }
+export async function validateOrder(
+    req: Request,
+    res: Response,
+    next: NextFunction
+){
+    try {
+        await requestSchema.parseAsync({
+            body: req.body,
+            query: req.query,
+            params: req.params,
+        })
+        return next()
+    } catch (error) {
+        return res.status(400).json(error)
+    }
 }
