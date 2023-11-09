@@ -8,6 +8,7 @@ import usersRoute from "./routes/usersRoute.js";
 import { loggingMiddleware } from "./middlewares/logging.js";
 import { apiErrorHandler } from "./middlewares/error.js";
 import { routeNotFound } from "./middlewares/routeNotFound.js";
+import orderRoute from "./routes/orderRoute.js";
 const PORT = 8080;
 const app = express();
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use("/api/v1/items", itemsRoute);
 app.use("/api/v1/products", productsRoute);
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/users", usersRoute);
+app.use("/api/v1/orders", orderRoute);
 app.use(apiErrorHandler);
 app.use(routeNotFound);
 app.listen(PORT, () => {

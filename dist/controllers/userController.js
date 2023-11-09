@@ -33,10 +33,34 @@ export function createOneUser(req, res) {
         res.status(201).json({ user });
     });
 }
+export function findOneAndUpdate(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const newUser = req.body;
+        const userId = req.params.userId;
+        const updatedUser = yield UsersService.findOneAndUpdate(userId, newUser);
+        if (!updatedUser) {
+            next(ApiError.resourceNotFound("User not found."));
+            return;
+        }
+        res.status(200).json({ updatedUser });
+    });
+}
+export function findOneAndDelete(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const userId = req.params.userId;
+        const deletedUser = yield UsersService.findOneAndDelete(userId);
+        if (!deletedUser) {
+            next(ApiError.resourceNotFound("User not found."));
+            return;
+        }
+        res.status(200).json({ deletedUser });
+        res.status(200).json("User deleted ...");
+    });
+}
 export default {
     findOneUser,
     findAllUser,
     createOneUser,
-    // updateUser,
-    // deleteUser,
+    findOneAndUpdate,
+    findOneAndDelete,
 };

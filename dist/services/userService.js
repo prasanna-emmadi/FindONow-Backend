@@ -29,23 +29,22 @@ function createOne(user) {
         return yield newUser.save();
     });
 }
-// async function findIndex(userId: number) {
-//   const userIndex = UserRepo.findIndex(userId);
-//   return userIndex;
-// }
-// function updateUser(userIndex: number, user: User) {
-//   const updateUser = UserRepo.updateUser(userIndex, user);
-//   return updateUser;
-// } 
-// function deleteUser(userIndex: number) {
-//   const user = useUserRepo.deleteUser(userIndex);
-//   return user;
-// }
+function findOneAndUpdate(userId, user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const id = new mongoose.Types.ObjectId(userId);
+        return yield UserRepo.findByIdAndUpdate(id, user);
+    });
+}
+function findOneAndDelete(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const id = new mongoose.Types.ObjectId(userId);
+        return yield UserRepo.findByIdAndDelete(id);
+    });
+}
 export default {
     findOne,
     findAll,
     createOne,
-    // findIndex,
-    // updateUser,
-    // deleteUser
+    findOneAndUpdate,
+    findOneAndDelete,
 };
