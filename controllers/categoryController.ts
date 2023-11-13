@@ -3,6 +3,17 @@ import CategoryService from "../services/categoryService.js"
 
 export class CategoryController {
 
+  async getOffset(req:Request, res: Response)  {
+    try {
+      const pageNumber = Number(req.query.pageNumber) || 1;
+      const pageSize = Number(req.query.pageSize) || 10;
+      const categories = await CategoryService.paginateCategories(pageNumber, pageSize);
+      res.json(categories);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+
   async getAllCategories(req: Request, res: Response) {
     const list = await CategoryService.findAll()
     res.json({ list });

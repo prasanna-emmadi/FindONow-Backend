@@ -2,6 +2,14 @@ import mongoose, { ObjectId } from "mongoose"
 import CategoryRepo from "../models/Category.js"
 import { Category } from "../types/category.js"
 
+
+ async function paginateCategories(pageNumber:number, pageSize:number) {
+  const skip = (pageNumber - 1) * pageSize;
+  const categories = await CategoryRepo.find().skip(skip).limit(pageSize).exec();
+  return categories;
+}
+
+
 async function findAll() {
   const categories = await CategoryRepo.find().exec()
 
@@ -63,5 +71,6 @@ export default {
   findAll,
   createOne,
   updateOne,
-  deleteOne
+  deleteOne,
+  paginateCategories
 }
