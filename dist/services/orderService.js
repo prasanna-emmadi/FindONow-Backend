@@ -9,7 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import mongoose from "mongoose";
 import OrderRepo from "../models/Order.js";
-function findAll(userId) {
+function getPaginatedOrder(pageNumber, pageSize) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const orders = yield OrderRepo.find().skip(pageNumber).limit(pageSize).exec();
+        return orders;
+    });
+}
+function getPaginatedUserOrder(userId, pageNumber, pageSize) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const orders = yield OrderRepo.find({ userId }).skip(pageNumber).limit(pageSize).exec();
+        return orders;
+    });
+}
+function findAll() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const orders = yield OrderRepo.find().exec();
+        return orders;
+    });
+}
+function findAllForUser(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const orders = yield OrderRepo.find({ userId }).exec();
         return orders;
@@ -60,5 +78,8 @@ export default {
     findAll,
     createOne,
     updateOne,
-    deleteOne
+    deleteOne,
+    findAllForUser,
+    getPaginatedOrder,
+    getPaginatedUserOrder
 };

@@ -8,9 +8,26 @@ const router = Router();
 router.post("/", (req, res) =>
     orderController.createOrder(req, res)
 );
-router.get("/", (req, res) =>
+
+router.get("/user/:id", (req, res) =>
     orderController.getAllUserOrders(req, res)
 );
+
+
+router.get("/offset", (req, res) =>
+    orderController.getAllOffset(req, res)
+);
+
+router.get("/user/:id/offset", (req, res) =>
+    orderController.getAllUserOrdersOffset(req, res)
+);
+
+
+router.get("/", (req, res) =>
+    orderController.getAll(req, res)
+);
+
+
 router.get('/:id', (req, res) =>
 orderController.getOrder(req, res)
 );

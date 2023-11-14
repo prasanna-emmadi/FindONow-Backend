@@ -2,7 +2,25 @@ import mongoose, { ObjectId } from "mongoose"
 import OrderRepo from "../models/Order.js"
 import { Order } from "../types/order.js"
 
-async function findAll(userId:string) {
+async function getPaginatedOrder(pageNumber:number, pageSize:number) {
+  const orders = await OrderRepo.find().skip(pageNumber).limit(pageSize).exec();
+
+  return orders;
+}
+
+async function getPaginatedUserOrder(userId:string, pageNumber:number, pageSize:number) {
+  const orders = await OrderRepo.find({userId}).skip(pageNumber).limit(pageSize).exec();
+  return orders;
+}
+
+
+async function findAll() {
+  const orders = await OrderRepo.find().exec();
+
+  return orders;
+}
+
+async function findAllForUser(userId:string) {
   const orders = await OrderRepo.find({userId}).exec()
 
   return orders
@@ -64,5 +82,8 @@ export default {
   findAll,
   createOne,
   updateOne,
-  deleteOne
+  deleteOne,
+  findAllForUser,
+  getPaginatedOrder,
+  getPaginatedUserOrder
 }
