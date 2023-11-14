@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/", OrderDetailController.findAllOrderDetail);
 router.get("/:orderDetailId", OrderDetailController.findOneOrderDetail);
+router.get("/offset", OrderDetailController.findOrderDetailOffset);
 router.post(
   "/",
   validateOrderDetail,

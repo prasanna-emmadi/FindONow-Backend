@@ -1,14 +1,25 @@
 import { NextFunction, Request, Response } from "express";
-import orderDetailsService from "../services/orderDetailsService.js";
+import orderDetailsService from "../services/orderDetailService.js";
 import { ApiError } from "../errors/ApiError.js";
+import orderDetailService from "../services/orderDetailService.js";
 
-export async function findAllOrderDetail(_: Request, res: Response) {
+async function findOrderDetailOffset(req: Request, res: Response) {
+  const pageNumber = Number(req.query.pageNumber) || 1;
+  const pageSize = Number(req.query.pageSize) || 10;
+  const list = await orderDetailService.getPaginatedOrderDetail(
+    pageNumber,
+    pageSize
+  );
+  res.json({ list });
+}
+
+async function findAllOrderDetail(_: Request, res: Response) {
   const orderDetails = await orderDetailsService.findAll();
 
   res.json({ orderDetails });
 }
 
-export async function findOneOrderDetail(
+async function findOneOrderDetail(
   req: Request,
   res: Response,
   next: NextFunction
@@ -24,14 +35,14 @@ export async function findOneOrderDetail(
   res.json({ orderDetail });
 }
 
-export async function createOneOrderDetail(req: Request, res: Response) {
+async function createOneOrderDetail(req: Request, res: Response) {
   const newOrderDetail = req.body;
   const orderDetail = await orderDetailsService.createOne(newOrderDetail);
 
   res.status(201).json({ orderDetail });
 }
 
-export async function findOneAndUpdate(
+async function findOneAndUpdate(
   req: Request,
   res: Response,
   next: NextFunction
@@ -50,7 +61,7 @@ export async function findOneAndUpdate(
   res.status(201).json({ updatedOrderDetail });
 }
 
-export async function findOneAndDelete(
+async function findOneAndDelete(
   req: Request,
   res: Response,
   next: NextFunction
@@ -73,4 +84,5 @@ export default {
   createOneOrderDetail,
   findOneAndUpdate,
   findOneAndDelete,
+  findOrderDetailOffset,
 };
