@@ -2,6 +2,18 @@ import { NextFunction, Request, Response } from "express";
 import UsersService from "../services/userService.js";
 import { ApiError } from "../errors/ApiError.js";
 
+export async function getOffsetUser(req:Request, res: Response, next: NextFunction)  {
+  
+  const pageNumber = Number(req.query.pageNumber) || 1;
+  const pageSize = Number(req.query.pageSize) || 10;
+  const users = await UsersService.paginateUsers(pageNumber, pageSize);
+  if(!users) {
+    next(ApiError.internal("Internal Server error"));
+  }
+  res.json(users);
+  //res.status(500).json({ error: "Internal Server Error" });
+}
+
 export async function findAllUser(_: Request, res: Response) {
   const users = await UsersService.findAll();
   res.json({ users });

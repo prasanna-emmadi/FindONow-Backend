@@ -16,7 +16,7 @@ export class ApiError {
     return new ApiError(400, msg)
   }
 
-  static interal(msg: string) {
+  static internal(msg: string) {
     return new ApiError(500, msg)
   }
 }

@@ -4,6 +4,12 @@ import { User } from "../types/users.js"
 
 const usersRepo = new UserRepo()
 
+async function paginateUsers(pageNumber:number, pageSize:number) {
+  const skip = (pageNumber - 1) * pageSize;
+  const users = await UserRepo.find().skip(skip).limit(pageSize).exec();
+  return users;
+}
+
 async function findAll() {
   const users = await UserRepo.find().exec()
   return users
@@ -31,6 +37,7 @@ async function findOneAndDelete(userId: string) {
   }
  
 export default {
+  paginateUsers,
   findOne,
   findAll,
   createOne,
