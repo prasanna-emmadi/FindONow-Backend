@@ -9,10 +9,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import OrderService from "../services/orderService.js";
 export class OrderController {
-    getAllUserOrders(req, res) {
+    getAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { userId } = req.body;
-            const list = yield OrderService.findAll(userId);
+            const list = yield OrderService.findAll();
+            res.json({ list });
+        });
+    }
+    getAllOffset(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const pageNumber = Number(req.query.pageNumber) || 1;
+            const pageSize = Number(req.query.pageSize) || 10;
+            const list = yield OrderService.getPaginatedOrder(pageNumber, pageSize);
+            res.json({ list });
+        });
+    }
+    getAllUserOrdersOffset(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userId = req.params.id;
+            const pageNumber = Number(req.query.pageNumber) || 1;
+            const pageSize = Number(req.query.pageSize) || 10;
+            const list = yield OrderService.getPaginatedUserOrder(userId, pageNumber, pageSize);
+            res.json({ list });
+        });
+    }
+    getAllUserOrders(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userId = req.params.id;
+            const list = yield OrderService.findAllForUser(userId);
             res.json({ list });
         });
     }

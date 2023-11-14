@@ -11,6 +11,8 @@ router.post("/", (req, res) =>
 router.get("/", (req, res) =>
   categoryController.getAllCategories(req, res)
 );
+router.get("/offset/",(req, res) => categoryController.getOffset(req, res));
+
 router.get('/:id', (req, res) =>
   categoryController.getCategoryById(req, res)
 );
