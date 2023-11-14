@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import orderDetailsService from "../services/orderDetailsService.js";
+import orderDetailsService from "../services/orderDetailService.js";
 import { ApiError } from "../errors/ApiError.js";
 
 export async function findAllOrderDetail(_: Request, res: Response) {
