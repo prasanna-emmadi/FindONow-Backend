@@ -1,33 +1,39 @@
 import mongoose from "mongoose";
-import OrderRepo from "../models/Order.js";
-import { Order } from "../types/orders.js";
+import OrderDetailRepo from "../models/OrderDetail.js";
+import { OrderDetail } from "../types/orderDetails.js";
 
-async function findAll() {
-  const orders = await OrderRepo.find().exec();
-
+async function getPaginatedOrderDetail(pageNumber: number, pageSize:number) {
+  const skip = (pageNumber - 1) * pageSize;
+  const orders =await OrderDetailRepo.find().skip(skip).limit(pageSize).exec();
   return orders;
 }
 
-async function findone(orderId: string) {
-  const id = new mongoose.Types.ObjectId(orderId);
-  const order = await OrderRepo.findById(id);
+async function findAll() {
+  const orderDetails = await OrderDetailRepo.find().exec();
 
-  return order;
+  return orderDetails;
 }
 
-async function createOne(order: Order) {
-  const newOrder = new OrderRepo(order);
-  return await newOrder.save();
+async function findone(orderDetailId: string) {
+  const id = new mongoose.Types.ObjectId(orderDetailId);
+  const orderDetail = await OrderDetailRepo.findById(id);
+
+  return orderDetail;
 }
 
-async function findOneAndUpdate(orderId: string, order: Order) {
-  const id = new mongoose.Types.ObjectId(orderId);
-  return await OrderRepo.findByIdAndUpdate(id, order);
+async function createOne(orderDetail: OrderDetail) {
+  const newOrderDetail = new OrderDetailRepo(orderDetail);
+  return await newOrderDetail.save();
 }
 
-async function findOneAndDelete(orderId: string) {
-  const id = new mongoose.Types.ObjectId(orderId);
-  return await OrderRepo.findByIdAndDelete(id);
+async function findOneAndUpdate(orderDetailId: string, orderDetail: OrderDetail) {
+  const id = new mongoose.Types.ObjectId(orderDetailId);
+  return await OrderDetailRepo.findByIdAndUpdate(id, orderDetail);
+}
+
+async function findOneAndDelete(orderDetailId: string) {
+  const id = new mongoose.Types.ObjectId(orderDetailId);
+  return await OrderDetailRepo.findByIdAndDelete(id);
 }
 
 export default {
@@ -36,4 +42,5 @@ export default {
   createOne,
   findOneAndUpdate,
   findOneAndDelete,
+  getPaginatedOrderDetail
 };
