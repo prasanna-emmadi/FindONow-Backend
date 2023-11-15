@@ -9,6 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import UsersService from "../services/userService.js";
 import { ApiError } from "../errors/ApiError.js";
+export function getOffsetUser(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const pageNumber = Number(req.query.pageNumber) || 1;
+        const pageSize = Number(req.query.pageSize) || 10;
+        const users = yield UsersService.paginateUsers(pageNumber, pageSize);
+        if (!users) {
+            next(ApiError.internal("Internal Server error"));
+        }
+        res.json(users);
+        //res.status(500).json({ error: "Internal Server Error" });
+    });
+}
 export function findAllUser(_, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const users = yield UsersService.findAll();

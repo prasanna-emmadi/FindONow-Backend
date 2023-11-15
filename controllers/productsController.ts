@@ -4,16 +4,18 @@ import { ApiError } from "../errors/ApiError.js";
 import { Product } from "../types/products.js";
 
 const ProductController = {
-  async findAllProduct(_: Request, res: Response) {
-    const products = await ProductsService.findAll();
-    res.json({ products });
+  async findAllProduct(req: Request, res: Response) {
+    try {
+      const pageNumber = Number(req.query.pageNumber) || 1;
+      const pageSize = Number(req.query.pageSize) || 10;
+      const products = await ProductsService.paginateProducts(pageNumber, pageSize);
+      res.json({ products });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   },
 
-  async findOneProduct(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  async findOneProduct(req: Request, res: Response, next: NextFunction) {
     const productId = req.params.productId;
     const product = await ProductsService.findOne(productId);
 
@@ -27,7 +29,9 @@ const ProductController = {
 
   async createOneProduct(req: Request, res: Response) {
     const newProduct: Product = req.body;
-    const product = await ProductsService.createOne(newProduct);
+    const categoryId: string = req.body.categoryId;
+
+    const product = await ProductsService.createOne(newProduct, categoryId);
 
     res.status(201).json({ product });
   },
@@ -35,7 +39,9 @@ const ProductController = {
   async updateProduct(req: Request, res: Response, next: NextFunction) {
     const productId = req.params.productId;
     const updatedProduct: Product = req.body;
-    const product = await ProductsService.updateOne(productId, updatedProduct);
+    const categoryId: string = req.body.categoryId;
+
+    const product = await ProductsService.updateOne(productId, updatedProduct, categoryId);
 
     if (!product) {
       next(ApiError.resourceNotFound("Product not found."));
