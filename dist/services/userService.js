@@ -10,6 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import mongoose from "mongoose";
 import UserRepo from "../models/User.js";
 const usersRepo = new UserRepo();
+function paginateUsers(pageNumber, pageSize) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const skip = (pageNumber - 1) * pageSize;
+        const users = yield UserRepo.find().skip(skip).limit(pageSize).exec();
+        return users;
+    });
+}
 function findAll() {
     return __awaiter(this, void 0, void 0, function* () {
         const users = yield UserRepo.find().exec();
@@ -42,6 +49,7 @@ function findOneAndDelete(userId) {
     });
 }
 export default {
+    paginateUsers,
     findOne,
     findAll,
     createOne,
