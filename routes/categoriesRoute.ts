@@ -1,27 +1,16 @@
 import { Router } from 'express';
 
-import { CategoryController } from '../controllers/categoryController.js';
+import  CategoryController  from '../controllers/categoryController.js';
 
-const categoryController = new CategoryController();
+
 const router = Router();
 
-router.post("/", (req, res) =>
-  categoryController.createCategory(req, res)
-);
-router.get("/", (req, res) =>
-  categoryController.getAllCategories(req, res)
-);
-router.get("/offset/",(req, res) => categoryController.getOffset(req, res));
-
-router.get('/:id', (req, res) =>
-  categoryController.getCategoryById(req, res)
-);
-router.put("/:id", (req, res) =>
-  categoryController.updateCategory(req, res)
-);
-router.delete("/:id", (req, res) =>
-  categoryController.deleteCategory(req, res)
-);
+router.post("/", CategoryController.createCategory);
+router.get("/", CategoryController.getAllCategories);
+router.get("/offset/", CategoryController.getOffset);
+router.get('/:id', CategoryController.getCategoryById);
+router.put("/:id", CategoryController.updateCategory);
+router.delete("/:id",CategoryController.deleteCategory);
 router.use((req, res, next) => {
   console.log("👀 got here")
   res.on("finish", () => {

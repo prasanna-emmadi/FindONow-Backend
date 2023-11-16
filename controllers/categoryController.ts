@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import CategoryService from "../services/categoryService.js"
 
-export class CategoryController {
+const CategoryController = {
 
   async getOffset(req:Request, res: Response)  {
     try {
@@ -13,12 +13,12 @@ export class CategoryController {
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
-
+  ,
   async getAllCategories(req: Request, res: Response) {
     const list = await CategoryService.findAll()
     res.json({ list });
   }
-
+  ,
   async getCategoryById(req: Request, res: Response) {
     const categoryId = req.params.id;
     const item = await CategoryService.findOne(categoryId)
@@ -28,6 +28,7 @@ export class CategoryController {
       res.status(404).json({ code: 404, error: "Category not found" });
     }
   }
+  ,
   async createCategory(req: Request, res: Response) {
     const category = req.body;
     if (category) {
@@ -37,6 +38,7 @@ export class CategoryController {
       res.status(400).json({ code: 404, error: "Details are Required" });
     }
   }
+  ,
   async updateCategory(req: Request, res: Response) {
     const categoryId = req.params.id;
     const  name  = req.body;
@@ -51,6 +53,7 @@ export class CategoryController {
       res.status(400).json({ code: 404, error: "Details are Required" });
     }
   }
+  ,
   async deleteCategory(req: Request, res: Response) {
     const categoryId = req.params.id;
     const category = await CategoryService.deleteOne(categoryId);
@@ -64,3 +67,4 @@ export class CategoryController {
     }
   }
 }
+export default CategoryController;

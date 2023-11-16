@@ -1,15 +1,14 @@
 import { Router } from 'express';
-import { OrderController } from '../controllers/orderController.js';
-const orderController = new OrderController();
+import OrderController from '../controllers/orderController.js';
 const router = Router();
-router.post("/", (req, res) => orderController.createOrder(req, res));
-router.get("/user/:id", (req, res) => orderController.getAllUserOrders(req, res));
-router.get("/offset", (req, res) => orderController.getAllOffset(req, res));
-router.get("/user/:id/offset", (req, res) => orderController.getAllUserOrdersOffset(req, res));
-router.get("/", (req, res) => orderController.getAll(req, res));
-router.get('/:id', (req, res) => orderController.getOrder(req, res));
-router.put("/:id", (req, res) => orderController.updateOrder(req, res));
-router.delete("/:id", (req, res) => orderController.deleteOrder(req, res));
+router.post("/", OrderController.createOrder);
+router.get("/user/:id", OrderController.getAllUserOrders);
+router.get("/offset", OrderController.getAllOffset);
+router.get("/user/:id/offset", OrderController.getAllUserOrdersOffset);
+router.get("/", OrderController.getAll);
+router.get('/:id', OrderController.getOrder);
+router.put("/:id", OrderController.updateOrder);
+router.delete("/:id", OrderController.deleteOrder);
 router.use((req, res, next) => {
     console.log("👀 got here");
     res.on("finish", () => {

@@ -8,14 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import OrderService from "../services/orderService.js";
-export class OrderController {
+const OrderController = {
     getAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { userId } = req.body;
             const list = yield OrderService.findAll();
             res.json({ list });
         });
-    }
+    },
     getAllOffset(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const pageNumber = Number(req.query.pageNumber) || 1;
@@ -23,7 +23,7 @@ export class OrderController {
             const list = yield OrderService.getPaginatedOrder(pageNumber, pageSize);
             res.json({ list });
         });
-    }
+    },
     getAllUserOrdersOffset(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const userId = req.params.id;
@@ -32,14 +32,14 @@ export class OrderController {
             const list = yield OrderService.getPaginatedUserOrder(userId, pageNumber, pageSize);
             res.json({ list });
         });
-    }
+    },
     getAllUserOrders(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const userId = req.params.id;
             const list = yield OrderService.findAllForUser(userId);
             res.json({ list });
         });
-    }
+    },
     getOrder(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const orderId = req.params.id;
@@ -51,7 +51,7 @@ export class OrderController {
                 res.status(404).json({ code: 404, error: "Order not found" });
             }
         });
-    }
+    },
     createOrder(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const order = req.body;
@@ -63,7 +63,7 @@ export class OrderController {
                 res.status(400).json({ code: 404, error: "Details are Required" });
             }
         });
-    }
+    },
     updateOrder(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const orderId = req.params.id;
@@ -81,7 +81,7 @@ export class OrderController {
                 res.status(400).json({ code: 404, error: "Details are Required" });
             }
         });
-    }
+    },
     deleteOrder(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const orderId = req.params.id;
@@ -96,4 +96,5 @@ export class OrderController {
             }
         });
     }
-}
+};
+export default OrderController;

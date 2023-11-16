@@ -6,7 +6,7 @@ import itemsRoute from "./routes/itemsRoute.js";
 import categoryRoute from "./routes/categoriesRoute.js";
 import productsRoute from "./routes/productsRoute.js";
 import usersRoute from "./routes/usersRoute.js";
-import ordersRoute from "./routes/ordersRoute.js";
+
 import orderDetailsRoute from "./routes/orderDetailsRoute.js";
 
 import { loggingMiddleware } from "./middlewares/logging.js"
@@ -31,7 +31,7 @@ app.use("/api/v1/items", itemsRoute);
 app.use("/api/v1/products", productsRoute);
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/users", usersRoute);
-app.use("/api/v1/orders", orderRoute);
+app.use("/api/v1/orders", orderRoute)
 
 app.use(apiErrorHandler);
 app.use(routeNotFound);
