@@ -1,6 +1,8 @@
 import mongoose, { ObjectId } from "mongoose"
 import UserRepo  from "../models/User.js"
 import { User } from "../types/users.js"
+import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken"
 
 const usersRepo = new UserRepo()
 
@@ -34,7 +36,80 @@ async function findOneAndUpdate(userId: string, user: User) {
 async function findOneAndDelete(userId: string) {
     const id = new mongoose.Types.ObjectId(userId);
     return await UserRepo.findByIdAndDelete(id);
+}
+
+async function findOneByEmail(email: string) {
+  return UserRepo.findOne({ email })
+}
+
+//signup
+async function createNewOne({
+  name,
+  email,
+  password,
+}: {
+  name: string,
+  email: string,
+  password: string
+}) {
+  const hashedPassword = bcrypt.hashSync(password, 10)
+  console.log("HashedPassword:", hashedPassword)
+
+  const userFromDB = await findOneByEmail(email)
+  if (userFromDB) {
+    return null
   }
+  const user = new UserRepo({
+    name,
+    email,
+    password: hashedPassword,
+  })
+  await user.save()
+  const userWithoutPass = {
+    name: user.name,
+    email: user.email,
+    //role: user.role,
+  }
+  return userWithoutPass
+}
+
+//login
+async function login(email: string, password: string) {
+  const user = await findOneByEmail(email)
+  if (!user) {
+    return {
+      message: "bad credentials",
+      status: false,
+      accessToken: null,
+    }
+  }
+
+  const hashedPassword = user.password
+
+  const isValid = bcrypt.compareSync(password, hashedPassword)
+  if (!isValid) {
+    return {
+      message: "bad credentials",
+      status: false,
+      accessToken: null,
+    }
+  }
+
+  const payload = {
+    userId: user.id,
+    email: user.email,
+    role: user.role,
+  }
+  const accessToken = jwt.sign(payload, process.env.TOKEN_SECRET as string, {
+    expiresIn: "1h",
+  })
+  console.log("AccessToken:",accessToken)
+  return {
+    message: "valid credentials",
+    status: true,
+    accessToken,
+  }
+}
  
 export default {
   paginateUsers,
@@ -43,4 +118,7 @@ export default {
   createOne,
   findOneAndUpdate,
   findOneAndDelete,
+  createNewOne,
+  findOneByEmail,
+  login
 }

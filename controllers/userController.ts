@@ -60,6 +60,38 @@ export async function findOneAndDelete( req: Request, res: Response, next: NextF
     res.status(200).json("User deleted ...");
 }
 
+//SignUp
+export async function signup(req: Request, res: Response) {
+  const { name, email, password } = req.body
+  const user = await UsersService.createOne({ name, email, password })
+  if (!user) {
+    res.status(400).json({
+      message: "User exists",
+      user: null,
+    })
+    return
+  }
+
+  res.status(201).json({
+    message: "user created",
+    user,
+  })
+}
+
+//login
+export async function login(req: Request, res: Response) {
+  const { password, email } = req.body
+  const login = await UsersService.login(email, password)
+
+  if (!login.status) {
+    // TODO throw API error
+    res.status(400).json({ accessToken: null, message: "Bad credentials" })
+    return
+  }
+
+  res.json({ message: login.message, accessToken: login.accessToken })
+}
+
 
 export default {
   findOneUser,
@@ -67,4 +99,6 @@ export default {
   createOneUser,
   findOneAndUpdate,
   findOneAndDelete,
+  login,
+  signup
 };
