@@ -1,5 +1,6 @@
 import mongoose, { ObjectId } from "mongoose"
 import UserRepo  from "../models/User.js"
+//import { User } from "../types/users.js"
 import { User } from "../types/users.js"
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"

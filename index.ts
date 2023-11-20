@@ -8,12 +8,13 @@ import productsRoute from "./routes/productsRoute.js";
 import usersRoute from "./routes/usersRoute.js";
 
 import orderDetailsRoute from "./routes/orderDetailsRoute.js";
-import crypto from "crypto"
+
 import { loggingMiddleware } from "./middlewares/logging.js"
 import { apiErrorHandler } from "./middlewares/error.js"
 import { routeNotFound } from "./middlewares/routeNotFound.js"
 import orderRoute from "./routes/orderRoute.js"
 const jwt= require("jsonwebtoken")
+import crypto from "crypto"
 
 const PORT = 8080;
 const app = express();
@@ -41,7 +42,7 @@ console.log("Key:",key)
 app.post("/api/v1/login", (req, res) =>{
   const user = {
     id: 'abcde-fghijk',
-    email :'te@test.io',
+    email :'test@test.io',
     password :'12345',
   }
   
