@@ -12,7 +12,7 @@ router.put("/:userId", UserController.findOneAndUpdate);
 router.delete("/:userId", UserController.findOneAndDelete);
 
 router.post("/signup", UserController.signup)
-//router.post("/login", UserController.login)  
+router.post("/login", UserController.login)  
 
 // router.use((req, res, next) => {
 //     console.log("👀 got here")

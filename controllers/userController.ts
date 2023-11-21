@@ -63,7 +63,7 @@ export async function findOneAndDelete( req: Request, res: Response, next: NextF
 //SignUp
 export async function signup(req: Request, res: Response) {
   const { name, email, password } = req.body
-  const user = await UsersService.createOne({ name, email, password })
+  const user = await UsersService.createNewOne({ name, email, password })
   if (!user) {
     res.status(400).json({
       message: "User exists",
@@ -80,10 +80,10 @@ export async function signup(req: Request, res: Response) {
 
 //login
 export async function login(req: Request, res: Response) {
-  const { password, email } = req.body
+  const { email, password} = req.body
   const login = await UsersService.login(email, password)
 
-  if (!login.status) {
+  if (login.status === false) {
     // TODO throw API error
     res.status(400).json({ accessToken: null, message: "Bad credentials" })
     return

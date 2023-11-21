@@ -15,6 +15,7 @@ import { routeNotFound } from "./middlewares/routeNotFound.js"
 import orderRoute from "./routes/orderRoute.js"
 const jwt= require("jsonwebtoken")
 import crypto from "crypto"
+import { checkAuth } from "./middlewares/checkAuth.js";
 
 const PORT = 8080;
 const app = express();
@@ -35,31 +36,35 @@ app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/users", usersRoute);
 app.use("/api/v1/orders", orderRoute)
 
+app.get("/api/v1/protected", checkAuth, (req, res) => {
+  res.json({ items: [1, 2, 3, 4, 5] })
+})
+
 // for generating secret key
-const key = crypto.randomBytes(64).toString("hex")
-console.log("Key:",key)
+// const key = crypto.randomBytes(64).toString("hex")
+// console.log("Key:",key)
 //login code shifted to user controller
-app.post("/api/v1/login", (req, res) =>{
-  const user = {
-    id: 'abcde-fghijk',
-    email :'test@test.io',
-    password :'12345',
-  }
+// app.post("/api/v1/login", (req, res) =>{
+//   const user = {
+//     id: 'abcde-fghijk',
+//     email :'test@test.io',
+//     password :'12345',
+//   }
   
-  if(req.body.email !== user.email || req.body.password !== user.password){
-    return res.json({
-      msg:'Invalid credential'
-    })
-  }
-  const payload = {
-    userId: user.id,
-    email :user.email,
-  }
- const token = jwt.sign(payload,"secret")
-  //const token = jwt.sign(payload, process.env.TOKEN_SECRET as string)
-  console.log("Token:",token)
-  res.json({token})
-});
+//   if(req.body.email !== user.email || req.body.password !== user.password){
+//     return res.json({
+//       msg:'Invalid credential'
+//     })
+//   }
+//   const payload = {
+//     userId: user.id,
+//     email :user.email,
+//   }
+//  const token = jwt.sign(payload,"secret")
+//   //const token = jwt.sign(payload, process.env.TOKEN_SECRET as string)
+//   console.log("Token:",token)
+//   res.json({token})
+// });
 
 app.use(apiErrorHandler);
 app.use(routeNotFound);
