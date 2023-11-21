@@ -1,17 +1,23 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import CategoryService from "../services/categoryService.js"
+import { ApiError } from "../errors/ApiError.js";
+import { ResponseHandler } from "../responses/ResponeHandler.js";
 
 const CategoryController = {
 
-  async getOffset(req:Request, res: Response)  {
-    try {
+  async getOffset(req:Request, res: Response, next:NextFunction)  {
       const pageNumber = Number(req.query.pageNumber) || 1;
       const pageSize = Number(req.query.pageSize) || 10;
+      if(pageNumber<0){
+        next(ApiError.internal("PageNumber Must be Non Negative"))
+        return
+      }
       const categories = await CategoryService.paginateCategories(pageNumber, pageSize);
-      res.json(categories);
-    } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+  
+      next(ResponseHandler.resourceFetched(JSON.stringify(categories)))
+      //res.json(categories);
+      
+    
   }
   ,
   async getAllCategories(req: Request, res: Response) {
@@ -19,52 +25,69 @@ const CategoryController = {
     res.json({ list });
   }
   ,
-  async getCategoryById(req: Request, res: Response) {
+  async getCategoryById(req: Request, res: Response, next:NextFunction) {
     const categoryId = req.params.id;
+    if(categoryId.length!==24){
+      next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+      return
+      
+    }
     const item = await CategoryService.findOne(categoryId)
-    if (item) {
-      res.json(item);
-    } else {
-      res.status(404).json({ code: 404, error: "Category not found" });
+    if (!item) {
+      next(ApiError.resourceNotFound(`Category ${categoryId} is not found`))
+      return 
     }
+    next(ResponseHandler.resourceFetched(JSON.stringify(item)))
+    //res.json(item);
   }
   ,
-  async createCategory(req: Request, res: Response) {
+  async createCategory(req: Request, res: Response, next:NextFunction) {
     const category = req.body;
-    if (category) {
-      const newCategory = await CategoryService.createOne(category)
-      res.status(201).json(newCategory);
-    } else {
-      res.status(400).json({ code: 404, error: "Details are Required" });
+    if(!category){
+      next(ApiError.internal("Details are Required"))
     }
+    const newCategory = await CategoryService.createOne(category)
+    next(ResponseHandler.resourceCreated(JSON.stringify(newCategory), `Category with ${newCategory._id} has been added`))
+    //res.status(201).json({message: `Category with ${newCategory._id} has been added`});
   }
   ,
-  async updateCategory(req: Request, res: Response) {
+  async updateCategory(req: Request, res: Response, next:NextFunction) {
     const categoryId = req.params.id;
+    if(categoryId.length!==24){
+      next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+      return
+      
+    }
+
     const  name  = req.body;
-    if (name) {
-      const category = await CategoryService.updateOne(categoryId, name);
-      if (category) {
-        res.json({ message: `${JSON.stringify(category)} has been updated` });
-      } else {
-        res.status(404).json({ code: 404, error: "Category not found" });
-      }
-    } else {
-      res.status(400).json({ code: 404, error: "Details are Required" });
+    if(!name){
+      next(ApiError.internal("Details are Required"))
+      return
     }
+
+    const category = await CategoryService.updateOne(categoryId, name);
+    if (!category) {
+      next(ApiError.resourceNotFound("Category not found"))
+      return
+    }
+    next(ResponseHandler.resourceUpdated(JSON.stringify(category), `Category with ${category._id} has been updated`))
   }
   ,
-  async deleteCategory(req: Request, res: Response) {
+  async deleteCategory(req: Request, res: Response, next:NextFunction) {
     const categoryId = req.params.id;
+    if(categoryId.length!==24){
+      next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+      return
+      
+    }
     const category = await CategoryService.deleteOne(categoryId);
 
-    if (category) {
-      res.json({
-        message: `Category ${categoryId} has been deleted successfully`,
-      });
-    } else {
-      res.status(404).json({ code: 404, error: "Category not found" });
+    if (!category) {
+      next(ApiError.resourceNotFound("Category not found"))
+      return
     }
+    next(ResponseHandler.resourceUpdated(JSON.stringify(category), `Category with ${category._id} has been Deleted`))
+
   }
 }
 export default CategoryController;

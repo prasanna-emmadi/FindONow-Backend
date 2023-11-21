@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,72 +8,119 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import UsersService from "../services/userService.js";
-import { ApiError } from "../errors/ApiError.js";
-export function getOffsetUser(req, res, next) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.login = exports.signup = exports.findOneAndDelete = exports.findOneAndUpdate = exports.createOneUser = exports.findOneUser = exports.findAllUser = exports.getOffsetUser = void 0;
+const userService_js_1 = __importDefault(require("../services/userService.js"));
+const ApiError_js_1 = require("../errors/ApiError.js");
+function getOffsetUser(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const pageNumber = Number(req.query.pageNumber) || 1;
         const pageSize = Number(req.query.pageSize) || 10;
-        const users = yield UsersService.paginateUsers(pageNumber, pageSize);
+        const users = yield userService_js_1.default.paginateUsers(pageNumber, pageSize);
         if (!users) {
-            next(ApiError.internal("Internal Server error"));
+            next(ApiError_js_1.ApiError.internal("Internal Server error"));
         }
         res.json(users);
         //res.status(500).json({ error: "Internal Server Error" });
     });
 }
-export function findAllUser(_, res) {
+exports.getOffsetUser = getOffsetUser;
+function findAllUser(_, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const users = yield UsersService.findAll();
+        const users = yield userService_js_1.default.findAll();
         res.json({ users });
     });
 }
-export function findOneUser(req, res, next) {
+exports.findAllUser = findAllUser;
+function findOneUser(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const userId = Number(req.params.userId);
-        const user = yield UsersService.findOne(userId);
+        const user = yield userService_js_1.default.findOne(userId);
         if (!user) {
-            next(ApiError.resourceNotFound("user not found."));
+            next(ApiError_js_1.ApiError.resourceNotFound("user not found."));
             return;
         }
         res.json({ user });
     });
 }
-export function createOneUser(req, res) {
+exports.findOneUser = findOneUser;
+function createOneUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const newUser = req.body;
-        const user = yield UsersService.createOne(newUser);
+        const user = yield userService_js_1.default.createOne(newUser);
         res.status(201).json({ user });
     });
 }
-export function findOneAndUpdate(req, res, next) {
+exports.createOneUser = createOneUser;
+function findOneAndUpdate(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const newUser = req.body;
         const userId = req.params.userId;
-        const updatedUser = yield UsersService.findOneAndUpdate(userId, newUser);
+        const updatedUser = yield userService_js_1.default.findOneAndUpdate(userId, newUser);
         if (!updatedUser) {
-            next(ApiError.resourceNotFound("User not found."));
+            next(ApiError_js_1.ApiError.resourceNotFound("User not found."));
             return;
         }
         res.status(200).json({ updatedUser });
     });
 }
-export function findOneAndDelete(req, res, next) {
+exports.findOneAndUpdate = findOneAndUpdate;
+function findOneAndDelete(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const userId = req.params.userId;
-        const deletedUser = yield UsersService.findOneAndDelete(userId);
+        const deletedUser = yield userService_js_1.default.findOneAndDelete(userId);
         if (!deletedUser) {
-            next(ApiError.resourceNotFound("User not found."));
+            next(ApiError_js_1.ApiError.resourceNotFound("User not found."));
             return;
         }
         res.status(200).json({ deletedUser });
         res.status(200).json("User deleted ...");
     });
 }
-export default {
+exports.findOneAndDelete = findOneAndDelete;
+//SignUp
+function signup(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { name, email, password } = req.body;
+        //const user = await UsersService.createOne({ name, email, password })
+        const user = yield userService_js_1.default.createOne({ id: 1, name: name, email: email });
+        if (!user) {
+            res.status(400).json({
+                message: "User exists",
+                user: null,
+            });
+            return;
+        }
+        res.status(201).json({
+            message: "user created",
+            user,
+        });
+    });
+}
+exports.signup = signup;
+//login
+function login(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { password, email } = req.body;
+        const login = yield userService_js_1.default.login(email, password);
+        if (!login.status) {
+            // TODO throw API error
+            res.status(400).json({ accessToken: null, message: "Bad credentials" });
+            return;
+        }
+        res.json({ message: login.message, accessToken: login.accessToken });
+    });
+}
+exports.login = login;
+exports.default = {
     findOneUser,
     findAllUser,
     createOneUser,
     findOneAndUpdate,
     findOneAndDelete,
+    login,
+    signup
 };

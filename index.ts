@@ -15,6 +15,7 @@ import { routeNotFound } from "./middlewares/routeNotFound.js"
 import orderRoute from "./routes/orderRoute.js"
 const jwt= require("jsonwebtoken")
 import crypto from "crypto"
+import { responseHandler } from "./middlewares/responsehandler.js";
 
 const PORT = 8080;
 const app = express();
@@ -60,9 +61,10 @@ app.post("/api/v1/login", (req, res) =>{
   console.log("Token:",token)
   res.json({token})
 });
-
-app.use(apiErrorHandler);
+app.use(responseHandler);
+//app.use(apiErrorHandler);
 app.use(routeNotFound);
+
 
 app.listen(PORT, () => {
   console.log(`👀 app is running at localhost:${PORT}`);
