@@ -1,81 +1,116 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import OrderService from "../services/orderService.js"
+import { ApiError } from "../errors/ApiError.js";
+import { ResponseHandler } from "../responses/ResponeHandler.js";
 
 
 const OrderController = {
-  async getAll(req: Request, res: Response) {
-    const {userId} = req.body
+  async getAll(req: Request, res: Response, next: NextFunction) {
     const list = await OrderService.findAll()
-    res.json({ list });
+    //res.json({ list });
+    next(ResponseHandler.resourceFetched(JSON.stringify(list)))
   }
   ,
-  async getAllOffset(req: Request, res: Response) {
+  async getAllOffset(req: Request, res: Response, next:NextFunction) {
     const pageNumber = Number(req.query.pageNumber) || 1;
     const pageSize = Number(req.query.pageSize) || 10;
+    if(pageNumber<0){
+      next(ApiError.internal("PageNumber Must be Non Negative"))
+      return
+    }
     const list = await OrderService.getPaginatedOrder(pageNumber, pageSize)
-    res.json({ list });
+    //res.json({ list });
+    next(ResponseHandler.resourceFetched(JSON.stringify(list)))
+
   }
   ,
-  async getAllUserOrdersOffset(req: Request, res: Response) {
+  async getAllUserOrdersOffset(req: Request, res: Response, next:NextFunction) {
     const userId = req.params.id
+    if(userId.length!==24){
+      next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+      return
+    }
     const pageNumber = Number(req.query.pageNumber) || 1;
     const pageSize = Number(req.query.pageSize) || 10;
-    const list = await OrderService.getPaginatedUserOrder(userId, pageNumber, pageSize)
-    res.json({ list });
-  }
-,
-  async getAllUserOrders(req: Request, res: Response) {
-    const userId = req.params.id
-    const list = await OrderService.findAllForUser(userId)
-    res.json({ list });
-  }
-,
-  async getOrder(req: Request, res: Response) {
-    const orderId = req.params.id;
-    const item = await OrderService.findOne(orderId)
-    if (item) {
-      res.json(item);
-    } else {
-      res.status(404).json({ code: 404, error: "Order not found" });
+    if(pageNumber<0){
+      next(ApiError.internal("PageNumber Must be Non Negative"))
+      return
     }
-  }
-  ,
-  async createOrder(req: Request, res: Response) {
-    const order = req.body;
-    if (order) {
-      const newCategory = await OrderService.createOne(order)
-      res.status(201).json(newCategory);
-    } else {
-      res.status(400).json({ code: 404, error: "Details are Required" });
-    }
-  }
-  ,
-  async updateOrder(req: Request, res: Response) {
-    const orderId = req.params.id;
-    const  updatedOrder  = req.body;
-    if (updatedOrder) {
-      const order = await OrderService.updateOne(orderId, updatedOrder);
-      if (order) {
-        res.json({ message: `${JSON.stringify(order)} has been updated` });
-      } else {
-        res.status(404).json({ code: 404, error: "Order not found" });
-      }
-    } else {
-      res.status(400).json({ code: 404, error: "Details are Required" });
-    }
-  }
-  ,
-  async deleteOrder(req: Request, res: Response) {
-    const orderId = req.params.id;
-    const order = await OrderService.deleteOne(orderId);
 
-    if (order) {
-      res.json({
-        message: `Order ${orderId} has been deleted successfully`,
-      });
-    } else {
-      res.status(404).json({ code: 404, error: "Order not found" });
+    const list = await OrderService.getPaginatedUserOrder(userId, pageNumber, pageSize)
+    //res.json({ list });
+    next(ResponseHandler.resourceFetched(JSON.stringify(list)))
+
+  }
+,
+  async getAllUserOrders(req: Request, res: Response, next: NextFunction) {
+    const userId = req.params.id
+    if(userId.length!==24){
+      next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+      return
     }
+    const list = await OrderService.findAllForUser(userId)
+    //res.json({ list });
+    next(ResponseHandler.resourceFetched(JSON.stringify(list)))
+
+  }
+,
+  async getOrder(req: Request, res: Response, next:NextFunction) {
+    const orderId = req.params.id;
+    if(orderId.length!==24){
+      next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+      return
+    }
+    const item = await OrderService.findOne(orderId)
+    if (!item) {
+      next(ApiError.resourceNotFound(`OrderId ${orderId} is not found`))
+    } 
+    next(ResponseHandler.resourceFetched(JSON.stringify(item)))
+
+  }
+  ,
+  async createOrder(req: Request, res: Response, next: NextFunction) {
+    const order = req.body;
+    if(!order){
+      next(ApiError.internal("Details are Required"))
+      return
+    }
+    const newOrder = await OrderService.createOne(order)
+    next(ResponseHandler.resourceCreated(JSON.stringify(newOrder), `Order with ${newOrder._id} has been added`))
+  }
+  ,
+  async updateOrder(req: Request, res: Response, next:NextFunction) {
+    const orderId = req.params.id;
+    if(orderId.length!==24){
+      next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+      return
+    }
+    const  updatedOrder  = req.body;
+    if(!updatedOrder){
+      next(ApiError.internal("Details are Required"))
+      return
+    }
+    const order = await OrderService.updateOne(orderId, updatedOrder);
+    if(!order){
+      next(ApiError.resourceNotFound("Order not found"))
+      return
+    }
+    next(ResponseHandler.resourceUpdated(JSON.stringify(order), `Order with ${order._id} has been updated`))
+  }
+  ,
+  async deleteOrder(req: Request, res: Response, next:NextFunction) {
+    const orderId = req.params.id;
+    if(orderId.length!==24){
+      next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+      return
+    }
+    const order = await OrderService.deleteOne(orderId);
+    if(!order){
+      next(ApiError.resourceNotFound("Order not found"))
+      return
+    }
+    next(ResponseHandler.resourceDeleted(JSON.stringify(order), `Order with ${order._id} has been deleted`))
+
   }
 }
 

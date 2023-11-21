@@ -13,92 +13,117 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const orderService_js_1 = __importDefault(require("../services/orderService.js"));
+const ApiError_js_1 = require("../errors/ApiError.js");
+const ResponeHandler_js_1 = require("../responses/ResponeHandler.js");
 const OrderController = {
-    getAll(req, res) {
+    getAll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { userId } = req.body;
             const list = yield orderService_js_1.default.findAll();
-            res.json({ list });
+            //res.json({ list });
+            next(ResponeHandler_js_1.ResponseHandler.resourceFetched(JSON.stringify(list)));
         });
     },
-    getAllOffset(req, res) {
+    getAllOffset(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const pageNumber = Number(req.query.pageNumber) || 1;
             const pageSize = Number(req.query.pageSize) || 10;
+            if (pageNumber < 0) {
+                next(ApiError_js_1.ApiError.internal("PageNumber Must be Non Negative"));
+                return;
+            }
             const list = yield orderService_js_1.default.getPaginatedOrder(pageNumber, pageSize);
-            res.json({ list });
+            //res.json({ list });
+            next(ResponeHandler_js_1.ResponseHandler.resourceFetched(JSON.stringify(list)));
         });
     },
-    getAllUserOrdersOffset(req, res) {
+    getAllUserOrdersOffset(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const userId = req.params.id;
+            if (userId.length !== 24) {
+                next(ApiError_js_1.ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"));
+                return;
+            }
             const pageNumber = Number(req.query.pageNumber) || 1;
             const pageSize = Number(req.query.pageSize) || 10;
+            if (pageNumber < 0) {
+                next(ApiError_js_1.ApiError.internal("PageNumber Must be Non Negative"));
+                return;
+            }
             const list = yield orderService_js_1.default.getPaginatedUserOrder(userId, pageNumber, pageSize);
-            res.json({ list });
+            //res.json({ list });
+            next(ResponeHandler_js_1.ResponseHandler.resourceFetched(JSON.stringify(list)));
         });
     },
-    getAllUserOrders(req, res) {
+    getAllUserOrders(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const userId = req.params.id;
+            if (userId.length !== 24) {
+                next(ApiError_js_1.ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"));
+                return;
+            }
             const list = yield orderService_js_1.default.findAllForUser(userId);
-            res.json({ list });
+            //res.json({ list });
+            next(ResponeHandler_js_1.ResponseHandler.resourceFetched(JSON.stringify(list)));
         });
     },
-    getOrder(req, res) {
+    getOrder(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const orderId = req.params.id;
+            if (orderId.length !== 24) {
+                next(ApiError_js_1.ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"));
+                return;
+            }
             const item = yield orderService_js_1.default.findOne(orderId);
-            if (item) {
-                res.json(item);
+            if (!item) {
+                next(ApiError_js_1.ApiError.resourceNotFound(`OrderId ${orderId} is not found`));
             }
-            else {
-                res.status(404).json({ code: 404, error: "Order not found" });
-            }
+            next(ResponeHandler_js_1.ResponseHandler.resourceFetched(JSON.stringify(item)));
         });
     },
-    createOrder(req, res) {
+    createOrder(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const order = req.body;
-            if (order) {
-                const newCategory = yield orderService_js_1.default.createOne(order);
-                res.status(201).json(newCategory);
+            if (!order) {
+                next(ApiError_js_1.ApiError.internal("Details are Required"));
+                return;
             }
-            else {
-                res.status(400).json({ code: 404, error: "Details are Required" });
-            }
+            const newOrder = yield orderService_js_1.default.createOne(order);
+            next(ResponeHandler_js_1.ResponseHandler.resourceCreated(JSON.stringify(newOrder), `Order with ${newOrder._id} has been added`));
         });
     },
-    updateOrder(req, res) {
+    updateOrder(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const orderId = req.params.id;
+            if (orderId.length !== 24) {
+                next(ApiError_js_1.ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"));
+                return;
+            }
             const updatedOrder = req.body;
-            if (updatedOrder) {
-                const order = yield orderService_js_1.default.updateOne(orderId, updatedOrder);
-                if (order) {
-                    res.json({ message: `${JSON.stringify(order)} has been updated` });
-                }
-                else {
-                    res.status(404).json({ code: 404, error: "Order not found" });
-                }
+            if (!updatedOrder) {
+                next(ApiError_js_1.ApiError.internal("Details are Required"));
+                return;
             }
-            else {
-                res.status(400).json({ code: 404, error: "Details are Required" });
+            const order = yield orderService_js_1.default.updateOne(orderId, updatedOrder);
+            if (!order) {
+                next(ApiError_js_1.ApiError.resourceNotFound("Order not found"));
+                return;
             }
+            next(ResponeHandler_js_1.ResponseHandler.resourceUpdated(JSON.stringify(order), `Order with ${order._id} has been updated`));
         });
     },
-    deleteOrder(req, res) {
+    deleteOrder(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const orderId = req.params.id;
+            if (orderId.length !== 24) {
+                next(ApiError_js_1.ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"));
+                return;
+            }
             const order = yield orderService_js_1.default.deleteOne(orderId);
-            if (order) {
-                res.json({
-                    message: `Order ${orderId} has been deleted successfully`,
-                });
+            if (!order) {
+                next(ApiError_js_1.ApiError.resourceNotFound("Order not found"));
+                return;
             }
-            else {
-                res.status(404).json({ code: 404, error: "Order not found" });
-            }
+            next(ResponeHandler_js_1.ResponseHandler.resourceDeleted(JSON.stringify(order), `Order with ${order._id} has been deleted`));
         });
     }
 };

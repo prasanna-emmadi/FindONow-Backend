@@ -86,7 +86,7 @@ const CategoryController = {
       next(ApiError.resourceNotFound("Category not found"))
       return
     }
-    next(ResponseHandler.resourceUpdated(JSON.stringify(category), `Category with ${category._id} has been Deleted`))
+    next(ResponseHandler.resourceDeleted(JSON.stringify(category), `Category with ${category._id} has been Deleted`))
 
   }
 }

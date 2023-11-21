@@ -85,8 +85,7 @@ exports.findOneAndDelete = findOneAndDelete;
 function signup(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { name, email, password } = req.body;
-        //const user = await UsersService.createOne({ name, email, password })
-        const user = yield userService_js_1.default.createOne({ id: 1, name: name, email: email });
+        const user = yield userService_js_1.default.createNewOne({ name, email, password });
         if (!user) {
             res.status(400).json({
                 message: "User exists",
@@ -104,9 +103,9 @@ exports.signup = signup;
 //login
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { password, email } = req.body;
+        const { email, password } = req.body;
         const login = yield userService_js_1.default.login(email, password);
-        if (!login.status) {
+        if (login.status === false) {
             // TODO throw API error
             res.status(400).json({ accessToken: null, message: "Bad credentials" });
             return;

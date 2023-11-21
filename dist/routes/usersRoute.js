@@ -13,7 +13,7 @@ router.post("/", userValidate_js_1.validateUser, userController_js_1.default.cre
 router.put("/:userId", userController_js_1.default.findOneAndUpdate);
 router.delete("/:userId", userController_js_1.default.findOneAndDelete);
 router.post("/signup", userController_js_1.default.signup);
-//router.post("/login", UserController.login)  
+router.post("/login", userController_js_1.default.login);
 // router.use((req, res, next) => {
 //     console.log("👀 got here")
 //     res.on("finish", () => {
