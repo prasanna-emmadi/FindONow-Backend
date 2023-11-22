@@ -55,9 +55,9 @@ async function createNewOne({
 }) {
   const hashedPassword = bcrypt.hashSync(password, 10)
   console.log("HashedPassword:", hashedPassword)
-
+  
   const userFromDB = await findOneByEmail(email)
-  if (!userFromDB) {
+  if (userFromDB) {
     return null
   }
   const user = new UserRepo({
@@ -86,16 +86,17 @@ async function login(email: string, password: string) {
   }
 
   const hashedPassword = user.password
-  console.log("Has password:",hashedPassword)
+  console.log("hashedPassword==",hashedPassword)
+  console.log("Password==",password)
 
-  // const isValid = bcrypt.compareSync(password, hashedPassword)
-  // if (!isValid) {
-  //   return {
-  //     message: "bad credentials",
-  //     status: false,
-  //     accessToken: null,
-  //   }
-  // } //not working
+  const isValid = bcrypt.compareSync(password, hashedPassword)
+  if (!isValid) {
+    return {
+      message: "bad credentials",
+      status: false,
+      accessToken: null,
+    }
+  } 
 
   const payload = {
     userId: user.id,
