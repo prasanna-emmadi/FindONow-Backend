@@ -1,9 +1,9 @@
 import request from "supertest";
 
-import app from "../../index.js";
-import CategoryService from "../../services/categoryService.js";
-import connect, { MongoHelper } from "../db-helper.js";
-import CategoryRepo from "../../models/Category.js";
+import app from "../../index";
+import CategoryService from "../../services/categoryService";
+import connect, { MongoHelper } from "../db-helper";
+import CategoryRepo from "../../models/Category";
 
 describe("Category controller", () => {
   let mongoHelper: MongoHelper;

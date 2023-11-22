@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,64 +8,68 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import mongoose from "mongoose";
-import UserRepo from "../models/User.js";
-import bcrypt from 'bcrypt';
-import jwt from "jsonwebtoken";
-const usersRepo = new UserRepo();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importDefault(require("mongoose"));
+const User_js_1 = __importDefault(require("../models/User.js"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const usersRepo = new User_js_1.default();
 function paginateUsers(pageNumber, pageSize) {
     return __awaiter(this, void 0, void 0, function* () {
         const skip = (pageNumber - 1) * pageSize;
-        const users = yield UserRepo.find().skip(skip).limit(pageSize).exec();
+        const users = yield User_js_1.default.find().skip(skip).limit(pageSize).exec();
         return users;
     });
 }
 function findAll() {
     return __awaiter(this, void 0, void 0, function* () {
-        const users = yield UserRepo.find().exec();
+        const users = yield User_js_1.default.find().exec();
         return users;
     });
 }
 function findOne(userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const id = new mongoose.Types.ObjectId(userId);
-        const user = yield UserRepo.findById(userId);
+        const id = new mongoose_1.default.Types.ObjectId(userId);
+        const user = yield User_js_1.default.findById(userId);
         return user;
     });
 }
 function createOne(user) {
     return __awaiter(this, void 0, void 0, function* () {
-        const newUser = new UserRepo(user);
+        const newUser = new User_js_1.default(user);
         return yield newUser.save();
     });
 }
 function findOneAndUpdate(userId, user) {
     return __awaiter(this, void 0, void 0, function* () {
-        const id = new mongoose.Types.ObjectId(userId);
-        return yield UserRepo.findByIdAndUpdate(id, user);
+        const id = new mongoose_1.default.Types.ObjectId(userId);
+        return yield User_js_1.default.findByIdAndUpdate(id, user);
     });
 }
 function findOneAndDelete(userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const id = new mongoose.Types.ObjectId(userId);
-        return yield UserRepo.findByIdAndDelete(id);
+        const id = new mongoose_1.default.Types.ObjectId(userId);
+        return yield User_js_1.default.findByIdAndDelete(id);
     });
 }
 function findOneByEmail(email) {
     return __awaiter(this, void 0, void 0, function* () {
-        return UserRepo.findOne({ email });
+        return User_js_1.default.findOne({ email });
     });
 }
 //signup
 function createNewOne({ name, email, password, }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const hashedPassword = bcrypt.hashSync(password, 10);
+        const hashedPassword = bcrypt_1.default.hashSync(password, 10);
         console.log("HashedPassword:", hashedPassword);
         const userFromDB = yield findOneByEmail(email);
         if (userFromDB) {
             return null;
         }
-        const user = new UserRepo({
+        const user = new User_js_1.default({
             name,
             email,
             password: hashedPassword,
@@ -92,7 +97,7 @@ function login(email, password) {
         const hashedPassword = user.password;
         console.log("hashedPassword==", hashedPassword);
         console.log("Password==", password);
-        const isValid = bcrypt.compareSync(password, hashedPassword);
+        const isValid = bcrypt_1.default.compareSync(password, hashedPassword);
         if (!isValid) {
             return {
                 message: "bad credentials",
@@ -105,7 +110,7 @@ function login(email, password) {
             email: user.email,
             role: user.role,
         };
-        const accessToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+        const accessToken = jsonwebtoken_1.default.sign(payload, process.env.TOKEN_SECRET, {
             expiresIn: "1h",
         });
         console.log("AccessToken:", accessToken);
@@ -116,7 +121,7 @@ function login(email, password) {
         };
     });
 }
-export default {
+exports.default = {
     paginateUsers,
     findOne,
     findAll,
@@ -127,3 +132,4 @@ export default {
     findOneByEmail,
     login
 };
+//# sourceMappingURL=userService.js.map

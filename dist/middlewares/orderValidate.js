@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,11 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { requestSchema } from "../schemas/orderSchema.js";
-export function validateOrder(req, res, next) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateOrder = void 0;
+const orderSchema_js_1 = require("../schemas/orderSchema.js");
+function validateOrder(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield requestSchema.parseAsync({
+            yield orderSchema_js_1.requestSchema.parseAsync({
                 body: req.body,
                 query: req.query,
                 params: req.params,
@@ -23,3 +26,5 @@ export function validateOrder(req, res, next) {
         }
     });
 }
+exports.validateOrder = validateOrder;
+//# sourceMappingURL=orderValidate.js.map

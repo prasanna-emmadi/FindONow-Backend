@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,49 +8,53 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import mongoose from "mongoose";
-import OrderRepo from "../models/Order.js";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importDefault(require("mongoose"));
+const Order_js_1 = __importDefault(require("../models/Order.js"));
 function getPaginatedOrder(pageNumber, pageSize) {
     return __awaiter(this, void 0, void 0, function* () {
-        const orders = yield OrderRepo.find().skip(pageNumber).limit(pageSize).exec();
+        const orders = yield Order_js_1.default.find().skip(pageNumber).limit(pageSize).exec();
         return orders;
     });
 }
 function getPaginatedUserOrder(userId, pageNumber, pageSize) {
     return __awaiter(this, void 0, void 0, function* () {
-        const orders = yield OrderRepo.find({ userId }).skip(pageNumber).limit(pageSize).exec();
+        const orders = yield Order_js_1.default.find({ userId }).skip(pageNumber).limit(pageSize).exec();
         return orders;
     });
 }
 function findAll() {
     return __awaiter(this, void 0, void 0, function* () {
-        const orders = yield OrderRepo.find().exec();
+        const orders = yield Order_js_1.default.find().exec();
         return orders;
     });
 }
 function findAllForUser(userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const orders = yield OrderRepo.find({ userId }).exec();
+        const orders = yield Order_js_1.default.find({ userId }).exec();
         return orders;
     });
 }
 function findOne(orderId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const oid = new mongoose.Types.ObjectId(orderId);
-        const category = yield OrderRepo.findById(oid).exec();
+        const oid = new mongoose_1.default.Types.ObjectId(orderId);
+        const category = yield Order_js_1.default.findById(oid).exec();
         return category;
     });
 }
 function createOne(order) {
     return __awaiter(this, void 0, void 0, function* () {
-        const newOrder = new OrderRepo(order);
+        const newOrder = new Order_js_1.default(order);
         return yield newOrder.save();
     });
 }
 function updateOne(orderId, updatedOrder) {
     return __awaiter(this, void 0, void 0, function* () {
-        const id = new mongoose.Types.ObjectId(orderId);
-        const order = yield OrderRepo.findById(id);
+        const id = new mongoose_1.default.Types.ObjectId(orderId);
+        const order = yield Order_js_1.default.findById(id);
         if (!order) {
             return undefined;
         }
@@ -61,19 +66,19 @@ function updateOne(orderId, updatedOrder) {
 }
 function deleteOne(orderId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const id = new mongoose.Types.ObjectId(orderId);
-        const order = yield OrderRepo.findById(id);
+        const id = new mongoose_1.default.Types.ObjectId(orderId);
+        const order = yield Order_js_1.default.findById(id);
         if (!order) {
             return undefined;
         }
-        const deletedOrder = yield OrderRepo.deleteOne({ _id: id });
+        const deletedOrder = yield Order_js_1.default.deleteOne({ _id: id });
         if (deletedOrder.deletedCount === 0) {
             return undefined;
         }
         return order;
     });
 }
-export default {
+exports.default = {
     findOne,
     findAll,
     createOne,
@@ -83,3 +88,4 @@ export default {
     getPaginatedOrder,
     getPaginatedUserOrder
 };
+//# sourceMappingURL=orderService.js.map

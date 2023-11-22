@@ -13,8 +13,6 @@ import { loggingMiddleware } from "./middlewares/logging.js"
 import { apiErrorHandler } from "./middlewares/error.js"
 import { routeNotFound } from "./middlewares/routeNotFound.js"
 import orderRoute from "./routes/orderRoute.js"
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
 
 const jwt= require("jsonwebtoken")
 import crypto from "crypto"

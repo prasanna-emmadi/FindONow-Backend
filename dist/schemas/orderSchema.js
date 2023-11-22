@@ -1,15 +1,19 @@
-import { z } from "zod";
-export const orderSchema = z.object({
-    userId: z.string({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.requestSchema = exports.orderSchema = void 0;
+const zod_1 = require("zod");
+exports.orderSchema = zod_1.z.object({
+    userId: zod_1.z.string({
         required_error: "User ID is required",
     }),
-    date: z.string({
+    date: zod_1.z.string({
         required_error: "Date is required",
     }),
-    totalAmount: z.number({
+    totalAmount: zod_1.z.number({
         required_error: "Total amount is required",
     }),
 });
-export const requestSchema = z.object({
-    body: orderSchema,
+exports.requestSchema = zod_1.z.object({
+    body: exports.orderSchema,
 });
+//# sourceMappingURL=orderSchema.js.map
