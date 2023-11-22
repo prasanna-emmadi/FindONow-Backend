@@ -107,6 +107,7 @@ export async function login(req: Request, res: Response) {
 
 
 export default {
+  getOffsetUser,
   findOneUser,
   findAllUser,
   createOneUser,

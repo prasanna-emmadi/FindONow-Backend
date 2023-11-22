@@ -10,6 +10,7 @@ router.get("/:userId", UserController.findOneUser)
 router.post("/",validateUser, UserController.createOneUser)
 router.put("/:userId", UserController.findOneAndUpdate);
 router.delete("/:userId", UserController.findOneAndDelete);
+router.get("/offset", UserController.getOffsetUser);
 
 router.post("/signup", UserController.signup)
 router.post("/login", UserController.login)  
