@@ -1,17 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 import UsersService from "../services/userService.js";
 import { ApiError } from "../errors/ApiError.js";
+import { ResponseHandler } from "../responses/ResponeHandler.js";
 
 export async function getOffsetUser(req:Request, res: Response, next: NextFunction)  {
   
   const pageNumber = Number(req.query.pageNumber) || 1;
   const pageSize = Number(req.query.pageSize) || 10;
+  if(pageNumber<0){
+    next(ApiError.internal("PageNumber Must be Non Negative"))
+    return
+  }
   const users = await UsersService.paginateUsers(pageNumber, pageSize);
   if(!users) {
     next(ApiError.internal("Internal Server error"));
   }
-  res.json(users);
-  //res.status(500).json({ error: "Internal Server Error" });
+  next(ResponseHandler.resourceFetched(JSON.stringify(users)))
+  //res.json(users);
+  
 }
 
 export async function findAllUser(_: Request, res: Response) {
@@ -21,19 +27,28 @@ export async function findAllUser(_: Request, res: Response) {
 
 export async function findOneUser(req: Request, res: Response, next: NextFunction) {
   const userId = Number(req.params.userId);
+  // if(userId.length!==24){
+  //   next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+  //   return  
+  // }
   const user = await UsersService.findOne(userId);
 
   if (!user) {
-    next(ApiError.resourceNotFound("user not found."))
+    next(ApiError.resourceNotFound("User not found."))
     return;
   }
-  res.json({ user });
+  next(ResponseHandler.resourceFetched(JSON.stringify(user)))
+ // res.json({ user });
 }
 
-export async function createOneUser(req: Request, res: Response) {
+export async function createOneUser(req: Request, res: Response, next:NextFunction) {
   const newUser = req.body;
+  if(!newUser){
+    next(ApiError.internal("Details are Required"))
+  }
   const user = await UsersService.createOne(newUser);
-  res.status(201).json({ user });
+  next(ResponseHandler.resourceCreated(JSON.stringify(user), `User with ${user._id} has been added`))
+ // res.status(201).json({ user });
 }
 
 export async function findOneAndUpdate(req: Request,res: Response,next: NextFunction) {
@@ -45,7 +60,8 @@ export async function findOneAndUpdate(req: Request,res: Response,next: NextFunc
       next(ApiError.resourceNotFound("User not found."));
       return;
     }
-     res.status(200).json({ updatedUser });
+    next(ResponseHandler.resourceUpdated(JSON.stringify(updatedUser), `User with ${updatedUser._id} has been updated`))
+     //res.status(200).json({ updatedUser });
 }
 
 export async function findOneAndDelete( req: Request, res: Response, next: NextFunction ) {
@@ -56,12 +72,12 @@ export async function findOneAndDelete( req: Request, res: Response, next: NextF
         next(ApiError.resourceNotFound("User not found."));
         return;
     }
-    res.status(200).json({ deletedUser });
-    res.status(200).json("User deleted ...");
+    next(ResponseHandler.resourceDeleted(JSON.stringify(deletedUser), `User with ${deletedUser._id} has been Deleted`))
+   // res.status(200).json("User deleted ...");
 }
 
 //SignUp
-export async function signup(req: Request, res: Response) {
+export async function signup(req: Request, res: Response,  next: NextFunction) {
   const { name, email, password } = req.body
   const user = await UsersService.createNewOne({ name, email, password })
   if (!user) {
@@ -71,11 +87,8 @@ export async function signup(req: Request, res: Response) {
     })
     return
   }
-
-  res.status(201).json({
-    message: "user created",
-    user,
-  })
+  next(ResponseHandler.resourceCreated(JSON.stringify(user), `User has been added`))
+ // res.status(201).json({message: "user created",user,})
 }
 
 //login
