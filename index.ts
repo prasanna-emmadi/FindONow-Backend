@@ -73,3 +73,5 @@ app.use(routeNotFound);
 app.listen(PORT, () => {
   console.log(`👀 app is running at localhost:${PORT}`);
 });
+
+export default app

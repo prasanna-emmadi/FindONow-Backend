@@ -66,7 +66,7 @@ function createNewOne({ name, email, password, }) {
         const hashedPassword = bcrypt_1.default.hashSync(password, 10);
         console.log("HashedPassword:", hashedPassword);
         const userFromDB = yield findOneByEmail(email);
-        if (!userFromDB) {
+        if (userFromDB) {
             return null;
         }
         const user = new User_js_1.default({
@@ -95,15 +95,16 @@ function login(email, password) {
             };
         }
         const hashedPassword = user.password;
-        console.log("Has password:", hashedPassword);
-        // const isValid = bcrypt.compareSync(password, hashedPassword)
-        // if (!isValid) {
-        //   return {
-        //     message: "bad credentials",
-        //     status: false,
-        //     accessToken: null,
-        //   }
-        // } //not working
+        console.log("hashedPassword==", hashedPassword);
+        console.log("Password==", password);
+        const isValid = bcrypt_1.default.compareSync(password, hashedPassword);
+        if (!isValid) {
+            return {
+                message: "bad credentials",
+                status: false,
+                accessToken: null,
+            };
+        }
         const payload = {
             userId: user.id,
             email: user.email,
