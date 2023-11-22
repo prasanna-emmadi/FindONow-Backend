@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build_ci": "tsc",
     "build": "tsc -w",
     "start": "nodemon dist/index.js",
     "test": "jest --forceExit --coverage --verbose false --runInBand"
