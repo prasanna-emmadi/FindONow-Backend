@@ -1,6 +1,6 @@
 import request from "supertest";
 
-import app from "../../index";
+
 import CategoryService from "../../services/categoryService";
 import connect, { MongoHelper } from "../db-helper";
 import CategoryRepo from "../../models/Category";

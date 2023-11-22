@@ -27,10 +27,10 @@ describe("Category controller", () => {
     const response = await request(app).post("/api/v1/categories").send({
       name: "Test cat",
     });
-    expect(response.body.category).toHaveProperty("name");
-    expect(response.body).toMatchObject({ category: { name: "Test cat" } });
-    expect(response.body).toEqual({
-      category: {
+    expect(response.body.data).toHaveProperty("name");
+    expect(response.body.data).toMatchObject({ data: { name: "Test cat" } });
+    expect(response.body.data).toEqual({
+      data: {
         name: "Test cat",
         __v: expect.any(Number),
         _id: expect.any(String),
@@ -43,13 +43,14 @@ describe("Category controller", () => {
   // find all category
   it("should return all category", async () => {
     // create a category
-    await CategoryService.createOne({ id:1, name: "category1" });
+    let category:any = {name: "NewCategory"}
+    await CategoryService.createOne(category);
 
     const response = await request(app).get("/api/v1/categories");
 
-    expect(response.body.categories.length).toEqual(1);
-    expect(response.body.categories[0]).toMatchObject({
-      name: "category1",
+    expect(response.body.data.length).toEqual(1);
+    expect(response.body.data).toMatchObject({
+      name: "NewCategory",
     });
   });
 });
