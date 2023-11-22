@@ -38,8 +38,8 @@ The API should be deployed before the **`DEADLINE`** which is end of Week 47 24t
 ## Tasks Checklist
 - [x] Entity CRUD Operations 
 - [x] Authentication
-- [] Minimun Requirements (I didn't find any of them there. If there are some, we should list it down)
-- [ ] Response Formats
-- [ ] Error Handling
+- [ ] Minimun Requirements (I didn't find any of them there. If there are some, we should list it down)
+- [x] Response Formats
+- [x] Error Handling
 - [ ] Testing
-- [ ] Deployment
+- [x] Deployment

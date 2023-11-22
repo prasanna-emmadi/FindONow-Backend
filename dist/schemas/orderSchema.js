@@ -16,3 +16,4 @@ exports.orderSchema = zod_1.z.object({
 exports.requestSchema = zod_1.z.object({
     body: exports.orderSchema,
 });
+//# sourceMappingURL=orderSchema.js.map

@@ -1,10 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "NodeNext",
+    "module": "commonjs",
+    "strict": true,
     "esModuleInterop": true,
-    "rootDir": "./",
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
     "outDir": "dist",
-    "strict": true
-  }
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*", "types/*"]
+    }
+  },
+  "include": ["**/*"]
 }

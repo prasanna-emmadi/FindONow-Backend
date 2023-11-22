@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken"
 import { NextFunction, Request, Response } from "express"
 
-import { ApiError } from "../errors/ApiError.js"
-import { DecodedUser } from "../types/user.js"
+import { ApiError } from "../errors/ApiError"
+import { DecodedUser } from "../types/user"
 
 export interface WithAuthRequest extends Request {
   decoded?: DecodedUser

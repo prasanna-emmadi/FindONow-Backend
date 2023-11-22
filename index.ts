@@ -2,21 +2,19 @@ import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
 
-import itemsRoute from "./routes/itemsRoute.js";
-import categoryRoute from "./routes/categoriesRoute.js";
-import productsRoute from "./routes/productsRoute.js";
-import usersRoute from "./routes/usersRoute.js";
+import itemsRoute from "./routes/itemsRoute";
+import categoryRoute from "./routes/categoriesRoute";
+import productsRoute from "./routes/productsRoute";
+import usersRoute from "./routes/usersRoute";
+import { loggingMiddleware } from "./middlewares/logging"
+import { routeNotFound } from "./middlewares/routeNotFound"
+import orderRoute from "./routes/orderRoute"
+import { checkAuth } from "./middlewares/checkAuth";
+import { responseHandler } from "./middlewares/responsehandler";
 
-import orderDetailsRoute from "./routes/orderDetailsRoute.js";
 
-import { loggingMiddleware } from "./middlewares/logging.js"
-import { apiErrorHandler } from "./middlewares/error.js"
-import { routeNotFound } from "./middlewares/routeNotFound.js"
-import orderRoute from "./routes/orderRoute.js"
+
 const jwt= require("jsonwebtoken")
-import crypto from "crypto"
-import { checkAuth } from "./middlewares/checkAuth.js";
-import { responseHandler } from "./middlewares/responsehandler.js";
 
 const PORT = 8080;
 const app = express();
@@ -73,3 +71,5 @@ app.use(routeNotFound);
 app.listen(PORT, () => {
   console.log(`👀 app is running at localhost:${PORT}`);
 });
+
+export default app

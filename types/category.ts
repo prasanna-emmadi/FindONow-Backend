@@ -2,7 +2,7 @@
 
 import { z } from "zod"
 
-import { categorySchema } from "../schemas/categorySchema.js"
+import { categorySchema } from "../schemas/categorySchema"
 
 // to get the type FROM the ZOD validation
 type CategoryDTO = z.infer<typeof categorySchema>

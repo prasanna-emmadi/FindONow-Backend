@@ -24,3 +24,4 @@ const OrderSchema = new Schema({
 });
 const Order = mongoose_1.default.model("Order", OrderSchema);
 exports.default = Order;
+//# sourceMappingURL=Order.js.map

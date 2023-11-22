@@ -13,51 +13,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const User_js_1 = __importDefault(require("../models/User.js"));
+const User_1 = __importDefault(require("../models/User"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const usersRepo = new User_js_1.default();
+const usersRepo = new User_1.default();
 function paginateUsers(pageNumber, pageSize) {
     return __awaiter(this, void 0, void 0, function* () {
         const skip = (pageNumber - 1) * pageSize;
-        const users = yield User_js_1.default.find().skip(skip).limit(pageSize).exec();
+        const users = yield User_1.default.find().skip(skip).limit(pageSize).exec();
         return users;
     });
 }
 function findAll() {
     return __awaiter(this, void 0, void 0, function* () {
-        const users = yield User_js_1.default.find().exec();
+        const users = yield User_1.default.find().exec();
         return users;
     });
 }
 function findOne(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const id = new mongoose_1.default.Types.ObjectId(userId);
-        const user = yield User_js_1.default.findById(userId);
+        const user = yield User_1.default.findById(userId);
         return user;
     });
 }
 function createOne(user) {
     return __awaiter(this, void 0, void 0, function* () {
-        const newUser = new User_js_1.default(user);
+        const newUser = new User_1.default(user);
         return yield newUser.save();
     });
 }
 function findOneAndUpdate(userId, user) {
     return __awaiter(this, void 0, void 0, function* () {
         const id = new mongoose_1.default.Types.ObjectId(userId);
-        return yield User_js_1.default.findByIdAndUpdate(id, user);
+        return yield User_1.default.findByIdAndUpdate(id, user);
     });
 }
 function findOneAndDelete(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const id = new mongoose_1.default.Types.ObjectId(userId);
-        return yield User_js_1.default.findByIdAndDelete(id);
+        return yield User_1.default.findByIdAndDelete(id);
     });
 }
 function findOneByEmail(email) {
     return __awaiter(this, void 0, void 0, function* () {
-        return User_js_1.default.findOne({ email });
+        return User_1.default.findOne({ email });
     });
 }
 //signup
@@ -66,10 +66,10 @@ function createNewOne({ name, email, password, }) {
         const hashedPassword = bcrypt_1.default.hashSync(password, 10);
         console.log("HashedPassword:", hashedPassword);
         const userFromDB = yield findOneByEmail(email);
-        if (!userFromDB) {
+        if (userFromDB) {
             return null;
         }
-        const user = new User_js_1.default({
+        const user = new User_1.default({
             name,
             email,
             password: hashedPassword,
@@ -95,15 +95,16 @@ function login(email, password) {
             };
         }
         const hashedPassword = user.password;
-        console.log("Has password:", hashedPassword);
-        // const isValid = bcrypt.compareSync(password, hashedPassword)
-        // if (!isValid) {
-        //   return {
-        //     message: "bad credentials",
-        //     status: false,
-        //     accessToken: null,
-        //   }
-        // } //not working
+        console.log("hashedPassword==", hashedPassword);
+        console.log("Password==", password);
+        const isValid = bcrypt_1.default.compareSync(password, hashedPassword);
+        if (!isValid) {
+            return {
+                message: "bad credentials",
+                status: false,
+                accessToken: null,
+            };
+        }
         const payload = {
             userId: user.id,
             email: user.email,
@@ -131,3 +132,4 @@ exports.default = {
     findOneByEmail,
     login
 };
+//# sourceMappingURL=userService.js.map

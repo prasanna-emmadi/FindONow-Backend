@@ -1,5 +1,5 @@
-import ProductRepo from "../models/Product.js";
-import { Product } from "../types/products.js";
+import ProductRepo from "../models/Product";
+import { Product } from "../types/products";
 
 async function paginateProducts(pageNumber: number, pageSize: number) {
   const skip = (pageNumber - 1) * pageSize;

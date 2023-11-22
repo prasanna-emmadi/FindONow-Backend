@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { z } from "zod"
 
-import { requestSchema } from "../schemas/categorySchema.js"
+import { requestSchema } from "../schemas/categorySchema"
 
 export async function validateCategory(
   req: Request,

@@ -1,6 +1,6 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express"
 
-import { ApiError } from "../errors/ApiError.js"
+import { ApiError } from "../errors/ApiError"
 
 export function apiErrorHandler(
   error: typeof ApiError | Error,

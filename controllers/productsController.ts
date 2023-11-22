@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import ProductsService from "../services/productsService.js";
-import { ApiError } from "../errors/ApiError.js";
-import { Product } from "../types/products.js";
+import ProductsService from "../services/productsService";
+import { ApiError } from "../errors/ApiError";
+import { Product } from "../types/products";
 
 const ProductController = {
   async findAllProduct(req: Request, res: Response) {

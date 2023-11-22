@@ -6,31 +6,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 require("dotenv/config");
-const itemsRoute_js_1 = __importDefault(require("./routes/itemsRoute.js"));
-const categoriesRoute_js_1 = __importDefault(require("./routes/categoriesRoute.js"));
-const productsRoute_js_1 = __importDefault(require("./routes/productsRoute.js"));
-const usersRoute_js_1 = __importDefault(require("./routes/usersRoute.js"));
-const logging_js_1 = require("./middlewares/logging.js");
-const routeNotFound_js_1 = require("./middlewares/routeNotFound.js");
-const orderRoute_js_1 = __importDefault(require("./routes/orderRoute.js"));
+const itemsRoute_1 = __importDefault(require("./routes/itemsRoute"));
+const categoriesRoute_1 = __importDefault(require("./routes/categoriesRoute"));
+const productsRoute_1 = __importDefault(require("./routes/productsRoute"));
+const usersRoute_1 = __importDefault(require("./routes/usersRoute"));
+const logging_1 = require("./middlewares/logging");
+const routeNotFound_1 = require("./middlewares/routeNotFound");
+const orderRoute_1 = __importDefault(require("./routes/orderRoute"));
+const checkAuth_1 = require("./middlewares/checkAuth");
+const responsehandler_1 = require("./middlewares/responsehandler");
 const jwt = require("jsonwebtoken");
-const checkAuth_js_1 = require("./middlewares/checkAuth.js");
-const responsehandler_js_1 = require("./middlewares/responsehandler.js");
 const PORT = 8080;
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // TODO: Validate .env using Zod
 const mongoURL = process.env.DB_URL;
 mongoose_1.default.connect(mongoURL).then(() => console.log("Connected!"));
-app.get("/hello", logging_js_1.loggingMiddleware, (_, res) => {
+app.get("/hello", logging_1.loggingMiddleware, (_, res) => {
     res.json({ msg: "hello, from Express.js!" });
 });
-app.use("/api/v1/items", itemsRoute_js_1.default);
-app.use("/api/v1/products", productsRoute_js_1.default);
-app.use("/api/v1/categories", categoriesRoute_js_1.default);
-app.use("/api/v1/users", usersRoute_js_1.default);
-app.use("/api/v1/orders", orderRoute_js_1.default);
-app.get("/api/v1/protected", checkAuth_js_1.checkAuth, (req, res) => {
+app.use("/api/v1/items", itemsRoute_1.default);
+app.use("/api/v1/products", productsRoute_1.default);
+app.use("/api/v1/categories", categoriesRoute_1.default);
+app.use("/api/v1/users", usersRoute_1.default);
+app.use("/api/v1/orders", orderRoute_1.default);
+app.get("/api/v1/protected", checkAuth_1.checkAuth, (req, res) => {
     res.json({ items: [1, 2, 3, 4, 5] });
 });
 // for generating secret key
@@ -57,8 +57,10 @@ app.get("/api/v1/protected", checkAuth_js_1.checkAuth, (req, res) => {
 //   console.log("Token:",token)
 //   res.json({token})
 // });
-app.use(responsehandler_js_1.responseHandler);
-app.use(routeNotFound_js_1.routeNotFound);
+app.use(responsehandler_1.responseHandler);
+app.use(routeNotFound_1.routeNotFound);
 app.listen(PORT, () => {
     console.log(`👀 app is running at localhost:${PORT}`);
 });
+exports.default = app;
+//# sourceMappingURL=index.js.map

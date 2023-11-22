@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express"
-import { ApiError } from "../errors/ApiError.js"
+import { ApiError } from "../errors/ApiError"
 const router = express.Router()
 
 const items = [1, 2, 3, 4, 5, 6]

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import orderDetailsService from "../services/orderDetailService.js";
-import { ApiError } from "../errors/ApiError.js";
-import orderDetailService from "../services/orderDetailService.js";
+import orderDetailsService from "../services/orderDetailService";
+import { ApiError } from "../errors/ApiError";
+import orderDetailService from "../services/orderDetailService";
 
 async function findOrderDetailOffset(req: Request, res: Response) {
   const pageNumber = Number(req.query.pageNumber) || 1;

@@ -13,24 +13,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.signup = exports.findOneAndDelete = exports.findOneAndUpdate = exports.createOneUser = exports.findOneUser = exports.findAllUser = exports.getOffsetUser = void 0;
-const userService_js_1 = __importDefault(require("../services/userService.js"));
-const ApiError_js_1 = require("../errors/ApiError.js");
+const userService_1 = __importDefault(require("../services/userService"));
+const ApiError_1 = require("../errors/ApiError");
+const ResponeHandler_1 = require("../responses/ResponeHandler");
 function getOffsetUser(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const pageNumber = Number(req.query.pageNumber) || 1;
         const pageSize = Number(req.query.pageSize) || 10;
-        const users = yield userService_js_1.default.paginateUsers(pageNumber, pageSize);
-        if (!users) {
-            next(ApiError_js_1.ApiError.internal("Internal Server error"));
+        if (pageNumber < 0) {
+            next(ApiError_1.ApiError.internal("PageNumber Must be Non Negative"));
+            return;
         }
-        res.json(users);
-        //res.status(500).json({ error: "Internal Server Error" });
+        const users = yield userService_1.default.paginateUsers(pageNumber, pageSize);
+        if (!users) {
+            next(ApiError_1.ApiError.internal("Internal Server error"));
+        }
+        next(ResponeHandler_1.ResponseHandler.resourceFetched(JSON.stringify(users)));
+        //res.json(users);
     });
 }
 exports.getOffsetUser = getOffsetUser;
 function findAllUser(_, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const users = yield userService_js_1.default.findAll();
+        const users = yield userService_1.default.findAll();
         res.json({ users });
     });
 }
@@ -38,20 +43,29 @@ exports.findAllUser = findAllUser;
 function findOneUser(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const userId = Number(req.params.userId);
-        const user = yield userService_js_1.default.findOne(userId);
+        // if(userId.length!==24){
+        //   next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+        //   return  
+        // }
+        const user = yield userService_1.default.findOne(userId);
         if (!user) {
-            next(ApiError_js_1.ApiError.resourceNotFound("user not found."));
+            next(ApiError_1.ApiError.resourceNotFound("User not found."));
             return;
         }
-        res.json({ user });
+        next(ResponeHandler_1.ResponseHandler.resourceFetched(JSON.stringify(user)));
+        // res.json({ user });
     });
 }
 exports.findOneUser = findOneUser;
-function createOneUser(req, res) {
+function createOneUser(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const newUser = req.body;
-        const user = yield userService_js_1.default.createOne(newUser);
-        res.status(201).json({ user });
+        if (!newUser) {
+            next(ApiError_1.ApiError.internal("Details are Required"));
+        }
+        const user = yield userService_1.default.createOne(newUser);
+        next(ResponeHandler_1.ResponseHandler.resourceCreated(JSON.stringify(user), `User with ${user._id} has been added`));
+        // res.status(201).json({ user });
     });
 }
 exports.createOneUser = createOneUser;
@@ -59,33 +73,34 @@ function findOneAndUpdate(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const newUser = req.body;
         const userId = req.params.userId;
-        const updatedUser = yield userService_js_1.default.findOneAndUpdate(userId, newUser);
+        const updatedUser = yield userService_1.default.findOneAndUpdate(userId, newUser);
         if (!updatedUser) {
-            next(ApiError_js_1.ApiError.resourceNotFound("User not found."));
+            next(ApiError_1.ApiError.resourceNotFound("User not found."));
             return;
         }
-        res.status(200).json({ updatedUser });
+        next(ResponeHandler_1.ResponseHandler.resourceUpdated(JSON.stringify(updatedUser), `User with ${updatedUser._id} has been updated`));
+        //res.status(200).json({ updatedUser });
     });
 }
 exports.findOneAndUpdate = findOneAndUpdate;
 function findOneAndDelete(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const userId = req.params.userId;
-        const deletedUser = yield userService_js_1.default.findOneAndDelete(userId);
+        const deletedUser = yield userService_1.default.findOneAndDelete(userId);
         if (!deletedUser) {
-            next(ApiError_js_1.ApiError.resourceNotFound("User not found."));
+            next(ApiError_1.ApiError.resourceNotFound("User not found."));
             return;
         }
-        res.status(200).json({ deletedUser });
-        res.status(200).json("User deleted ...");
+        next(ResponeHandler_1.ResponseHandler.resourceDeleted(JSON.stringify(deletedUser), `User with ${deletedUser._id} has been Deleted`));
+        // res.status(200).json("User deleted ...");
     });
 }
 exports.findOneAndDelete = findOneAndDelete;
 //SignUp
-function signup(req, res) {
+function signup(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const { name, email, password } = req.body;
-        const user = yield userService_js_1.default.createNewOne({ name, email, password });
+        const user = yield userService_1.default.createNewOne({ name, email, password });
         if (!user) {
             res.status(400).json({
                 message: "User exists",
@@ -93,10 +108,8 @@ function signup(req, res) {
             });
             return;
         }
-        res.status(201).json({
-            message: "user created",
-            user,
-        });
+        next(ResponeHandler_1.ResponseHandler.resourceCreated(JSON.stringify(user), `User has been added`));
+        // res.status(201).json({message: "user created",user,})
     });
 }
 exports.signup = signup;
@@ -104,7 +117,7 @@ exports.signup = signup;
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { email, password } = req.body;
-        const login = yield userService_js_1.default.login(email, password);
+        const login = yield userService_1.default.login(email, password);
         if (login.status === false) {
             // TODO throw API error
             res.status(400).json({ accessToken: null, message: "Bad credentials" });
@@ -123,3 +136,4 @@ exports.default = {
     login,
     signup
 };
+//# sourceMappingURL=userController.js.map

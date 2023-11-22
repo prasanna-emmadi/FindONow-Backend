@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
-import OrderService from "../services/orderService.js"
-import { ApiError } from "../errors/ApiError.js";
-import { ResponseHandler } from "../responses/ResponeHandler.js";
+import OrderService from "../services/orderService"
+import { ApiError } from "../errors/ApiError";
+import { ResponseHandler } from "../responses/ResponeHandler";
 
 
 const OrderController = {

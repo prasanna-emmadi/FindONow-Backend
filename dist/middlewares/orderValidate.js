@@ -10,11 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateOrder = void 0;
-const orderSchema_js_1 = require("../schemas/orderSchema.js");
+const orderSchema_1 = require("../schemas/orderSchema");
 function validateOrder(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield orderSchema_js_1.requestSchema.parseAsync({
+            yield orderSchema_1.requestSchema.parseAsync({
                 body: req.body,
                 query: req.query,
                 params: req.params,
@@ -27,3 +27,4 @@ function validateOrder(req, res, next) {
     });
 }
 exports.validateOrder = validateOrder;
+//# sourceMappingURL=orderValidate.js.map

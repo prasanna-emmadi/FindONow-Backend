@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
-import CategoryService from "../services/categoryService.js"
-import { ApiError } from "../errors/ApiError.js";
-import { ResponseHandler } from "../responses/ResponeHandler.js";
+import CategoryService from "../services/categoryService"
+import { ApiError } from "../errors/ApiError";
+import { ResponseHandler } from "../responses/ResponeHandler";
 
 const CategoryController = {
 

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import UsersService from "../services/userService.js";
-import { ApiError } from "../errors/ApiError.js";
-import { ResponseHandler } from "../responses/ResponeHandler.js";
+import UsersService from "../services/userService";
+import { ApiError } from "../errors/ApiError";
+import { ResponseHandler } from "../responses/ResponeHandler";
 
 export async function getOffsetUser(req:Request, res: Response, next: NextFunction)  {
   

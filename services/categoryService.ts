@@ -1,6 +1,6 @@
 import mongoose, { ObjectId } from "mongoose"
-import CategoryRepo from "../models/Category.js"
-import { Category } from "../types/category.js"
+import CategoryRepo from "../models/Category"
+import { Category } from "../types/category"
 
 
  async function paginateCategories(pageNumber:number, pageSize:number) {
