@@ -20,9 +20,11 @@ const CategoryController = {
     
   }
   ,
-  async getAllCategories(req: Request, res: Response) {
-    const list = await CategoryService.findAll()
-    res.json({ list });
+  async getAllCategories(req: Request, res: Response, next:NextFunction) {
+    const categories = await CategoryService.findAll()
+    //res.json({ list });
+    next(ResponseHandler.resourceFetched(JSON.stringify(categories)))
+
   }
   ,
   async getCategoryById(req: Request, res: Response, next:NextFunction) {
