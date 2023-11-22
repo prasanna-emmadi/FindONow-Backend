@@ -1,36 +1,33 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const mongoose_1 = __importDefault(require("mongoose"));
-require("dotenv/config");
-const itemsRoute_js_1 = __importDefault(require("./routes/itemsRoute.js"));
-const categoriesRoute_js_1 = __importDefault(require("./routes/categoriesRoute.js"));
-const productsRoute_js_1 = __importDefault(require("./routes/productsRoute.js"));
-const usersRoute_js_1 = __importDefault(require("./routes/usersRoute.js"));
-const logging_js_1 = require("./middlewares/logging.js");
-const routeNotFound_js_1 = require("./middlewares/routeNotFound.js");
-const orderRoute_js_1 = __importDefault(require("./routes/orderRoute.js"));
+import express from "express";
+import mongoose from "mongoose";
+import "dotenv/config";
+import itemsRoute from "./routes/itemsRoute.js";
+import categoryRoute from "./routes/categoriesRoute.js";
+import productsRoute from "./routes/productsRoute.js";
+import usersRoute from "./routes/usersRoute.js";
+import { loggingMiddleware } from "./middlewares/logging.js";
+import { routeNotFound } from "./middlewares/routeNotFound.js";
+import orderRoute from "./routes/orderRoute.js";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 const jwt = require("jsonwebtoken");
-const checkAuth_js_1 = require("./middlewares/checkAuth.js");
-const responsehandler_js_1 = require("./middlewares/responsehandler.js");
+import { checkAuth } from "./middlewares/checkAuth.js";
+import { responseHandler } from "./middlewares/responsehandler.js";
 const PORT = 8080;
-const app = (0, express_1.default)();
-app.use(express_1.default.json());
+const app = express();
+app.use(express.json());
 // TODO: Validate .env using Zod
 const mongoURL = process.env.DB_URL;
-mongoose_1.default.connect(mongoURL).then(() => console.log("Connected!"));
-app.get("/hello", logging_js_1.loggingMiddleware, (_, res) => {
+mongoose.connect(mongoURL).then(() => console.log("Connected!"));
+app.get("/hello", loggingMiddleware, (_, res) => {
     res.json({ msg: "hello, from Express.js!" });
 });
-app.use("/api/v1/items", itemsRoute_js_1.default);
-app.use("/api/v1/products", productsRoute_js_1.default);
-app.use("/api/v1/categories", categoriesRoute_js_1.default);
-app.use("/api/v1/users", usersRoute_js_1.default);
-app.use("/api/v1/orders", orderRoute_js_1.default);
-app.get("/api/v1/protected", checkAuth_js_1.checkAuth, (req, res) => {
+app.use("/api/v1/items", itemsRoute);
+app.use("/api/v1/products", productsRoute);
+app.use("/api/v1/categories", categoryRoute);
+app.use("/api/v1/users", usersRoute);
+app.use("/api/v1/orders", orderRoute);
+app.get("/api/v1/protected", checkAuth, (req, res) => {
     res.json({ items: [1, 2, 3, 4, 5] });
 });
 // for generating secret key
@@ -57,9 +54,9 @@ app.get("/api/v1/protected", checkAuth_js_1.checkAuth, (req, res) => {
 //   console.log("Token:",token)
 //   res.json({token})
 // });
-app.use(responsehandler_js_1.responseHandler);
-app.use(routeNotFound_js_1.routeNotFound);
+app.use(responseHandler);
+app.use(routeNotFound);
 app.listen(PORT, () => {
     console.log(`👀 app is running at localhost:${PORT}`);
 });
-exports.default = app;
+export default app;
