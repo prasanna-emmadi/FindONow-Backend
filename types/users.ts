@@ -10,7 +10,7 @@
 
 import { z } from "zod"
 
-import { userSchema } from "../schemas/userSchema.js"
+import { userSchema } from "../schemas/userSchema"
 
 // to get the type FROM the ZOD validation
 type UserDTO = z.infer<typeof userSchema>

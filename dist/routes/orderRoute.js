@@ -4,16 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const orderController_js_1 = __importDefault(require("../controllers/orderController.js"));
+const orderController_1 = __importDefault(require("../controllers/orderController"));
 const router = (0, express_1.Router)();
-router.post("/", orderController_js_1.default.createOrder);
-router.get("/user/:id", orderController_js_1.default.getAllUserOrders);
-router.get("/offset", orderController_js_1.default.getAllOffset);
-router.get("/user/:id/offset", orderController_js_1.default.getAllUserOrdersOffset);
-router.get("/", orderController_js_1.default.getAll);
-router.get('/:id', orderController_js_1.default.getOrder);
-router.put("/:id", orderController_js_1.default.updateOrder);
-router.delete("/:id", orderController_js_1.default.deleteOrder);
+router.post("/", orderController_1.default.createOrder);
+router.get("/user/:id", orderController_1.default.getAllUserOrders);
+router.get("/offset", orderController_1.default.getAllOffset);
+router.get("/user/:id/offset", orderController_1.default.getAllUserOrdersOffset);
+router.get("/", orderController_1.default.getAll);
+router.get('/:id', orderController_1.default.getOrder);
+router.put("/:id", orderController_1.default.updateOrder);
+router.delete("/:id", orderController_1.default.deleteOrder);
 router.use((req, res, next) => {
     console.log("👀 got here");
     res.on("finish", () => {

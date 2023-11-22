@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
-import { ResponseHandler } from "../responses/ResponeHandler.js"
-import { ApiError } from "../errors/ApiError.js"
+import { ResponseHandler } from "../responses/ResponeHandler"
+import { ApiError } from "../errors/ApiError"
 
 
   

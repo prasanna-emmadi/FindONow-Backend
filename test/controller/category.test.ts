@@ -8,15 +8,15 @@ describe("Category controller", () => {
   let mongoHelper: MongoHelper;
 
   beforeAll(async () => {
-    mongoHelper = await connect();
+    //mongoHelper = await connect();
   });
 
   afterEach(async () => {
-    await mongoHelper.clearDatabase();
+    //await mongoHelper.clearDatabase();
   });
 
   afterAll(async () => {
-    await mongoHelper.closeDatabase();
+   // await mongoHelper.closeDatabase();
   });
 
   it("Should create a category", async () => {

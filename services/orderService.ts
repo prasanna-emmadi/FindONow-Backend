@@ -1,6 +1,6 @@
 import mongoose, { ObjectId } from "mongoose"
-import OrderRepo from "../models/Order.js"
-import { Order } from "../types/order.js"
+import OrderRepo from "../models/Order"
+import { Order } from "../types/order"
 
 async function getPaginatedOrder(pageNumber:number, pageSize:number) {
   const orders = await OrderRepo.find().skip(pageNumber).limit(pageSize).exec();

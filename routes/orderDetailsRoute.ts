@@ -1,7 +1,7 @@
 import express from "express";
 
-import OrderDetailController from "../controllers/orderDetailsController.js";
-import { validateOrderDetail } from "../middlewares/orderDetailValidate.js";
+import OrderDetailController from "../controllers/orderDetailsController";
+import { validateOrderDetail } from "../middlewares/orderDetailValidate";
 
 const router = express.Router();
 

@@ -22,8 +22,7 @@ describe("Category controller", () => {
 
   it("should create a new category", async () => {
     // create new category
-    const category = {
-      id:0,
+    const category: any = {
       name: "test",
     };
     const newCategory = await CategoryService.createOne(category);

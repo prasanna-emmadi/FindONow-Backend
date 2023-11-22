@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { productSchema } from "../schemas/productSchema.js";
+import { productSchema } from "../schemas/productSchema";
 
 export async function validateProduct(
   req: Request,
