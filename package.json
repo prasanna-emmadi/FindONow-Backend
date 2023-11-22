@@ -7,7 +7,8 @@
     "build_ci": "tsc",
     "build": "tsc -w",
     "start": "nodemon dist/index.js",
-    "test": "jest --forceExit --coverage --verbose false --runInBand"
+    "test": "jest --forceExit --coverage --verbose false --runInBand",
+    "test1": "jest --forceExit --coverage --verbose false"
   },
   "keywords": [],
   "author": "",
