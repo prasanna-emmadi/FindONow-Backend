@@ -25,7 +25,7 @@ describe("Order controller", () => {
   }, 30000);
 
   afterEach(async () => {
-    await mongoHelper.clearDatabase();
+    //await mongoHelper.clearDatabase();
   });
 
   afterAll(async () => {
@@ -57,7 +57,6 @@ describe("Order controller", () => {
     const response = await createOrder();
     const orderId = response.body.data._id;
     const singleResponse = await request(app).get(ORDERS_URL + "/" + orderId);
-    console.log(singleResponse.body.data);
     expect(singleResponse.body.data._id).toEqual(orderId);
   });
 

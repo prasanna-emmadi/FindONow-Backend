@@ -20,7 +20,6 @@ router.put(
 );
 router.delete("/:orderDetailId", OrderDetailController.findOneAndDelete);
 router.use((req, res, next) => {
-  console.log("got here");
   res.on("finish", () => {
     console.log("Record created:", {
       /*log data */

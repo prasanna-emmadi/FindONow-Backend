@@ -11,6 +11,7 @@ import { routeNotFound } from "./middlewares/routeNotFound";
 import orderRoute from "./routes/orderRoute";
 import { checkAuth } from "./middlewares/checkAuth";
 import { responseHandler } from "./middlewares/responsehandler";
+import orderDetailsRoute from "./routes/orderDetailsRoute";
 
 const jwt = require("jsonwebtoken");
 
@@ -21,7 +22,6 @@ app.use(express.json());
 
 // TODO: Validate .env using Zod
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
-  console.log("connecting to real db");
   const mongoURL = process.env.DB_URL as string;
   mongoose.connect(mongoURL).then(() => console.log("Connected!"));
 }
@@ -35,6 +35,7 @@ app.use("/api/v1/products", productsRoute);
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/users", usersRoute);
 app.use("/api/v1/orders", orderRoute);
+app.use("/api/v1/orderDetails", orderDetailsRoute);
 
 app.get("/api/v1/protected", checkAuth, (req, res) => {
   res.json({ items: [1, 2, 3, 4, 5] });
@@ -69,8 +70,9 @@ app.get("/api/v1/protected", checkAuth, (req, res) => {
 app.use(responseHandler);
 app.use(routeNotFound);
 
-app.listen(PORT, () => {
-  console.log(`👀 app is running at localhost:${PORT}`);
-});
-
+if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
+  app.listen(PORT, () => {
+    console.log(`👀 app is running at localhost:${PORT}`);
+  });
+}
 export default app;

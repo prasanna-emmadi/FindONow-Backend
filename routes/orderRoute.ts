@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import { Router } from "express";
 
-import  OrderController  from '../controllers/orderController';
+import OrderController from "../controllers/orderController";
 
 const router = Router();
 
@@ -9,19 +9,18 @@ router.get("/user/:id", OrderController.getAllUserOrders);
 router.get("/offset", OrderController.getAllOffset);
 router.get("/user/:id/offset", OrderController.getAllUserOrdersOffset);
 router.get("/", OrderController.getAll);
-router.get('/:id', OrderController.getOrder);
+router.get("/:id", OrderController.getOrder);
 router.put("/:id", OrderController.updateOrder);
 router.delete("/:id", OrderController.deleteOrder);
 
 router.use((req, res, next) => {
-  console.log("👀 got here")
   res.on("finish", () => {
     console.log("Record created:", {
-      req
+      req,
       /* log data */
-    })
-  })
-  next()
-})
+    });
+  });
+  next();
+});
 
 export default router;
