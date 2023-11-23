@@ -1,0 +1,824 @@
+---
+openapi: 3.0.0
+info:
+  title: Simple Inventory API
+  description: This is a simple API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/HAIDERALI_1/Ecommerce/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+paths:
+  /categories/offset:
+    get:
+      tags:
+      - categories
+      parameters:
+      - name: pageNumber
+        in: query
+        description: pageNumber for Pagination
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: pageSize for pagination
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        "501":
+          description: internal server error
+  /categories:
+    get:
+      tags:
+      - categories
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        "501":
+          description: internal server error
+    post:
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/categories_body'
+      responses:
+        "201":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        "501":
+          description: internal server error
+  /categories/{id}:
+    put:
+      tags:
+      - categories
+      parameters:
+      - name: id
+        in: path
+        description: ID of the resource to be updated
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/categories_id_body'
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "501":
+          description: internal server error
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                code: 404
+                error: Category not found
+    delete:
+      tags:
+      - categories
+      parameters:
+      - name: id
+        in: path
+        description: ID of the resource to be updated
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "501":
+          description: internal server error
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                code: 404
+                error: Category not found
+  /orders/offset:
+    get:
+      tags:
+      - orders
+      parameters:
+      - name: pageNumber
+        in: query
+        description: pageNumber for Pagination
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: pageSize for pagination
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        "501":
+          description: internal server error
+  /orders:
+    get:
+      tags:
+      - orders
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        "501":
+          description: internal server error
+    post:
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/orders_body'
+      responses:
+        "201":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "501":
+          description: internal server error
+  /orders/{id}:
+    put:
+      tags:
+      - orders
+      parameters:
+      - name: id
+        in: path
+        description: ID of the resource to be updated
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/orders_id_body'
+      responses:
+        "201":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "501":
+          description: internal server error
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                code: 404
+                error: Order not found
+    delete:
+      tags:
+      - orders
+      parameters:
+      - name: id
+        in: path
+        description: ID of the resource to be updated
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "201":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "501":
+          description: internal server error
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                code: 404
+                error: Order not found
+  /orderDetails:
+    get:
+      tags:
+      - orderDetails
+      summary: Finds OrderDetails by status
+      description: Finds all OrderDetails
+      operationId: findOrderDetails
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDetail'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDetail'
+        "400":
+          description: Invalid status value
+    post:
+      tags:
+      - orderDetails
+      summary: Add a new orderDetails to the store
+      description: Add a new orderDetails to the store
+      operationId: addOrderDetails
+      requestBody:
+        description: Create a new orderDetails in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderDetail'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/OrderDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderDetail'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDetail'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/OrderDetail'
+        "405":
+          description: Invalid input
+  /orderDetails/offset:
+    get:
+      tags:
+      - orderDetails
+      summary: Finds OrderDetails with pagination
+      description: Finds OrderDetails with pagination
+      operationId: findOrderDetailsWithPagination
+      parameters:
+      - name: pageNumber
+        in: query
+        description: page number
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: page size
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDetail'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDetail'
+        "400":
+          description: Invalid status value
+  /orderDetails/{orderDetailId}:
+    get:
+      tags:
+      - orderDetails
+      summary: Finds OrderDetails by tags
+      description: Finds OrderDetail by Id
+      operationId: findOrderDetailsById
+      parameters:
+      - name: orderDetailId
+        in: path
+        description: OrderDetail id to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDetail'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDetail'
+        "400":
+          description: Invalid tag value
+    put:
+      tags:
+      - orderDetails
+      summary: Update an existing orderDetails
+      description: Update an existing orderDetails by Id
+      operationId: updateOrderDetails
+      parameters:
+      - name: orderDetailId
+        in: path
+        description: OrderDetail id to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Update an existent orderDetails in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderDetail'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/OrderDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderDetail'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDetail'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/OrderDetail'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: OrderDetails not found
+        "405":
+          description: Validation exception
+    delete:
+      tags:
+      - orderDetails
+      summary: Deletes a orderDetail
+      description: delete a orderDetail
+      operationId: deleteOrderDetail
+      parameters:
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: orderDetailId
+        in: path
+        description: OrderDetail id to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "400":
+          description: Invalid orderDetail value
+  /products:
+    get:
+      tags:
+      - products
+      summary: Get all products
+      description: Returns a list of all products
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              example:
+                products:
+                - _id: "123"
+                  name: Product 1
+                  description: Description 1
+                  price: 19.99
+                  image: image-url-1
+                  categoryId: category-id-1
+    post:
+      tags:
+      - products
+      summary: Create a new product
+      description: Creates a new product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        "201":
+          description: Product created successfully
+          content:
+            application/json:
+              example:
+                product:
+                  _id: "123"
+                  name: Product 1
+                  description: Description 1
+                  price: 19.99
+                  image: image-url-1
+                  categoryId: category-id-1
+  /products/{productId}:
+    get:
+      tags:
+      - products
+      summary: Get a product by ID
+      description: Returns a single product based on the provided ID
+      parameters:
+      - name: productId
+        in: path
+        description: ID of the product to retrieve data
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              example:
+                product:
+                  _id: "123"
+                  name: Product 1
+                  description: Description 1
+                  price: 19.99
+                  image: image-url-1
+                  categoryId: category-id-1
+        "404":
+          description: Product not found
+    put:
+      tags:
+      - products
+      summary: Update a product by ID
+      description: Updates an existing product with the provided data
+      parameters:
+      - name: productId
+        in: path
+        description: ID of the product to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        "200":
+          description: Product updated successfully
+          content:
+            application/json:
+              example:
+                product:
+                  _id: "123"
+                  name: Product 1
+                  description: Description 1
+                  price: 19.99
+                  image: image-url-1
+                  categoryId: category-id-1
+        "404":
+          description: Product not found
+    delete:
+      tags:
+      - products
+      summary: Delete a product by ID
+      description: Deletes a product based on the provided ID
+      parameters:
+      - name: productId
+        in: path
+        description: ID of the product to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Product deleted successfully
+        "404":
+          description: Product not found
+  /users:
+    get:
+      tags:
+      - users
+      summary: Get all users
+      description: Returns a list of all users
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags:
+      - users
+      summary: Create a new user
+      description: Creates a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "201":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{userId}:
+    get:
+      tags:
+      - users
+      summary: Get a user by ID
+      description: Returns a single user based on the provided ID
+      parameters:
+      - name: userId
+        in: path
+        description: ID of the user to retrieve data
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: User not found
+    put:
+      tags:
+      - users
+      summary: Update a user by ID
+      description: Updates an existing user with the provided data
+      parameters:
+      - name: userId
+        in: path
+        description: ID of the user to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: User not found
+    delete:
+      tags:
+      - users
+      summary: Delete a User by ID
+      description: Deletes a User based on the provided ID
+      parameters:
+      - name: userId
+        in: path
+        description: ID of the User to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: User deleted successfully
+        "404":
+          description: User not found
+components:
+  schemas:
+    Order:
+      required:
+      - totalAmount
+      - userId
+      type: object
+      properties:
+        id:
+          type: string
+          example: 654d12c542feb73983fe212c
+        userId:
+          type: string
+          example: 654d12c542feb73983fe212c
+        date:
+          type: string
+          example: 2023-11-09T20:23:45.874Z
+        totalAmount:
+          type: integer
+          format: int64
+          example: 5
+    OrderDetail:
+      required:
+      - orderId
+      type: object
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        productId:
+          type: string
+        quantity:
+          type: integer
+        priceAtPurchase:
+          type: number
+          format: double
+      xml:
+        name: orderDetail
+    Category:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          example: 654d12c542feb73983fe212c
+        name:
+          type: string
+          example: Electronics
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the product
+        description:
+          type: string
+          description: Description of the product
+        price:
+          type: number
+          description: Price of the product
+        image:
+          type: string
+          description: URL of the product image
+        categoryId:
+          type: string
+          description: ID of the product category
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the user
+        email:
+          type: string
+          description: email of the user
+        password:
+          type: string
+          description: password of the user
+        role:
+          type: string
+          description: role by default User
+    categories_body:
+      type: object
+      properties:
+        name:
+          type: string
+    categories_id_body:
+      type: object
+      properties:
+        name:
+          type: string
+    inline_response_200:
+      type: object
+      properties:
+        message:
+          type: string
+    orders_body:
+      type: object
+      properties:
+        userId:
+          type: string
+        totalAmount:
+          type: integer
+    orders_id_body:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: 654d12c542feb73983fe212c
+        totalAmount:
+          type: integer
