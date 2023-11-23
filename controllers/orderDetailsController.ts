@@ -1,22 +1,29 @@
 import { NextFunction, Request, Response } from "express";
-import orderDetailsService from "../services/orderDetailService";
-import { ApiError } from "../errors/ApiError";
 import orderDetailService from "../services/orderDetailService";
+import { ApiError } from "../errors/ApiError";
+import { ResponseHandler } from "../responses/ResponeHandler";
 
-async function findOrderDetailOffset(req: Request, res: Response) {
+async function findOrderDetailOffset(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const pageNumber = Number(req.query.pageNumber) || 1;
   const pageSize = Number(req.query.pageSize) || 10;
   const list = await orderDetailService.getPaginatedOrderDetail(
     pageNumber,
     pageSize
   );
-  res.json({ list });
+  next(ResponseHandler.resourceFetched(JSON.stringify(list)));
 }
 
-async function findAllOrderDetail(_: Request, res: Response) {
-  const orderDetails = await orderDetailsService.findAll();
-
-  res.json({ orderDetails });
+async function findAllOrderDetail(
+  _: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const orderDetails = await orderDetailService.findAll();
+  next(ResponseHandler.resourceFetched(JSON.stringify(orderDetails)));
 }
 
 async function findOneOrderDetail(
@@ -25,21 +32,29 @@ async function findOneOrderDetail(
   next: NextFunction
 ) {
   const orderDetailId = req.params.orderDetailId;
-  const orderDetail = await orderDetailsService.findone(orderDetailId);
+  const orderDetail = await orderDetailService.findone(orderDetailId);
 
   if (!orderDetail) {
     next(ApiError.resourceNotFound("OrderDetail not found."));
     return;
   }
-
-  res.json({ orderDetail });
+  next(ResponseHandler.resourceFetched(JSON.stringify(orderDetail)));
 }
 
-async function createOneOrderDetail(req: Request, res: Response) {
+async function createOneOrderDetail(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const newOrderDetail = req.body;
-  const orderDetail = await orderDetailsService.createOne(newOrderDetail);
+  const orderDetail = await orderDetailService.createOne(newOrderDetail);
 
-  res.status(201).json({ orderDetail });
+  next(
+    ResponseHandler.resourceCreated(
+      JSON.stringify(orderDetail),
+      `Order Detail with ${orderDetail._id} has been added`
+    )
+  );
 }
 
 async function findOneAndUpdate(
@@ -49,7 +64,7 @@ async function findOneAndUpdate(
 ) {
   const newOrderDetail = req.body;
   const orderDetailId = req.params.orderDetailId;
-  const updatedOrderDetail = await orderDetailsService.findOneAndUpdate(
+  const updatedOrderDetail = await orderDetailService.findOneAndUpdate(
     orderDetailId,
     newOrderDetail
   );
@@ -58,7 +73,13 @@ async function findOneAndUpdate(
     next(ApiError.resourceNotFound("OrderDetail not found."));
     return;
   }
-  res.status(201).json({ updatedOrderDetail });
+
+  next(
+    ResponseHandler.resourceUpdated(
+      JSON.stringify(updatedOrderDetail),
+      `OrderDetail with ${updatedOrderDetail._id} has been updated`
+    )
+  );
 }
 
 async function findOneAndDelete(
@@ -67,7 +88,7 @@ async function findOneAndDelete(
   next: NextFunction
 ) {
   const orderDetailId = req.params.orderDetailId;
-  const deletedOrderDetail = await orderDetailsService.findOneAndDelete(
+  const deletedOrderDetail = await orderDetailService.findOneAndDelete(
     orderDetailId
   );
 
@@ -75,7 +96,13 @@ async function findOneAndDelete(
     next(ApiError.resourceNotFound("OderDetail not found."));
     return;
   }
-  res.status(201).json({ deletedOrderDetail });
+
+  next(
+    ResponseHandler.resourceDeleted(
+      JSON.stringify(deletedOrderDetail),
+      `OrderDetail with ${deletedOrderDetail._id} has been deleted`
+    )
+  );
 }
 
 export default {

@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 import OrderDetailRepo from "../models/OrderDetail";
 import { OrderDetail } from "../types/orderDetails";
 
-async function getPaginatedOrderDetail(pageNumber: number, pageSize:number) {
+async function getPaginatedOrderDetail(pageNumber: number, pageSize: number) {
   const skip = (pageNumber - 1) * pageSize;
-  const orders =await OrderDetailRepo.find().skip(skip).limit(pageSize).exec();
+  const orders = await OrderDetailRepo.find().skip(skip).limit(pageSize).exec();
   return orders;
 }
 
@@ -16,7 +16,7 @@ async function findAll() {
 
 async function findone(orderDetailId: string) {
   const id = new mongoose.Types.ObjectId(orderDetailId);
-  const orderDetail = await OrderDetailRepo.findById(id);
+  const orderDetail = await OrderDetailRepo.findById(id).exec();
 
   return orderDetail;
 }
@@ -26,9 +26,14 @@ async function createOne(orderDetail: OrderDetail) {
   return await newOrderDetail.save();
 }
 
-async function findOneAndUpdate(orderDetailId: string, orderDetail: OrderDetail) {
+async function findOneAndUpdate(
+  orderDetailId: string,
+  orderDetail: OrderDetail
+) {
   const id = new mongoose.Types.ObjectId(orderDetailId);
-  return await OrderDetailRepo.findByIdAndUpdate(id, orderDetail);
+  return await OrderDetailRepo.findByIdAndUpdate(id, orderDetail, {
+    new: true,
+  });
 }
 
 async function findOneAndDelete(orderDetailId: string) {
@@ -42,5 +47,5 @@ export default {
   createOne,
   findOneAndUpdate,
   findOneAndDelete,
-  getPaginatedOrderDetail
+  getPaginatedOrderDetail,
 };
