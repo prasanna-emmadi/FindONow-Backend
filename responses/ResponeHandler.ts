@@ -29,6 +29,12 @@ export class ResponseHandler {
         }
         return new ResponseHandler(200, "Success", data, msg)
     }
+    static internalServerError(data?: string, msg?: string) {
+        if (!msg) {
+          return new ResponseHandler(500, "Internal Server Error", data || "Internal Server Error");
+        }
+        return new ResponseHandler(500, "Internal Server Error", data || "Internal Server Error", msg);
+      }
   
   }
   
