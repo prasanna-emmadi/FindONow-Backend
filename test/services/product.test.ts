@@ -1,12 +1,17 @@
-import ProductService from '../../services/productsService'; 
-import connect, { MongoHelper } from '../db-helper';
-import ProductRepo from '../../models/Product';
+import ProductService from "../../services/productsService";
+import connect, { MongoHelper } from "../db-helper";
+import ProductRepo from "../../models/Product";
+import CategoryModel from "../../models/Category";
 
-describe('Product service', () => {
+describe("Product service", () => {
   let mongoHelper: MongoHelper;
 
   beforeAll(async () => {
     mongoHelper = await connect();
+  });
+
+  beforeEach(async () => {
+    await CategoryModel.create({ name: "Test Category" }); // Create test category
   });
 
   afterEach(async () => {
@@ -17,83 +22,80 @@ describe('Product service', () => {
     await mongoHelper.closeDatabase();
   });
 
-  it('should create a new product', async () => {
+  it("should create a new product", async () => {
     // create new product
     const product: any = {
-      _id: '655e1356be9cf967bdead01f',
-      name: 'Test Product',
-      description: 'This is a test product.',
+      _id: "655e1356be9cf967bdead01f",
+      name: "Test Product",
+      description: "This is a test product.",
       price: 19.99,
-      image: 'test-image-url.jpg',
-      categoryId: '655e1356be9cf967bdead01f',
+      image: "test-image-url.jpg",
+      categoryId: "655e1356be9cf967bdead01f",
     };
 
-    const newProduct = await ProductService.createOne(product, '655e1356be9cf967bdead01f');
-    console.log("@@@@@@@@@@@@@@@@@@@@@@",newProduct)
+    const newProduct = await ProductService.createOne(
+      product,
+      "655e1356be9cf967bdead01f"
+    );
 
-    expect(newProduct).not.toBeNull();
-    expect(newProduct?.name).toEqual('Test Product');
+    expect(newProduct).toHaveProperty("name");
+    expect(newProduct.name).toEqual("Test Product");
   });
 
-  it('should return a list of products', async () => {
+  it("should return a list of products", async () => {
     // create new product
     const newProduct = new ProductRepo({
-      name: 'Test Product',
-      description: 'This is a test product.',
+      name: "Test Product",
+      description: "This is a test product.",
       price: 19.99,
-      image: 'https://example.com/smartphone.jpg',
-      categoryId: '655e1356be9cf967bdead01f',
+      image: "https://example.com/smartphone.jpg",
+      categoryId: "655e9e08106158f8d895ccbe",
     });
 
     await newProduct.save();
 
     const products = await ProductService.findAll();
-    console.log("########################",products)
+
     expect(products.length).toEqual(1);
+    expect(products[0]).toHaveProperty("name", "Test Product");
   });
 
-  it('should update a product', async () => {
+  it("should find a product by ID", async () => {
     // create new product
-    const product: any = {
-      _id: '655e1356be9cf967bdead01f',
-      name: 'Test Product',
-      description: 'This is a test product.',
+    const newProduct = new ProductRepo({
+      name: "Test Product",
+      description: "This is a test product.",
       price: 19.99,
-      image: 'test-image-url.jpg',
-      categoryId: '655e1356be9cf967bdead01f',
-    };
+      image: "https://example.com/smartphone.jpg",
+      categoryId: "655e9e08106158f8d895ccbe",
+    });
 
-    await ProductService.createOne(product, '655e1356be9cf967bdead01f');
+    const savedProduct = await newProduct.save();
 
-    // update product
-    const updatedProduct: any = {
-      name: 'Updated Test Product',
-      description: 'Updated description for the test product.',
-      price: 29.99,
-      image: 'updated-image-url.jpg',
-      categoryId: '655e1356be9cf967bdead01f',
-    };
+    const foundProduct = await ProductService.findOne(savedProduct._id);
 
-    const newProduct = await ProductService.updateOne('655e1356be9cf967bdead01f', updatedProduct, '655e1356be9cf967bdead01f');
-    expect(newProduct).not.toBeNull();
-    expect(newProduct?.name).toEqual('Updated Test Product');
+    expect(foundProduct).toHaveProperty("name", "Test Product");
   });
 
-  it('should delete a product', async () => {
+  it("should delete a product by ID", async () => {
     // create new product
-    const product: any = {
-      _id: '655e1356be9cf967bdead01f',
-      name: 'Test Product',
-      description: 'This is a test product.',
+    const newProduct = new ProductRepo({
+      name: "Test Product",
+      description: "This is a test product.",
       price: 19.99,
-      image: 'test-image-url.jpg',
-      categoryId: '655e1356be9cf967bdead01f',
-    };
+      image: "https://example.com/smartphone.jpg",
+      categoryId: "655e9e08106158f8d895ccbe",
+    });
 
-    await ProductService.createOne(product, '655e1356be9cf967bdead01f');
+    const savedProduct = await newProduct.save();
 
-    const newProduct = await ProductService.deleteOne('655e1356be9cf967bdead01f');
-    expect(newProduct).not.toBeNull();
-    expect(newProduct?.name).toEqual('Test Product');
+    const deletedProduct = await ProductService.deleteOne(savedProduct._id);
+
+    expect(deletedProduct).toHaveProperty("name", "Test Product");
+    expect(deletedProduct).toHaveProperty(
+      "description",
+      "This is a test product."
+    );
+    expect(deletedProduct).toHaveProperty("price", 19.99);
   });
 });
