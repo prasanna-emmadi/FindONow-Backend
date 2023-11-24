@@ -24,10 +24,6 @@ describe("Order controller", () => {
     userId = response.body.data._id;
   }, 30000);
 
-  afterEach(async () => {
-    //await mongoHelper.clearDatabase();
-  });
-
   afterAll(async () => {
     await mongoHelper.closeDatabase();
   });
