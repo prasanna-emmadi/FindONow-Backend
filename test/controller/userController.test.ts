@@ -8,7 +8,7 @@ describe("User controller", () => {
   let mongoHelper: MongoHelper;
 
   beforeAll(async () => {
-    //mongoHelper = await connect();
+    mongoHelper = await connect();
   });
 
   afterEach(async () => {
@@ -16,7 +16,7 @@ describe("User controller", () => {
   });
 
   afterAll(async () => {
-    //await mongoHelper.closeDatabase();
+    await mongoHelper.closeDatabase();
   });
 
   it("Should create a user", async () => {
@@ -27,7 +27,7 @@ describe("User controller", () => {
         password:"test123",
         role:"User"
     });
-
+  console.log("###########################",response.body)
     expect(response.body.data).toHaveProperty("name");
     expect(response.body.data.name).toEqual('Test user');
     expect(response.body.data).toHaveProperty("email");
@@ -54,10 +54,8 @@ describe("User controller", () => {
 //     });
 //   });
 
-it("should update the user", async () => {
-      
+it("should update the user", async () => { 
    // let user:any = {name: "Updated user"}
-  
     const response = await request(app).
     put("/api/v1/users/655e2273fe4c4f58b6a80113")
     .send({
@@ -65,13 +63,13 @@ it("should update the user", async () => {
         email:"update@gmail.com",
         password:"test123",
         role:"User",
-    });;
+    });
     //expect(response.body.user).toEqual({   
     expect(response.body.data).toEqual({
       name: "Updated user",
       email: "update@gmail.com",
       password: "test123",
-      role: "USER",
+      role: "User",
       _id: "655e2273fe4c4f58b6a80113",
       __v: 0,
     });
