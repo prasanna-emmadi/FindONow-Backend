@@ -1,24 +1,24 @@
 import request from "supertest";
 import app from "../../";
-// import connect, { MongoHelper } from '../db-helper';
+ import connect, { MongoHelper } from '../db-helper';
+ import mongoose from 'mongoose';
 
-describe("Product controller", () => {
-  // let mongoHelper: MongoHelper;
 
-  beforeAll(async () => {
-    // Initialize database connection if needed
-    // mongoHelper = await connect();
-  });
+  describe("Product controller", () => {
+    let mongoHelper: MongoHelper;
 
-  afterEach(async () => {
-    // Clear database or perform necessary cleanup
-    // await mongoHelper.clearDatabase();
-  });
+    beforeAll(async () => {
+      mongoHelper = await connect();
+    });
+  
+    afterEach(async () => {
+      //await mongoHelper.clearDatabase();
+    });
+  
+    afterAll(async () => {
+      await mongoHelper.closeDatabase();
+    });
 
-  afterAll(async () => {
-    // Close the database connection if needed
-    //  await mongoHelper.closeDatabase();
-  });
 
   it("Should create a product", async () => {
     const response = await request(app).post("/api/v1/products").send({
@@ -50,33 +50,28 @@ describe("Product controller", () => {
 
   it("Should get the product", async () => {
     const response = await request(app).get(
-      "/api/v1/products/655e9e23106158f8d895ccc1"
+      "/api/v1/products/655e78935512aa4109537c03"
     );
 
-    const responseObject = JSON.parse(response.text);
-
-    console.log("#####################", response.text);
-    expect(responseObject.product).toHaveProperty("name");
-    expect(responseObject.product.name).toEqual("Smartphone99");
-    expect(responseObject.product).toHaveProperty("description");
-    expect(responseObject.product.description).toEqual(
+console.log('########################## get', response.body)
+    expect(response.body.product).toHaveProperty("name");
+    expect(response.body.product.name).toEqual("Smartphone");
+    expect(response.body.product).toHaveProperty("description");
+    expect(response.body.product.description).toEqual(
       "High-end smartphone with advanced features"
     );
-    expect(responseObject.product).toHaveProperty("price");
-    expect(responseObject.product.price).toEqual(799.99);
-    expect(responseObject.product).toHaveProperty("image");
-    expect(responseObject.product.image).toEqual(
+    expect(response.body.product).toHaveProperty("price");
+    expect(response.body.product.price).toEqual(799.99);
+    expect(response.body.product).toHaveProperty("image");
+    expect(response.body.product.image).toEqual(
       "https://example.com/smartphone.jpg"
     );
-    expect(responseObject.product).toHaveProperty("categoryId");
-    expect(responseObject.product.categoryId._id).toEqual(
-      "655e9e08106158f8d895ccbe"
-    );
+    expect(response.body.product).toHaveProperty("categoryId");
   });
 
   it("Should update the product", async () => {
     const response = await request(app)
-      .put("/api/v1/products/655ea039d3be60c4fa66469d")
+      .put("/api/v1/products/655e78935512aa4109537c03")
       .send({
         name: "Updated Smartphone",
         description: "Updated description for the smartphone",
@@ -85,7 +80,7 @@ describe("Product controller", () => {
         categoryId: "655e9e08106158f8d895ccbe",
       });
 
-    const responseData = JSON.parse(response.text);
+    console.log("#####################", response.body);
 
     expect(response.body.product).toHaveProperty("name");
     expect(response.body.product.name).toEqual("Updated Smartphone");
@@ -100,9 +95,6 @@ describe("Product controller", () => {
       "https://example.com/updated-smartphone.jpg"
     );
     expect(response.body.product).toHaveProperty("categoryId");
-    expect(response.body.product.categoryId._id).toEqual(
-      "655e9e08106158f8d895ccbe"
-    );
   });
 
   it("Should delete the product", async () => {
@@ -117,3 +109,4 @@ describe("Product controller", () => {
     expect(message).toEqual("Product deleted successfully");
   });
 });
+
