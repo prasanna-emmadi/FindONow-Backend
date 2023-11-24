@@ -47,35 +47,35 @@ describe("User controller", () => {
 
 
 // it("should get the user", async () => {
-//     const response = await request(app).get("/api/v1/users/655e1356be9cf967bdead01f");
-//     //const responseObject = JSON.parse(response.text);
+//     const response = await request(app).get("/api/v1/users/655e2273fe4c4f58b6a80113");
+   
 //     expect(response.body.data).toMatchObject({
 //       _id: "655e2273fe4c4f58b6a80113",
 //     });
 //   });
 
-// it("should update the user", async () => {
+it("should update the user", async () => {
       
-//    // let user:any = {name: "Updated user"}
+   // let user:any = {name: "Updated user"}
   
-//     const response = await request(app).
-//     put("/api/v1/users/655e2273fe4c4f58b6a80113")
-//     .send({
-//         name: "Updated user",
-//         email:"update@gmail.com",
-//         password:"test123",
-//         role:"User",
-//     });;
-//     //expect(response.body.user).toEqual({   
-//     expect(response.body.data).toEqual({
-//       name: "Updated user",
-//       email: "update@gmail.com",
-//       password: "test123",
-//       role: "USER",
-//       _id: "655e2273fe4c4f58b6a80113",
-//       __v: 0,
-//     });
-// });
+    const response = await request(app).
+    put("/api/v1/users/655e2273fe4c4f58b6a80113")
+    .send({
+        name: "Updated user",
+        email:"update@gmail.com",
+        password:"test123",
+        role:"User",
+    });;
+    //expect(response.body.user).toEqual({   
+    expect(response.body.data).toEqual({
+      name: "Updated user",
+      email: "update@gmail.com",
+      password: "test123",
+      role: "USER",
+      _id: "655e2273fe4c4f58b6a80113",
+      __v: 0,
+    });
+});
 
 it("should delete the user", async () => {
     const response = await request(app)

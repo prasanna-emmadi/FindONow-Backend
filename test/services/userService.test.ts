@@ -50,31 +50,31 @@ describe("User service", () => {
 //     expect(users[0]).toHaveProperty("name", "test user");
 //   });
 
-//   it("should update a User", async () => {
-//          // create new User
-//     const user1: any = {
-//       _id: "655e2273fe4c4f58b6a80113",
-//       name: "test",
-//       email:"test@gmail.com",
-//       password:"test123",
-//       role:"User"
-//     };
-//     await UserService.createOne(user1);
+  it("should update a User", async () => {
+         // create new User
+    const user1: any = {
+      _id: "655e2273fe4c4f58b6a80113",
+      name: "test",
+      email:"test@gmail.com",
+      password:"test123",
+      role:"User"
+    };
+    await UserService.createOne(user1);
 
-//     // create new user
-//     const user: any = {
-//       name: "tester",
-//       email:"test@gmail.com",
-//       password:"test123",
-//       role:"User"
-//     };
-//     const newUser = await UserService.findOneAndUpdate("655e1356be9cf967bdead01f", user);
-//     console.log('#############!@#@!#', newUser)
-//     if(newUser){
-//       expect(newUser).toHaveProperty("_id");
-//       expect(newUser.name).toEqual("tester");
-//     }
-//   });
+    // create new user
+    const user: any = {
+      name: "tester",
+      email:"test@gmail.com",
+      password:"test123",
+      role:"User"
+    };
+    const newUser = await UserService.findOneAndUpdate("655e1356be9cf967bdead01f", user);
+    console.log('NewUser==', newUser)
+    if(newUser){
+      expect(newUser).toHaveProperty("_id");
+      expect(newUser.name).toEqual("tester");
+    }
+  });
 
   it("should delete a user", async () => {
     const user: any = {                               //// create new user
