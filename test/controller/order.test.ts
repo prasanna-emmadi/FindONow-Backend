@@ -8,6 +8,7 @@ describe("Category controller", () => {
   let mongoHelper: MongoHelper;
 
   beforeAll(async () => {
+    mongoHelper = await connect();
     await request(app).post("/api/v1/users").send({
         _id: "655e1356be9cf967bdead01f", name: "Test cat" , email:"testcat@testcat.com", password:"1234", role:"USER",
       });
@@ -19,6 +20,7 @@ describe("Category controller", () => {
 
   afterAll(async () => {
     await request(app).delete("/api/v1/users/655e1356be9cf967bdead01f");
+    await mongoHelper.closeDatabase();
   });
 
   it("Should create an order", async () => {
