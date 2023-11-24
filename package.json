@@ -7,6 +7,7 @@
     "build_ci": "npx tsc",
     "build": "tsc -w",
     "start": "cross-env  NODE_ENV=DEV nodemon dist/index.js",
+    "start_ci": "cross-env  NODE_ENV=PRODUCTION node dist/index.js",
     "test": "cross-env NODE_ENV=test jest --forceExit --coverage --verbose false --runInBand"
   },
   "keywords": [],
