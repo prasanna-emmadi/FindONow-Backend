@@ -22,11 +22,11 @@ describe("User service", () => {
   it("should create a new User", async () => {
     // create new user
     const user: any = {
-      _id: "655e2273fe4c4f58b6a80113",
-      name: "test",
-      email:"test@gmail.com",
-      password:"test123",
-      role:"User"
+        _id: "655e2273fe4c4f58b6a80113", 
+        name: "Test user", 
+        email:"test@gmail.com",
+        password:"test123",
+        role:"User"
     };
     const newUser = await UserService.createOne(user);
 
@@ -53,20 +53,20 @@ describe("User service", () => {
   it("should update a User", async () => {
          // create new User
     const user1: any = {
-      _id: "655e2273fe4c4f58b6a80113",
-      name: "test",
-      email:"test@gmail.com",
-      password:"test123",
-      role:"User"
+        _id: "655e2273fe4c4f58b6a80113", 
+        name: "Test user", 
+        email:"test@gmail.com",
+        password:"test123",
+        role:"User"
     };
     await UserService.createOne(user1);
 
     // create new user
     const user: any = {
-      name: "tester",
-      email:"test@gmail.com",
-      password:"test123",
-      role:"User"
+      name: "Updated user",
+      email: "update@gmail.com",
+      password: "test123",
+      role: "User",
     };
     const newUser = await UserService.findOneAndUpdate("655e1356be9cf967bdead01f", user);
     console.log('NewUser==', newUser)

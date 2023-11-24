@@ -53,10 +53,6 @@ describe("OrderDetail controller", () => {
     productId = productResponse.body.product._id;
   }, 60000);
 
-  afterEach(async () => {
-    // await mongoHelper.clearDatabase();
-  });
-
   afterAll(async () => {
     await mongoHelper.closeDatabase();
   });
