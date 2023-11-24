@@ -49,33 +49,16 @@ async function updateOne(orderId: string, updatedOrder: Order) {
   const id = new mongoose.Types.ObjectId(orderId);
   const order = await OrderRepo.findById(id);
 
-  if (!order) {
-    return undefined;
-  }
-
-  // Update category fields
-  order.totalAmount = updatedOrder.totalAmount;
-
-  await order.save();
-  return order;
+  return await OrderRepo.findByIdAndUpdate(id, updatedOrder, {
+    new: true,
+  });
 }
 
 async function deleteOne(orderId: string) {
   const id = new mongoose.Types.ObjectId(orderId);
-
-  const order = await OrderRepo.findById(id);
-
-  if (!order) {
-    return undefined;
-  }
-
-  const deletedOrder = await OrderRepo.deleteOne({ _id: id });
-
-  if (deletedOrder.deletedCount === 0) {
-    return undefined;
-  }
-
-  return order;
+  return await OrderRepo.findByIdAndDelete(id, {
+    new: true,
+  });
 }
 
 export default {

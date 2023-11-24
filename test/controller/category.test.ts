@@ -8,7 +8,7 @@ describe("Category controller", () => {
   let mongoHelper: MongoHelper;
 
   beforeAll(async () => {
-    //mongoHelper = await connect();
+    mongoHelper = await connect();
   });
 
   afterEach(async () => {
@@ -16,7 +16,7 @@ describe("Category controller", () => {
   });
 
   afterAll(async () => {
-    //await mongoHelper.closeDatabase();
+    await mongoHelper.closeDatabase();
   });
 
   it("Should create a category", async () => {
