@@ -53,7 +53,7 @@ import app from "../../";
       "/api/v1/products/655e78935512aa4109537c03"
     );
 
-console.log('########################## get', response.body)
+
     expect(response.body.product).toHaveProperty("name");
     expect(response.body.product.name).toEqual("Smartphone");
     expect(response.body.product).toHaveProperty("description");
@@ -79,8 +79,6 @@ console.log('########################## get', response.body)
         image: "https://example.com/updated-smartphone.jpg",
         categoryId: "655e9e08106158f8d895ccbe",
       });
-
-    console.log("#####################", response.body);
 
     expect(response.body.product).toHaveProperty("name");
     expect(response.body.product.name).toEqual("Updated Smartphone");

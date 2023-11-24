@@ -22,7 +22,7 @@ describe("User service", () => {
   it("should create a new User", async () => {
     // create new user
     const user: any = {
-        _id: "655e2273fe4c4f58b6a80113", 
+       
         name: "Test user", 
         email:"test@gmail.com",
         password:"test123",
@@ -31,7 +31,7 @@ describe("User service", () => {
     const newUser = await UserService.createOne(user);
 
     expect(newUser).toHaveProperty("_id");
-    expect(newUser.name).toEqual("test");
+    expect(newUser.name).toEqual("Test user");
   });
 
 //   it("should return a user list", async () => {
@@ -78,17 +78,16 @@ describe("User service", () => {
 
   it("should delete a user", async () => {
     const user: any = {                               //// create new user
-      _id: "655e2273fe4c4f58b6a80113",
       name: "tester",
       email:"test@gmail.com",
       password:"test123",
       role:"User"
     };
-    await UserService.createOne(user);
+    const userObj = await UserService.createOne(user);
 
-    const deleteUser = await UserService.findOneAndDelete("655e1356be9cf967bdead01f");
+    const deleteUser = await UserService.findOneAndDelete(userObj._id.toString());
     expect(deleteUser).toHaveProperty("_id");
-    expect(deleteUser).toHaveProperty("name", "test");
+    expect(deleteUser).toHaveProperty("name", "tester");
     expect(deleteUser).toHaveProperty("email", "test@gmail.com");  
 });
 

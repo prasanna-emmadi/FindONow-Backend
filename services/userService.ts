@@ -31,7 +31,7 @@ async function createOne(user: User) {
 
 async function findOneAndUpdate(userId: string, user: User) {
     const id = new mongoose.Types.ObjectId(userId);
-    return await UserRepo.findByIdAndUpdate(id, user);
+    return await UserRepo.findByIdAndUpdate(id, user,{new:true});
 }
 
 async function findOneAndDelete(userId: string) {
