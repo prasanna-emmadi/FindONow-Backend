@@ -41,7 +41,7 @@ describe("OrderDetail controller", () => {
       name: " Test cat",
     });
     expect(categoryResponse.statusCode).toBe(201);
-    categoryId = categoryResponse.body.data._id;
+    categoryId = categoryResponse.body._id;
     const productResponse = await request(app).post(PRODUCTS_URL).send({
       name: " Test cat",
       description: "Animal",
@@ -50,7 +50,7 @@ describe("OrderDetail controller", () => {
       categoryId: categoryId,
     });
     expect(productResponse.statusCode).toBe(201);
-    productId = productResponse.body.product._id;
+    productId = productResponse.body._id;
   }, 60000);
 
   afterAll(async () => {
