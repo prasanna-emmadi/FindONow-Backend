@@ -1,6 +1,5 @@
 import ProductService from "../../services/productsService";
 import connect, { MongoHelper } from "../db-helper";
-import ProductRepo from "../../models/Product";
 import categoryService from "../../services/categoryService";
 
 describe("Product service", () => {

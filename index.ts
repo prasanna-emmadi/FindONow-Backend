@@ -12,6 +12,7 @@ import orderRoute from "./routes/orderRoute";
 import { checkAuth } from "./middlewares/checkAuth";
 import { responseHandler } from "./middlewares/responsehandler";
 import orderDetailsRoute from "./routes/orderDetailsRoute";
+import cors from "cors";
 
 const jwt = require("jsonwebtoken");
 
@@ -19,7 +20,7 @@ const PORT = 8080;
 const app = express();
 
 app.use(express.json());
-
+app.use(cors());
 // TODO: Validate .env using Zod
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   const mongoURL = process.env.DB_URL as string;
