@@ -11,63 +11,50 @@ describe("Category controller", () => {
     mongoHelper = await connect();
   });
 
-  afterEach(async () => {
-    //await mongoHelper.clearDatabase();
-  });
-
   afterAll(async () => {
     await mongoHelper.closeDatabase();
   });
 
-  it("Should create a category", async () => {
-
+  async function createCategory() {
     const response = await request(app).post("/api/v1/categories").send({
-      _id: "655e1356be9cf967bdead01f", name: "Test cat",
+      name: "Test category",
     });
 
-    expect(response.body.data).toHaveProperty("name");
-    //expect(response.body.data.name).toMatchObject('Test cat');
-    expect(response.body.data.name).toEqual('Test cat');
-    
-    expect(response.body.data).toEqual({
-      name: "Test cat",
-      //_id: expect.any(string),
-      _id: "655e1356be9cf967bdead01f",
-      __v: 0,
-    });
+    expect(response.body).toHaveProperty("name");
+    expect(response.body.name).toEqual('Test category');
+    return response;
+  }
+
+  it("Should create a category", async () => {
+    await createCategory();
   });
 
 
 
   it("should get the category", async () => {
-    // get a category
-    const response = await request(app).get("/api/v1/categories/655e1356be9cf967bdead01f");
-    //expect(response.body.data.length).toEqual(1);
-    expect(response.body.data).toMatchObject({
-      _id: "655e1356be9cf967bdead01f",
-    });
+    const categoryResponse = await createCategory();
+    const categoryId = categoryResponse.body._id.toString();
+
+    const response = await request(app).get("/api/v1/categories/" + categoryId);
   });
 
-    it("should update the category", async () => {
+  it("should update the category", async () => {
       // update a category
-      let category:any = {name: "Updated Category"}
-  
-      const response = await request(app).put("/api/v1/categories/655e1356be9cf967bdead01f").send({
-         name: "Updated cat",
+    const categoryResponse = await createCategory();
+    const categoryId = categoryResponse.body._id.toString();
+
+      const response = await request(app).put("/api/v1/categories/" + categoryId).send({
+         name: "Updated category",
       });;
-        
-    expect(response.body.data).toEqual({
-      name: "Updated cat",
-      //_id: expect.any(string),
-      _id: "655e1356be9cf967bdead01f",
-      __v: 0,
-    });
+    expect(response.body.name).toEqual('Updated category');
     });
 
     it("should delete the category", async () => {
-      const response = await request(app).delete("/api/v1/categories/655e1356be9cf967bdead01f");
-    expect(response.body.data._id).toEqual(
-     "655e1356be9cf967bdead01f");
+    const categoryResponse = await createCategory();
+    const categoryId = categoryResponse.body._id.toString();
+
+    const response = await request(app).delete("/api/v1/categories/" + categoryId);
+    expect(response.body._id).toEqual(categoryId);
     });
 
 

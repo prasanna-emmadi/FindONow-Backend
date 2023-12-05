@@ -79,12 +79,13 @@ const CategoryController = {
       next(ApiError.resourceNotFound("Category not found"));
       return;
     }
-    next(
-      ResponseHandler.resourceUpdated(
-        JSON.stringify(category),
-        `Category with ${category._id} has been updated`
-      )
-    );
+    //next(
+    //  ResponseHandler.resourceUpdated(
+    //    JSON.stringify(category),
+    //    `Category with ${category._id} has been updated`
+    //  )
+    //);
+    res.status(201).json(category)
   },
   async deleteCategory(req: Request, res: Response, next: NextFunction) {
     const categoryId = req.params.id;
@@ -102,12 +103,13 @@ const CategoryController = {
       next(ApiError.resourceNotFound("Category not found"));
       return;
     }
-    next(
-      ResponseHandler.resourceDeleted(
-        JSON.stringify(category),
-        `Category with ${category._id} has been Deleted`
-      )
-    );
+    //next(
+    //  ResponseHandler.resourceDeleted(
+    //    JSON.stringify(category),
+    //     `Category with ${category._id} has been Deleted`
+    //   )
+    // );
+    res.status(201).json(category);
   },
 };
 export default CategoryController;
