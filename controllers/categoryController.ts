@@ -16,7 +16,8 @@ const CategoryController = {
       pageSize
     );
 
-    next(ResponseHandler.resourceFetched(JSON.stringify(categories)));
+    //next(ResponseHandler.resourceFetched(JSON.stringify(categories)));
+    res.json(categories)
   },
   async getAllCategories(req: Request, res: Response, next: NextFunction) {
     const categories = await CategoryService.findAll();
@@ -38,7 +39,8 @@ const CategoryController = {
       next(ApiError.resourceNotFound(`Category ${categoryId} is not found`));
       return;
     }
-    next(ResponseHandler.resourceFetched(JSON.stringify(item)));
+    //next(ResponseHandler.resourceFetched(JSON.stringify(item)));
+    res.json(item)
   },
   async createCategory(req: Request, res: Response, next: NextFunction) {
     const category = req.body;
@@ -46,12 +48,13 @@ const CategoryController = {
       next(ApiError.internal("Details are Required"));
     }
     const newCategory = await CategoryService.createOne(category);
-    next(
-      ResponseHandler.resourceCreated(
-        JSON.stringify(newCategory),
-        `Category with ${newCategory._id} has been added`
-      )
-    );
+    //next(
+    //  ResponseHandler.resourceCreated(
+    //    JSON.stringify(newCategory),
+    //    `Category with ${newCategory._id} has been added`
+    //  )
+    //);
+    res.status(201).json(newCategory)
     //res.status(201).json({message: `Category with ${newCategory._id} has been added`});
   },
   async updateCategory(req: Request, res: Response, next: NextFunction) {

@@ -14,7 +14,6 @@ const ProductController = {
         pageSize
       );
       res.json(products);
-      // next(ResponseHandler.resourceFetched(JSON.stringify(products)));
     } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
     }
@@ -29,7 +28,7 @@ const ProductController = {
       return;
     }
 
-    res.json({ product });
+    res.json(product);
   },
 
   async createOneProduct(req: Request, res: Response) {
@@ -38,7 +37,7 @@ const ProductController = {
 
     const product = await ProductsService.createOne(newProduct, categoryId);
 
-    res.status(201).json({ product });
+    res.status(201).json(product);
   },
 
   async updateProduct(req: Request, res: Response, next: NextFunction) {
@@ -57,7 +56,7 @@ const ProductController = {
       return;
     }
 
-    res.json({ product });
+    res.json(product);
   },
 
   async deleteProduct(req: Request, res: Response, next: NextFunction) {
