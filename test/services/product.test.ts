@@ -13,7 +13,6 @@ describe("Product service", () => {
     mongoHelper = await connect();
     // create category
     const categoryObj: any = {
-      _id: "655e1356be9cf967bdead01f",
       name: "test",
     };
     const category: any = await categoryService.createOne(categoryObj);

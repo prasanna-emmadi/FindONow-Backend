@@ -69,7 +69,6 @@ describe("User service", () => {
       role: "User",
     };
     const newUser = await UserService.findOneAndUpdate("655e1356be9cf967bdead01f", user);
-    console.log('NewUser==', newUser)
     if(newUser){
       expect(newUser).toHaveProperty("_id");
       expect(newUser.name).toEqual("tester");

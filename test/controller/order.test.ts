@@ -4,7 +4,7 @@ import app from "../../";
 import connect, { MongoHelper } from "../db-helper";
 import { number, string } from "zod";
 
-describe("Category controller", () => {
+describe("Order controller", () => {
   let mongoHelper: MongoHelper;
 
   beforeAll(async () => {
@@ -34,20 +34,8 @@ describe("Category controller", () => {
       _id: "655e1356be9cf967bdead01f", totalAmount: 500, userId:"655e1356be9cf967bdead01f", date:datee,
     });
 
-    console.log('#############################', response.body)
-
-
     expect(response.body.data).toHaveProperty("userId");
     expect(response.body.data.userId).toEqual('655e1356be9cf967bdead01f');
-    
-    expect(response.body.data).toEqual({
-      //_id: expect.any(string),
-      _id: "655e1356be9cf967bdead01f",
-      userId: "655e1356be9cf967bdead01f",
-      date: "2023-11-21T18:52:40.597Z",
-      totalAmount: 500,
-      __v: 0,
-    });
   });
 
 

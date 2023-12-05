@@ -10,7 +10,6 @@ export interface WithAuthRequest extends Request {
 
 export function checkAuth(req: WithAuthRequest,_: Response,next: NextFunction) {
   const token = req.headers.authorization?.split(" ")[1]
-  console.log("token:",token)
   if (!token) {
     next(ApiError.forbidden("Token is missing"))
     return

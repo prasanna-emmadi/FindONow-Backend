@@ -27,22 +27,12 @@ describe("User controller", () => {
         password:"test123",
         role:"User"
     });
-  console.log("###########################",response.body)
     expect(response.body.data).toHaveProperty("name");
     expect(response.body.data.name).toEqual('Test user');
     expect(response.body.data).toHaveProperty("email");
     expect(response.body.data.email).toEqual("test@gmail.com");
     expect(response.body.data).toHaveProperty("role");
     expect(response.body.data.role).toEqual("User");
-    // expect(response.body.data).toEqual({
-    //   name: "Test user",
-    //   email:"test@gmail.com",
-    //   password:"test123",
-    //   role:"User",
-    //   //_id: expect.any(string),
-    //   _id: "655e2273fe4c4f58b6a80113",
-    //   __v: 0,
-    // });
   });
 
 

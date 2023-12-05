@@ -38,7 +38,6 @@ async function updateOne(categoryId: string, updatedCategory: Category) {
         return undefined
       }
       
-      console.log('category:',category, 'updatedCategory:', updatedCategory)
       // Update category fields
       category.name = updatedCategory.name
       

@@ -54,8 +54,7 @@ async function createNewOne({
   password: string
 }) {
   const hashedPassword = bcrypt.hashSync(password, 10)
-  console.log("HashedPassword:", hashedPassword)
-  
+
   const userFromDB = await findOneByEmail(email)
   if (userFromDB) {
     return null
@@ -86,8 +85,6 @@ async function login(email: string, password: string) {
   }
 
   const hashedPassword = user.password
-  console.log("hashedPassword==",hashedPassword)
-  console.log("Password==",password)
 
   const isValid = bcrypt.compareSync(password, hashedPassword)
   if (!isValid) {
@@ -106,7 +103,6 @@ async function login(email: string, password: string) {
   const accessToken = jwt.sign(payload, process.env.TOKEN_SECRET as string, {
     expiresIn: "1h",
   })
-  console.log("AccessToken:",accessToken)
 
   return {
     message: "valid credentials",
