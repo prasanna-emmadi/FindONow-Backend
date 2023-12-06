@@ -20,8 +20,8 @@ const OrderController = {
     }
     const list = await OrderService.getPaginatedOrder(pageNumber, pageSize)
     //res.json({ list });
-    next(ResponseHandler.resourceFetched(JSON.stringify(list)))
-
+    //next(ResponseHandler.resourceFetched(JSON.stringify(list)))
+    res.json(list)
   }
   ,
   async getAllUserOrdersOffset(req: Request, res: Response, next:NextFunction) {
@@ -39,7 +39,8 @@ const OrderController = {
 
     const list = await OrderService.getPaginatedUserOrder(userId, pageNumber, pageSize)
     //res.json({ list });
-    next(ResponseHandler.resourceFetched(JSON.stringify(list)))
+    //next(ResponseHandler.resourceFetched(JSON.stringify(list)))
+    res.json(list);
 
   }
 ,
@@ -51,8 +52,8 @@ const OrderController = {
     }
     const list = await OrderService.findAllForUser(userId)
     //res.json({ list });
-    next(ResponseHandler.resourceFetched(JSON.stringify(list)))
-
+    //next(ResponseHandler.resourceFetched(JSON.stringify(list)))
+    res.json(list);
   }
 ,
   async getOrder(req: Request, res: Response, next:NextFunction) {
@@ -65,8 +66,8 @@ const OrderController = {
     if (!item) {
       next(ApiError.resourceNotFound(`OrderId ${orderId} is not found`))
     } 
-    next(ResponseHandler.resourceFetched(JSON.stringify(item)))
-
+    //next(ResponseHandler.resourceFetched(JSON.stringify(item)))
+    res.json(item);
   }
   ,
   async createOrder(req: Request, res: Response, next: NextFunction) {
@@ -76,7 +77,8 @@ const OrderController = {
       return
     }
     const newOrder = await OrderService.createOne(order)
-    next(ResponseHandler.resourceCreated(JSON.stringify(newOrder), `Order with ${newOrder._id} has been added`))
+    //next(ResponseHandler.resourceCreated(JSON.stringify(newOrder), `Order with ${newOrder._id} has been added`))
+    res.status(201).json(newOrder);
   }
   ,
   async updateOrder(req: Request, res: Response, next:NextFunction) {
@@ -95,7 +97,8 @@ const OrderController = {
       next(ApiError.resourceNotFound("Order not found"))
       return
     }
-    next(ResponseHandler.resourceUpdated(JSON.stringify(order), `Order with ${order._id} has been updated`))
+    //next(ResponseHandler.resourceUpdated(JSON.stringify(order), `Order with ${order._id} has been updated`))
+    res.status(201).json(order);
   }
   ,
   async deleteOrder(req: Request, res: Response, next:NextFunction) {
@@ -109,8 +112,8 @@ const OrderController = {
       next(ApiError.resourceNotFound("Order not found"))
       return
     }
-    next(ResponseHandler.resourceDeleted(JSON.stringify(order), `Order with ${order._id} has been deleted`))
-
+    //next(ResponseHandler.resourceDeleted(JSON.stringify(order), `Order with ${order._id} has been deleted`))
+    res.status(201).json(order);
   }
 }
 

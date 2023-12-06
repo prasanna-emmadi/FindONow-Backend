@@ -25,9 +25,10 @@ async function connect() {
   }
 }
 
-export default connect
 
 export type MongoHelper = {
   closeDatabase: () => Promise<void>
   clearDatabase: () => Promise<void>
 }
+
+export default connect

@@ -23,7 +23,8 @@ async function findAllOrderDetail(
   next: NextFunction
 ) {
   const orderDetails = await orderDetailService.findAll();
-  next(ResponseHandler.resourceFetched(JSON.stringify(orderDetails)));
+  //next(ResponseHandler.resourceFetched(JSON.stringify(orderDetails)));
+  res.json(orderDetails);
 }
 
 async function findOneOrderDetail(
@@ -38,7 +39,8 @@ async function findOneOrderDetail(
     next(ApiError.resourceNotFound("OrderDetail not found."));
     return;
   }
-  next(ResponseHandler.resourceFetched(JSON.stringify(orderDetail)));
+  //next(ResponseHandler.resourceFetched(JSON.stringify(orderDetail)));
+  res.json(orderDetail);
 }
 
 async function createOneOrderDetail(
@@ -49,12 +51,13 @@ async function createOneOrderDetail(
   const newOrderDetail = req.body;
   const orderDetail = await orderDetailService.createOne(newOrderDetail);
 
-  next(
-    ResponseHandler.resourceCreated(
-      JSON.stringify(orderDetail),
-      `Order Detail with ${orderDetail._id} has been added`
-    )
-  );
+  // next(
+  //   ResponseHandler.resourceCreated(
+  //     JSON.stringify(orderDetail),
+  //     `Order Detail with ${orderDetail._id} has been added`
+  //   )
+  // );
+  res.status(201).json(orderDetail);
 }
 
 async function findOneAndUpdate(
@@ -74,12 +77,13 @@ async function findOneAndUpdate(
     return;
   }
 
-  next(
-    ResponseHandler.resourceUpdated(
-      JSON.stringify(updatedOrderDetail),
-      `OrderDetail with ${updatedOrderDetail._id} has been updated`
-    )
-  );
+  // next(
+  //   ResponseHandler.resourceUpdated(
+  //     JSON.stringify(updatedOrderDetail),
+  //     `OrderDetail with ${updatedOrderDetail._id} has been updated`
+  //   )
+  // );
+  res.status(201).json(updatedOrderDetail);
 }
 
 async function findOneAndDelete(
@@ -97,12 +101,13 @@ async function findOneAndDelete(
     return;
   }
 
-  next(
-    ResponseHandler.resourceDeleted(
-      JSON.stringify(deletedOrderDetail),
-      `OrderDetail with ${deletedOrderDetail._id} has been deleted`
-    )
-  );
+  // next(
+  //   ResponseHandler.resourceDeleted(
+  //     JSON.stringify(deletedOrderDetail),
+  //     `OrderDetail with ${deletedOrderDetail._id} has been deleted`
+  //   )
+  // );
+  res.status(201).json(deletedOrderDetail);
 }
 
 export default {

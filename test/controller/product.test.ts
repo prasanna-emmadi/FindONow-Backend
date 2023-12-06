@@ -1,7 +1,6 @@
 import request from "supertest";
 import app from "../../";
- import connect, { MongoHelper } from '../db-helper';
- import mongoose from 'mongoose';
+import connect, { MongoHelper } from '../db-helper';
 
 
   describe("Product controller", () => {

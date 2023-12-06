@@ -1,12 +1,11 @@
 import request from "supertest";
-
 import app from "../../";
 import connect, { MongoHelper } from "../db-helper";
-import { number, string } from "zod";
 
 const BASE_URL = "/api/v1";
 const ORDERS_URL = BASE_URL + "/orders";
 const USERS_URL = BASE_URL + "/users";
+const TEST_TIMEOUT = 20000;
 
 describe("Order controller", () => {
   let mongoHelper: MongoHelper;
@@ -14,6 +13,7 @@ describe("Order controller", () => {
 
   beforeAll(async () => {
     mongoHelper = await connect();
+    console.log("mongoHelper connected")
     // create user
     const response = await request(app).post(USERS_URL).send({
       name: "Test cat",
@@ -21,7 +21,7 @@ describe("Order controller", () => {
       password: "hello",
     });
     expect(response.statusCode).toBe(201);
-    userId = response.body.data._id;
+    userId = response.body._id;
   }, 30000);
 
   afterAll(async () => {
@@ -45,16 +45,16 @@ describe("Order controller", () => {
     await createOrder();
 
     //const ordersResponse = await request(app).get(ORDERS_URL);
-    //expect(ordersResponse.body.data.length).toBe(1);
-  });
+    //expect(ordersResponse.body.length).toBe(1);
+  }, TEST_TIMEOUT);
 
   it("should get the order", async () => {
     // get a category
     const response = await createOrder();
-    const orderId = response.body.data._id;
+    const orderId = response.body._id;
     const singleResponse = await request(app).get(ORDERS_URL + "/" + orderId);
-    expect(singleResponse.body.data._id).toEqual(orderId);
-  });
+    expect(singleResponse.body._id).toEqual(orderId);
+  }, TEST_TIMEOUT);
 
   it("should update the order", async () => {
     // update a category
@@ -62,25 +62,25 @@ describe("Order controller", () => {
     // update
     // get and check
     const response = await createOrder();
-    const orderId = response.body.data._id;
+    const orderId = response.body._id;
     const putResponse = await request(app)
       .put(ORDERS_URL + "/" + orderId)
       .send({
         totalAmount: 120,
       });
 
-    expect(putResponse.body.data.totalAmount).toEqual(120);
-  });
+    expect(putResponse.body.totalAmount).toEqual(120);
+  }, TEST_TIMEOUT);
 
   it("should delete the order", async () => {
     // create order
     // delete order
     // get and check
     const response = await createOrder();
-    const orderId = response.body.data._id;
+    const orderId = response.body._id;
     const deleteResponse = await request(app).delete(
       ORDERS_URL + "/" + orderId
     );
-    expect(deleteResponse.body.data._id).toEqual(orderId);
-  });
+    expect(deleteResponse.body._id).toEqual(orderId);
+  }, TEST_TIMEOUT);
 });
