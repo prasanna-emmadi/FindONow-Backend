@@ -19,7 +19,7 @@ describe("OrderDetail controller", () => {
   let productId: string;
 
   beforeAll(async () => {
-    mongoHelper = await connect();aaaaaaa
+    mongoHelper = await connect();
     // create user
     // create order
     // create category
