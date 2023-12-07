@@ -2,8 +2,8 @@ import OrderDetailService from "../../src/services/orderDetailService";
 import userService from "../../src/services/userService";
 import orderService from "../../src/services/orderService";
 import categoryService from "../../src/services/categoryService";
-import connect, { MongoHelper } from "../db-helper";
 import productsService from "../../src/services/productsService";
+import connect, { MongoHelper } from "../db-helper";
 
 describe("OrderDetail controller", () => {
   let mongoHelper: MongoHelper;

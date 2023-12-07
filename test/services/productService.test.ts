@@ -20,6 +20,7 @@ describe("Product service", () => {
     const categoryResponse: any = await categoryService.createOne(categoryObj);
     category = categoryResponse._id;
   });
+  
   afterAll(async () => {
     await mongoHelper.closeDatabase();
   });
