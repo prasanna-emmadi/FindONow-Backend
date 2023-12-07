@@ -44,13 +44,15 @@ describe("OrderDetail controller", () => {
     });
     expect(categoryResponse.statusCode).toBe(201);
     categoryId = categoryResponse.body._id;
-    const productResponse = await request(app).post(PRODUCTS_URL).send({
-      name: " Test cat",
-      description: "Animal",
-      price: 10.2,
-      image: "google.com",
-      category: categoryId,
-    });
+    const productResponse = await request(app)
+      .post(PRODUCTS_URL)
+      .send({
+        name: " Test cat",
+        description: "Animal",
+        price: 10.2,
+        images: ["google.com"],
+        category: categoryId,
+      });
     expect(productResponse.statusCode).toBe(201);
     productId = productResponse.body._id;
   }, 60000);

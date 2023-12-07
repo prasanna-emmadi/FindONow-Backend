@@ -10,9 +10,9 @@ export const productSchema = z.object({
   price: z.number({
     required_error: "Price is required",
   }),
-  image: z.string({
+  images: z.array(z.string({
     required_error: "Image URL is required",
-  }),
+  })),
   category: z.string({
     required_error: "Category ID is required",
   }),

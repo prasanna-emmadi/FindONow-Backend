@@ -20,7 +20,7 @@ describe("Product service", () => {
     const categoryResponse: any = await categoryService.createOne(categoryObj);
     category = categoryResponse._id;
   });
-  
+
   afterAll(async () => {
     await mongoHelper.closeDatabase();
   });
@@ -30,14 +30,14 @@ describe("Product service", () => {
       name: "Test Product",
       description: "This is a test product.",
       price: 19.99,
-      image: "test-image-url.jpg",
+      images: ["test-image-url.jpg"],
     };
     const newProduct = await ProductService.createOne(product, category);
     expect(newProduct).toHaveProperty("_id");
     expect(newProduct.name).toEqual("Test Product");
     expect(newProduct.description).toEqual("This is a test product.");
     expect(newProduct.price).toEqual(19.99);
-    expect(newProduct.image).toEqual("test-image-url.jpg");
+    expect(newProduct.images).toEqual(["test-image-url.jpg"]);
     return newProduct;
   }
 
@@ -60,7 +60,7 @@ describe("Product service", () => {
       name: "Test Product",
       description: "This is a test product.",
       price: 19.99,
-      image: "test-image-url.jpg",
+      images: ["test-image-url.jpg"],
     };
     const id = product._id.toString();
     const newProduct = await ProductService.updateOne(
@@ -73,7 +73,7 @@ describe("Product service", () => {
       expect(newProduct.name).toEqual("Test Product");
       expect(newProduct.description).toEqual("This is a test product.");
       expect(newProduct.price).toEqual(19.99);
-      expect(newProduct.image).toEqual("test-image-url.jpg");
+      expect(newProduct.images).toEqual(["test-image-url.jpg"]);
     }
   });
   it("should delete a product", async () => {
@@ -85,7 +85,7 @@ describe("Product service", () => {
       expect(newProduct.name).toEqual("Test Product");
       expect(newProduct.description).toEqual("This is a test product.");
       expect(newProduct.price).toEqual(19.99);
-      expect(newProduct.image).toEqual("test-image-url.jpg");
+      expect(newProduct.images).toEqual(["test-image-url.jpg"]);
     }
   });
 });

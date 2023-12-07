@@ -2,6 +2,8 @@ import request from "supertest";
 import app from "../../src";
 import connect, { MongoHelper } from "../db-helper";
 
+const PRODUCTS_URL = "/api/v1/products/";
+
 describe("Product controller", () => {
   let mongoHelper: MongoHelper;
   let category: string;
@@ -24,13 +26,15 @@ describe("Product controller", () => {
   });
 
   async function createProduct() {
-    const response = await request(app).post("/api/v1/products").send({
-      name: "Smartphone",
-      description: "High-end smartphone with advanced features",
-      price: 799.99,
-      image: "https://example.com/smartphone.jpg",
-      category,
-    });
+    const response = await request(app)
+      .post(PRODUCTS_URL)
+      .send({
+        name: "Smartphone",
+        description: "High-end smartphone with advanced features",
+        price: 799.99,
+        images: ["https://example.com/smartphone.jpg"],
+        category,
+      });
 
     expect(response.body).toHaveProperty("name");
     expect(response.body.name).toEqual("Smartphone");
@@ -40,8 +44,10 @@ describe("Product controller", () => {
     );
     expect(response.body).toHaveProperty("price");
     expect(response.body.price).toEqual(799.99);
-    expect(response.body).toHaveProperty("image");
-    expect(response.body.image).toEqual("https://example.com/smartphone.jpg");
+    expect(response.body).toHaveProperty("images");
+    expect(response.body.images).toEqual([
+      "https://example.com/smartphone.jpg",
+    ]);
     expect(response.body).toHaveProperty("category");
     expect(response.body.category).toEqual(category);
     return response;
@@ -54,7 +60,7 @@ describe("Product controller", () => {
   it("Should get the product", async () => {
     const productResponse = await createProduct();
     const productId = productResponse.body._id.toString();
-    const response = await request(app).get("/api/v1/products/" + productId);
+    const response = await request(app).get(PRODUCTS_URL + productId);
 
     expect(response.body).toHaveProperty("name");
     expect(response.body.name).toEqual("Smartphone");
@@ -64,8 +70,10 @@ describe("Product controller", () => {
     );
     expect(response.body).toHaveProperty("price");
     expect(response.body.price).toEqual(799.99);
-    expect(response.body).toHaveProperty("image");
-    expect(response.body.image).toEqual("https://example.com/smartphone.jpg");
+    expect(response.body).toHaveProperty("images");
+    expect(response.body.images).toEqual([
+      "https://example.com/smartphone.jpg",
+    ]);
     expect(response.body).toHaveProperty("category");
   });
 
@@ -74,12 +82,12 @@ describe("Product controller", () => {
     const productId = productResponse.body._id.toString();
 
     const response = await request(app)
-      .put("/api/v1/products/" + productId)
+      .put(PRODUCTS_URL + productId)
       .send({
         name: "Updated Smartphone",
         description: "Updated description for the smartphone",
         price: 899.99,
-        image: "https://example.com/updated-smartphone.jpg",
+        images: ["https://example.com/updated-smartphone.jpg"],
         category: "655e9e08106158f8d895ccbe",
       });
 
@@ -91,10 +99,10 @@ describe("Product controller", () => {
     );
     expect(response.body).toHaveProperty("price");
     expect(response.body.price).toEqual(899.99);
-    expect(response.body).toHaveProperty("image");
-    expect(response.body.image).toEqual(
-      "https://example.com/updated-smartphone.jpg"
-    );
+    expect(response.body).toHaveProperty("images");
+    expect(response.body.images).toEqual([
+      "https://example.com/updated-smartphone.jpg",
+    ]);
     expect(response.body).toHaveProperty("category");
   });
 
@@ -102,7 +110,7 @@ describe("Product controller", () => {
     const productResponse = await createProduct();
     const productId = productResponse.body._id.toString();
 
-    const response = await request(app).delete("/api/v1/products/" + productId);
+    const response = await request(app).delete(PRODUCTS_URL + productId);
 
     const responseBody = JSON.parse(response.text);
     const message = responseBody.message;
