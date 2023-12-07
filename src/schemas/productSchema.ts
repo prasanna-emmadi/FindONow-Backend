@@ -13,7 +13,7 @@ export const productSchema = z.object({
   image: z.string({
     required_error: "Image URL is required",
   }),
-  categoryId: z.string({
+  category: z.string({
     required_error: "Category ID is required",
   }),
 });

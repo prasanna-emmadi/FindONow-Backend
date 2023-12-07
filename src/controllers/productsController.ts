@@ -33,7 +33,7 @@ const ProductController = {
 
   async createOneProduct(req: Request, res: Response) {
     const newProduct: Product = req.body;
-    const categoryId: string = req.body.categoryId;
+    const categoryId: string = req.body.category;
 
     const product = await ProductsService.createOne(newProduct, categoryId);
 
@@ -43,7 +43,7 @@ const ProductController = {
   async updateProduct(req: Request, res: Response, next: NextFunction) {
     const productId = req.params.productId;
     const updatedProduct: Product = req.body;
-    const categoryId: string = req.body.categoryId;
+    const categoryId: string = req.body.category;
 
     const product = await ProductsService.updateOne(
       productId,

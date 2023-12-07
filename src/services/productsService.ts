@@ -6,25 +6,25 @@ async function paginateProducts(pageNumber: number, pageSize: number) {
   const products = await ProductRepo.find()
     .skip(skip)
     .limit(pageSize)
-    .populate("categoryId")
+    .populate("category")
     .exec();
   return products;
 }
 
 async function findAll() {
-  const products = await ProductRepo.find().populate("categoryId").exec();
+  const products = await ProductRepo.find().populate("category").exec();
   return products;
 }
 
 async function findOne(productId: string) {
   const product = await ProductRepo.findById(productId)
-    .populate("categoryId")
+    .populate("category")
     .exec();
   return product;
 }
 
 async function createOne(product: Product, categoryId: string) {
-  product.categoryId = categoryId;
+  product.category = categoryId;
   const newProduct = new ProductRepo(product);
   return await newProduct.save();
 }
@@ -40,14 +40,14 @@ async function updateOne(
     updatedProduct,
     { new: true }
   )
-    .populate("categoryId")
+    .populate("category")
     .exec();
   return product;
 }
 
 async function deleteOne(productId: string) {
   const product = await ProductRepo.findByIdAndDelete(productId)
-    .populate("categoryId")
+    .populate("category")
     .exec();
   return product;
 }

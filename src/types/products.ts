@@ -13,7 +13,7 @@ export const productSchema = z.object({
   image: z.string({
     required_error: "Image URL is required",
   }),
-  categoryId: z.string(), // Assuming categoryId is a string, you can adjust it accordingly
+  category: z.string(), // Assuming categoryId is a string, you can adjust it accordingly
 });
 
 export type Product = z.infer<typeof productSchema> & {

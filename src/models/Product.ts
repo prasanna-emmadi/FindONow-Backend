@@ -5,7 +5,7 @@ export interface Product extends Document {
   description: string;
   price: number;
   image: string;
-  categoryId: mongoose.Types.ObjectId;
+  category: mongoose.Types.ObjectId;
 }
 
 const ProductSchema = new mongoose.Schema<Product>({
@@ -13,7 +13,7 @@ const ProductSchema = new mongoose.Schema<Product>({
   description: { type: String, required: true },
   price: { type: Number, required: true },
   image: { type: String, required: true },
-  categoryId: {
+  category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
     required: true,
