@@ -32,13 +32,13 @@ async function createOne(product: Product, categoryId: string) {
 async function updateOne(
   productId: string,
   updatedProduct: Product,
-  categoryId: string,
+  categoryId: string
 ) {
   updatedProduct.categoryId = categoryId;
   const product = await ProductRepo.findByIdAndUpdate(
     productId,
     updatedProduct,
-    { new: true },
+    { new: true }
   )
     .populate("categoryId")
     .exec();

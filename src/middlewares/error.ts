@@ -6,7 +6,7 @@ export function apiErrorHandler(
   error: typeof ApiError | Error,
   req: Request,
   res: Response,
-  _: NextFunction,
+  _: NextFunction
 ) {
   if (error instanceof ApiError) {
     res.status(error.code).json({ msg: error.message });

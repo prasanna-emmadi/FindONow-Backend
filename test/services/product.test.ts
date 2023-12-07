@@ -1,6 +1,6 @@
-import ProductService from "../../services/productsService";
+import ProductService from "../../src/services/productsService";
 import connect, { MongoHelper } from "../db-helper";
-import categoryService from "../../services/categoryService";
+import categoryService from "../../src/services/categoryService";
 
 describe("Product service", () => {
   let mongoHelper: MongoHelper;

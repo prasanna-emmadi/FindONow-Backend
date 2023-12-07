@@ -1,4 +1,4 @@
-import CategoryService from "../../services/categoryService";
+import CategoryService from "../../src/services/categoryService";
 import connect, { MongoHelper } from "../db-helper";
 
 describe("Category controller", () => {

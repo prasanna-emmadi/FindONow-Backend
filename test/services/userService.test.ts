@@ -1,8 +1,6 @@
-import request from "supertest";
-
-import UserService from "../../services/userService";
+import UserService from "../../src/services/userService";
 import connect, { MongoHelper } from "../db-helper";
-import UserRepo from "../../models/User";
+import UserRepo from "../../src/models/User";
 
 describe("User service", () => {
   let mongoHelper: MongoHelper;

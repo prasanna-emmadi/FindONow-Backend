@@ -1,10 +1,10 @@
 import request from "supertest";
 
-import OrderService from "../../services/orderService";
-import userService from "../../services/userService";
+import OrderService from "../../src/services/orderService";
+import userService from "../../src/services/userService";
 
 import connect, { MongoHelper } from "../db-helper";
-import OrderRepo from "../../models/Order";
+import OrderRepo from "../../src/models/Order";
 
 describe("Order controller", () => {
   let mongoHelper: MongoHelper;

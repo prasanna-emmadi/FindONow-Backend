@@ -6,7 +6,7 @@ import { requestSchema } from "../schemas/categorySchema";
 export async function validateCategory(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   try {
     await requestSchema.parseAsync({

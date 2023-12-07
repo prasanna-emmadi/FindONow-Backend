@@ -1,9 +1,9 @@
-import OrderDetailService from "../../services/orderDetailService";
-import userService from "../../services/userService";
-import orderService from "../../services/orderService";
-import categoryService from "../../services/categoryService";
+import OrderDetailService from "../../src/services/orderDetailService";
+import userService from "../../src/services/userService";
+import orderService from "../../src/services/orderService";
+import categoryService from "../../src/services/categoryService";
 import connect, { MongoHelper } from "../db-helper";
-import productsService from "../../services/productsService";
+import productsService from "../../src/services/productsService";
 
 describe("OrderDetail controller", () => {
   let mongoHelper: MongoHelper;

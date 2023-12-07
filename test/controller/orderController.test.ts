@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../";
+import app from "../../src";
 import connect, { MongoHelper } from "../db-helper";
 
 const BASE_URL = "/api/v1";

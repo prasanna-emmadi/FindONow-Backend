@@ -11,7 +11,7 @@ const ProductController = {
       const pageSize = Number(req.query.pageSize) || 10;
       const products = await ProductsService.paginateProducts(
         pageNumber,
-        pageSize,
+        pageSize
       );
       res.json(products);
     } catch (error) {
@@ -48,7 +48,7 @@ const ProductController = {
     const product = await ProductsService.updateOne(
       productId,
       updatedProduct,
-      categoryId,
+      categoryId
     );
 
     if (!product) {

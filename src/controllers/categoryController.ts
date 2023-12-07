@@ -13,7 +13,7 @@ const CategoryController = {
     }
     const categories = await CategoryService.paginateCategories(
       pageNumber,
-      pageSize,
+      pageSize
     );
 
     //next(ResponseHandler.resourceFetched(JSON.stringify(categories)));
@@ -29,8 +29,8 @@ const CategoryController = {
     if (categoryId.length !== 24) {
       next(
         ApiError.internal(
-          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer",
-        ),
+          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"
+        )
       );
       return;
     }
@@ -62,8 +62,8 @@ const CategoryController = {
     if (categoryId.length !== 24) {
       next(
         ApiError.internal(
-          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer",
-        ),
+          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"
+        )
       );
       return;
     }
@@ -92,8 +92,8 @@ const CategoryController = {
     if (categoryId.length !== 24) {
       next(
         ApiError.internal(
-          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer",
-        ),
+          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"
+        )
       );
       return;
     }

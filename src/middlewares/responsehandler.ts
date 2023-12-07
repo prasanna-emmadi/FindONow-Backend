@@ -6,7 +6,7 @@ export function responseHandler(
   rpHandler: typeof ResponseHandler | typeof ApiError | Error,
   req: Request,
   res: Response,
-  __: NextFunction,
+  __: NextFunction
 ) {
   if (rpHandler instanceof ResponseHandler) {
     if (!rpHandler.message) {
@@ -15,13 +15,11 @@ export function responseHandler(
         .json({ status: rpHandler.status, data: JSON.parse(rpHandler.data) });
       return;
     }
-    res
-      .status(rpHandler.code)
-      .json({
-        status: rpHandler.status,
-        data: JSON.parse(rpHandler.data),
-        message: rpHandler.message,
-      });
+    res.status(rpHandler.code).json({
+      status: rpHandler.status,
+      data: JSON.parse(rpHandler.data),
+      message: rpHandler.message,
+    });
     return;
   }
   if (rpHandler instanceof ApiError) {

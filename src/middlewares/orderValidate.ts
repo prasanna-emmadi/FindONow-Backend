@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 
-import { requestSchema } from "../schemas/userSchema";
+import { requestSchema } from "../schemas/orderSchema";
 
-export async function validateUser(
+export async function validateOrder(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   try {
     await requestSchema.parseAsync({

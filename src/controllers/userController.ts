@@ -6,7 +6,7 @@ import { ResponseHandler } from "../responses/ResponeHandler";
 export async function getOffsetUser(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   const pageNumber = Number(req.query.pageNumber) || 1;
   const pageSize = Number(req.query.pageSize) || 10;
@@ -30,7 +30,7 @@ export async function findAllUser(_: Request, res: Response) {
 export async function findOneUser(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   const userId = req.params.userId;
   // if(userId.length!==24){
@@ -50,7 +50,7 @@ export async function findOneUser(
 export async function createOneUser(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   const newUser = req.body;
   if (!newUser) {
@@ -64,7 +64,7 @@ export async function createOneUser(
 export async function findOneAndUpdate(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   const newUser = req.body;
   const userId = req.params.userId;
@@ -81,7 +81,7 @@ export async function findOneAndUpdate(
 export async function findOneAndDelete(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   const userId = req.params.userId;
   const deletedUser = await UsersService.findOneAndDelete(userId);
@@ -106,10 +106,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     return;
   }
   next(
-    ResponseHandler.resourceCreated(
-      JSON.stringify(user),
-      `User has been added`,
-    ),
+    ResponseHandler.resourceCreated(JSON.stringify(user), `User has been added`)
   );
   // res.status(201).json({message: "user created",user,})
 }

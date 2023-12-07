@@ -11,12 +11,12 @@ router.get("/offset", OrderDetailController.findOrderDetailOffset);
 router.post(
   "/",
   validateOrderDetail,
-  OrderDetailController.createOneOrderDetail,
+  OrderDetailController.createOneOrderDetail
 );
 router.put(
   "/:orderDetailId",
   validateOrderDetail,
-  OrderDetailController.findOneAndUpdate,
+  OrderDetailController.findOneAndUpdate
 );
 router.delete("/:orderDetailId", OrderDetailController.findOneAndDelete);
 router.use((req, res, next) => {

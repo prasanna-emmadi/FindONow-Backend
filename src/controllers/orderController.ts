@@ -24,14 +24,14 @@ const OrderController = {
   async getAllUserOrdersOffset(
     req: Request,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) {
     const userId = req.params.id;
     if (userId.length !== 24) {
       next(
         ApiError.internal(
-          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer",
-        ),
+          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"
+        )
       );
       return;
     }
@@ -45,7 +45,7 @@ const OrderController = {
     const list = await OrderService.getPaginatedUserOrder(
       userId,
       pageNumber,
-      pageSize,
+      pageSize
     );
     //res.json({ list });
     //next(ResponseHandler.resourceFetched(JSON.stringify(list)))
@@ -56,8 +56,8 @@ const OrderController = {
     if (userId.length !== 24) {
       next(
         ApiError.internal(
-          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer",
-        ),
+          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"
+        )
       );
       return;
     }
@@ -71,8 +71,8 @@ const OrderController = {
     if (orderId.length !== 24) {
       next(
         ApiError.internal(
-          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer",
-        ),
+          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"
+        )
       );
       return;
     }
@@ -98,8 +98,8 @@ const OrderController = {
     if (orderId.length !== 24) {
       next(
         ApiError.internal(
-          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer",
-        ),
+          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"
+        )
       );
       return;
     }
@@ -121,8 +121,8 @@ const OrderController = {
     if (orderId.length !== 24) {
       next(
         ApiError.internal(
-          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer",
-        ),
+          "ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"
+        )
       );
       return;
     }
