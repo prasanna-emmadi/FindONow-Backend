@@ -29,15 +29,15 @@ describe("Product controller", () => {
     const response = await request(app)
       .post(PRODUCTS_URL)
       .send({
-        name: "Smartphone",
+        title: "Smartphone",
         description: "High-end smartphone with advanced features",
         price: 799.99,
         images: ["https://example.com/smartphone.jpg"],
         category,
       });
 
-    expect(response.body).toHaveProperty("name");
-    expect(response.body.name).toEqual("Smartphone");
+    expect(response.body).toHaveProperty("title");
+    expect(response.body.title).toEqual("Smartphone");
     expect(response.body).toHaveProperty("description");
     expect(response.body.description).toEqual(
       "High-end smartphone with advanced features"
@@ -62,8 +62,8 @@ describe("Product controller", () => {
     const productId = productResponse.body._id.toString();
     const response = await request(app).get(PRODUCTS_URL + productId);
 
-    expect(response.body).toHaveProperty("name");
-    expect(response.body.name).toEqual("Smartphone");
+    expect(response.body).toHaveProperty("title");
+    expect(response.body.title).toEqual("Smartphone");
     expect(response.body).toHaveProperty("description");
     expect(response.body.description).toEqual(
       "High-end smartphone with advanced features"
@@ -84,15 +84,15 @@ describe("Product controller", () => {
     const response = await request(app)
       .put(PRODUCTS_URL + productId)
       .send({
-        name: "Updated Smartphone",
+        title: "Updated Smartphone",
         description: "Updated description for the smartphone",
         price: 899.99,
         images: ["https://example.com/updated-smartphone.jpg"],
         category: "655e9e08106158f8d895ccbe",
       });
 
-    expect(response.body).toHaveProperty("name");
-    expect(response.body.name).toEqual("Updated Smartphone");
+    expect(response.body).toHaveProperty("title");
+    expect(response.body.title).toEqual("Updated Smartphone");
     expect(response.body).toHaveProperty("description");
     expect(response.body.description).toEqual(
       "Updated description for the smartphone"

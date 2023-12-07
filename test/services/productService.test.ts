@@ -27,14 +27,14 @@ describe("Product service", () => {
   // create new product
   async function createProduct() {
     const product: any = {
-      name: "Test Product",
+      title: "Test Product",
       description: "This is a test product.",
       price: 19.99,
       images: ["test-image-url.jpg"],
     };
     const newProduct = await ProductService.createOne(product, category);
     expect(newProduct).toHaveProperty("_id");
-    expect(newProduct.name).toEqual("Test Product");
+    expect(newProduct.title).toEqual("Test Product");
     expect(newProduct.description).toEqual("This is a test product.");
     expect(newProduct.price).toEqual(19.99);
     expect(newProduct.images).toEqual(["test-image-url.jpg"]);
@@ -57,7 +57,7 @@ describe("Product service", () => {
   it("should update a new product", async () => {
     const product = await createProduct();
     const updatedproduct: any = {
-      name: "Test Product",
+      title: "Test Product",
       description: "This is a test product.",
       price: 19.99,
       images: ["test-image-url.jpg"],
@@ -70,7 +70,7 @@ describe("Product service", () => {
     );
     if (newProduct) {
       expect(newProduct).toHaveProperty("_id");
-      expect(newProduct.name).toEqual("Test Product");
+      expect(newProduct.title).toEqual("Test Product");
       expect(newProduct.description).toEqual("This is a test product.");
       expect(newProduct.price).toEqual(19.99);
       expect(newProduct.images).toEqual(["test-image-url.jpg"]);
@@ -82,7 +82,7 @@ describe("Product service", () => {
     const newProduct = await ProductService.deleteOne(id);
     if (newProduct) {
       expect(newProduct).toHaveProperty("_id");
-      expect(newProduct.name).toEqual("Test Product");
+      expect(newProduct.title).toEqual("Test Product");
       expect(newProduct.description).toEqual("This is a test product.");
       expect(newProduct.price).toEqual(19.99);
       expect(newProduct.images).toEqual(["test-image-url.jpg"]);

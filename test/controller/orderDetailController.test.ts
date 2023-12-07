@@ -19,7 +19,7 @@ describe("OrderDetail controller", () => {
   let productId: string;
 
   beforeAll(async () => {
-    mongoHelper = await connect();
+    mongoHelper = await connect();aaaaaaa
     // create user
     // create order
     // create category
@@ -47,7 +47,7 @@ describe("OrderDetail controller", () => {
     const productResponse = await request(app)
       .post(PRODUCTS_URL)
       .send({
-        name: " Test cat",
+        title: " Test cat",
         description: "Animal",
         price: 10.2,
         images: ["google.com"],

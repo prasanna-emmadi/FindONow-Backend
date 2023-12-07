@@ -34,14 +34,14 @@ describe("OrderDetail controller", () => {
     const category: any = await categoryService.createOne(categoryObj);
     categoryId = category._id;
     const productObj: any = {
-      name: " Test cat",
+      title: " Test cat",
       description: "Animal",
       price: 10.2,
       image: "google.com",
     };
     const product: any = await productsService.createOne(
       productObj,
-      categoryId,
+      categoryId
     );
     productId = product._id;
   });
@@ -88,7 +88,7 @@ describe("OrderDetail controller", () => {
     const id = orderDetail._id.toString();
     const newOrderDetail = await OrderDetailService.findOneAndUpdate(
       id,
-      updatedorderDetail,
+      updatedorderDetail
     );
     if (newOrderDetail) {
       expect(newOrderDetail).toHaveProperty("_id");
