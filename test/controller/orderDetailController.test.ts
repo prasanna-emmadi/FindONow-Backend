@@ -49,7 +49,7 @@ describe("OrderDetail controller", () => {
       description: "Animal",
       price: 10.2,
       image: "google.com",
-      categoryId: categoryId,
+      category: categoryId,
     });
     expect(productResponse.statusCode).toBe(201);
     productId = productResponse.body._id;
@@ -81,7 +81,7 @@ describe("OrderDetail controller", () => {
       //const ordersResponse = await request(app).get(ORDERS_URL);
       //expect(ordersResponse.body.length).toBe(1);
     },
-    TEST_TIMEOUT,
+    TEST_TIMEOUT
   );
 
   it(
@@ -91,11 +91,11 @@ describe("OrderDetail controller", () => {
       const response = await createOrderDetail();
       const orderDetailId = response.body._id;
       const singleResponse = await request(app).get(
-        ORDERDETAILS_URL + "/" + orderDetailId,
+        ORDERDETAILS_URL + "/" + orderDetailId
       );
       expect(singleResponse.body._id).toEqual(orderDetailId);
     },
-    TEST_TIMEOUT,
+    TEST_TIMEOUT
   );
 
   it(
@@ -119,7 +119,7 @@ describe("OrderDetail controller", () => {
       expect(putResponse.body.quantity).toEqual(120);
       expect(putResponse.body.priceAtPurchase).toEqual(130);
     },
-    TEST_TIMEOUT,
+    TEST_TIMEOUT
   );
 
   it(
@@ -131,10 +131,10 @@ describe("OrderDetail controller", () => {
       const response = await createOrderDetail();
       const orderDetailId = response.body._id;
       const deleteResponse = await request(app).delete(
-        ORDERDETAILS_URL + "/" + orderDetailId,
+        ORDERDETAILS_URL + "/" + orderDetailId
       );
       expect(deleteResponse.body._id).toEqual(orderDetailId);
     },
-    TEST_TIMEOUT,
+    TEST_TIMEOUT
   );
 });

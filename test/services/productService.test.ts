@@ -13,7 +13,9 @@ describe("Product service", () => {
     mongoHelper = await connect();
     // create category
     const categoryObj: any = {
+      id: 1,
       name: "test",
+      image: "Image",
     };
     const categoryResponse: any = await categoryService.createOne(categoryObj);
     category = categoryResponse._id;
@@ -63,7 +65,7 @@ describe("Product service", () => {
     const newProduct = await ProductService.updateOne(
       id,
       updatedproduct,
-      category,
+      category
     );
     if (newProduct) {
       expect(newProduct).toHaveProperty("_id");
