@@ -26,8 +26,9 @@ describe("OrderDetail controller", () => {
     // create product
     const userResponse = await request(app).post(USERS_URL).send({
       name: "Test cat",
-      email: "test@g.com",
+      email: "test_order_detail_controller@g.com",
       password: "hello",
+      role: "USER",
     });
     expect(userResponse.statusCode).toBe(201);
     userId = userResponse.body._id;
@@ -69,55 +70,71 @@ describe("OrderDetail controller", () => {
     return response;
   }
 
-  it("Should create a orderDetail", async () => {
-    // no orders
-    // create orders
-    // get and check orders
-    await createOrderDetail();
+  it(
+    "Should create a orderDetail",
+    async () => {
+      // no orders
+      // create orders
+      // get and check orders
+      await createOrderDetail();
 
-    //const ordersResponse = await request(app).get(ORDERS_URL);
-    //expect(ordersResponse.body.length).toBe(1);
-  }, TEST_TIMEOUT);
+      //const ordersResponse = await request(app).get(ORDERS_URL);
+      //expect(ordersResponse.body.length).toBe(1);
+    },
+    TEST_TIMEOUT,
+  );
 
-  it("should get the orderDetail", async () => {
-    // get a category
-    const response = await createOrderDetail();
-    const orderDetailId = response.body._id;
-    const singleResponse = await request(app).get(
-      ORDERDETAILS_URL + "/" + orderDetailId
-    );
-    expect(singleResponse.body._id).toEqual(orderDetailId);
-  }, TEST_TIMEOUT);
+  it(
+    "should get the orderDetail",
+    async () => {
+      // get a category
+      const response = await createOrderDetail();
+      const orderDetailId = response.body._id;
+      const singleResponse = await request(app).get(
+        ORDERDETAILS_URL + "/" + orderDetailId,
+      );
+      expect(singleResponse.body._id).toEqual(orderDetailId);
+    },
+    TEST_TIMEOUT,
+  );
 
-  it("should update the orderDetail", async () => {
-    // update a category
-    // create order
-    // update
-    // get and check
-    const response = await createOrderDetail();
-    const orderDetailId = response.body._id;
-    const putResponse = await request(app)
-      .put(ORDERDETAILS_URL + "/" + orderDetailId)
-      .send({
-        orderId: orderId,
-        productId: productId,
-        quantity: 120,
-        priceAtPurchase: 130,
-      });
+  it(
+    "should update the orderDetail",
+    async () => {
+      // update a category
+      // create order
+      // update
+      // get and check
+      const response = await createOrderDetail();
+      const orderDetailId = response.body._id;
+      const putResponse = await request(app)
+        .put(ORDERDETAILS_URL + "/" + orderDetailId)
+        .send({
+          orderId: orderId,
+          productId: productId,
+          quantity: 120,
+          priceAtPurchase: 130,
+        });
 
-    expect(putResponse.body.quantity).toEqual(120);
-    expect(putResponse.body.priceAtPurchase).toEqual(130);
-  }, TEST_TIMEOUT);
+      expect(putResponse.body.quantity).toEqual(120);
+      expect(putResponse.body.priceAtPurchase).toEqual(130);
+    },
+    TEST_TIMEOUT,
+  );
 
-  it("should delete the orderDetail", async () => {
-    // create orderDetail
-    // delete orderDetail
-    // get and checkDetail
-    const response = await createOrderDetail();
-    const orderDetailId = response.body._id;
-    const deleteResponse = await request(app).delete(
-      ORDERDETAILS_URL + "/" + orderDetailId
-    );
-    expect(deleteResponse.body._id).toEqual(orderDetailId);
-  }, TEST_TIMEOUT);
+  it(
+    "should delete the orderDetail",
+    async () => {
+      // create orderDetail
+      // delete orderDetail
+      // get and checkDetail
+      const response = await createOrderDetail();
+      const orderDetailId = response.body._id;
+      const deleteResponse = await request(app).delete(
+        ORDERDETAILS_URL + "/" + orderDetailId,
+      );
+      expect(deleteResponse.body._id).toEqual(orderDetailId);
+    },
+    TEST_TIMEOUT,
+  );
 });

@@ -1,21 +1,21 @@
-import { NextFunction, Request, Response } from "express"
-import { z } from "zod"
+import { NextFunction, Request, Response } from "express";
+import { z } from "zod";
 
-import { requestSchema } from "../schemas/categorySchema"
+import { requestSchema } from "../schemas/categorySchema";
 
 export async function validateCategory(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     await requestSchema.parseAsync({
       body: req.body,
       query: req.query,
       params: req.params,
-    })
-    return next()
+    });
+    return next();
   } catch (error) {
-    return res.status(400).json(error)
+    return res.status(400).json(error);
   }
 }

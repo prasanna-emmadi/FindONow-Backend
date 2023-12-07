@@ -63,7 +63,7 @@ describe("Product service", () => {
     const newProduct = await ProductService.updateOne(
       id,
       updatedproduct,
-      categoryId
+      categoryId,
     );
     if (newProduct) {
       expect(newProduct).toHaveProperty("_id");

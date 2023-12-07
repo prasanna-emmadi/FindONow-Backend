@@ -3,7 +3,7 @@ export class ResponseHandler {
     public code: number,
     public status: string,
     public data: string,
-    public message?: string
+    public message?: string,
   ) {
     this.code = code;
     this.status = status;
@@ -39,14 +39,14 @@ export class ResponseHandler {
       return new ResponseHandler(
         500,
         "Internal Server Error",
-        data || "Internal Server Error"
+        data || "Internal Server Error",
       );
     }
     return new ResponseHandler(
       500,
       "Internal Server Error",
       data || "Internal Server Error",
-      msg
+      msg,
     );
   }
 }

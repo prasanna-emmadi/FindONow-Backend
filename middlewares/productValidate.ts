@@ -5,7 +5,7 @@ import { productSchema } from "../schemas/productSchema";
 export async function validateProduct(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     await productSchema.parseAsync(req.body);
@@ -14,4 +14,3 @@ export async function validateProduct(
     return res.status(400).json(error);
   }
 }
-

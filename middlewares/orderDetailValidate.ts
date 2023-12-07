@@ -6,7 +6,7 @@ import { requestSchema } from "../schemas/orderDetailSchema";
 export async function validateOrderDetail(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     await requestSchema.parseAsync({

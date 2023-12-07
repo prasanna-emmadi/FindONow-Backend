@@ -21,15 +21,13 @@ describe("Category controller", () => {
     });
 
     expect(response.body).toHaveProperty("name");
-    expect(response.body.name).toEqual('Test category');
+    expect(response.body.name).toEqual("Test category");
     return response;
   }
 
   it("Should create a category", async () => {
     await createCategory();
   });
-
-
 
   it("should get the category", async () => {
     const categoryResponse = await createCategory();
@@ -39,25 +37,25 @@ describe("Category controller", () => {
   });
 
   it("should update the category", async () => {
-      // update a category
+    // update a category
     const categoryResponse = await createCategory();
     const categoryId = categoryResponse.body._id.toString();
 
-      const response = await request(app).put("/api/v1/categories/" + categoryId).send({
-         name: "Updated category",
-      });;
-    expect(response.body.name).toEqual('Updated category');
-    });
+    const response = await request(app)
+      .put("/api/v1/categories/" + categoryId)
+      .send({
+        name: "Updated category",
+      });
+    expect(response.body.name).toEqual("Updated category");
+  });
 
-    it("should delete the category", async () => {
+  it("should delete the category", async () => {
     const categoryResponse = await createCategory();
     const categoryId = categoryResponse.body._id.toString();
 
-    const response = await request(app).delete("/api/v1/categories/" + categoryId);
+    const response = await request(app).delete(
+      "/api/v1/categories/" + categoryId,
+    );
     expect(response.body._id).toEqual(categoryId);
-    });
-
-
+  });
 });
-
-

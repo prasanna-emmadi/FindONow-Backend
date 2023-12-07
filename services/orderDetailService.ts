@@ -28,7 +28,7 @@ async function createOne(orderDetail: OrderDetail) {
 
 async function findOneAndUpdate(
   orderDetailId: string,
-  orderDetail: OrderDetail
+  orderDetail: OrderDetail,
 ) {
   const id = new mongoose.Types.ObjectId(orderDetailId);
   return await OrderDetailRepo.findByIdAndUpdate(id, orderDetail, {

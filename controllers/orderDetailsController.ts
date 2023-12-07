@@ -6,13 +6,13 @@ import { ResponseHandler } from "../responses/ResponeHandler";
 async function findOrderDetailOffset(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const pageNumber = Number(req.query.pageNumber) || 1;
   const pageSize = Number(req.query.pageSize) || 10;
   const list = await orderDetailService.getPaginatedOrderDetail(
     pageNumber,
-    pageSize
+    pageSize,
   );
   next(ResponseHandler.resourceFetched(JSON.stringify(list)));
 }
@@ -20,7 +20,7 @@ async function findOrderDetailOffset(
 async function findAllOrderDetail(
   _: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const orderDetails = await orderDetailService.findAll();
   //next(ResponseHandler.resourceFetched(JSON.stringify(orderDetails)));
@@ -30,7 +30,7 @@ async function findAllOrderDetail(
 async function findOneOrderDetail(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const orderDetailId = req.params.orderDetailId;
   const orderDetail = await orderDetailService.findone(orderDetailId);
@@ -46,7 +46,7 @@ async function findOneOrderDetail(
 async function createOneOrderDetail(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const newOrderDetail = req.body;
   const orderDetail = await orderDetailService.createOne(newOrderDetail);
@@ -63,13 +63,13 @@ async function createOneOrderDetail(
 async function findOneAndUpdate(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const newOrderDetail = req.body;
   const orderDetailId = req.params.orderDetailId;
   const updatedOrderDetail = await orderDetailService.findOneAndUpdate(
     orderDetailId,
-    newOrderDetail
+    newOrderDetail,
   );
 
   if (!updatedOrderDetail) {
@@ -89,12 +89,11 @@ async function findOneAndUpdate(
 async function findOneAndDelete(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const orderDetailId = req.params.orderDetailId;
-  const deletedOrderDetail = await orderDetailService.findOneAndDelete(
-    orderDetailId
-  );
+  const deletedOrderDetail =
+    await orderDetailService.findOneAndDelete(orderDetailId);
 
   if (!deletedOrderDetail) {
     next(ApiError.resourceNotFound("OderDetail not found."));

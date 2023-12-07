@@ -41,7 +41,7 @@ describe("OrderDetail controller", () => {
     };
     const product: any = await productsService.createOne(
       productObj,
-      categoryId
+      categoryId,
     );
     productId = product._id;
   });
@@ -88,7 +88,7 @@ describe("OrderDetail controller", () => {
     const id = orderDetail._id.toString();
     const newOrderDetail = await OrderDetailService.findOneAndUpdate(
       id,
-      updatedorderDetail
+      updatedorderDetail,
     );
     if (newOrderDetail) {
       expect(newOrderDetail).toHaveProperty("_id");

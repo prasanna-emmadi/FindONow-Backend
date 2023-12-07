@@ -17,3 +17,7 @@ export const productSchema = z.object({
     required_error: "Category ID is required",
   }),
 });
+
+export const requestSchema = z.object({
+  body: productSchema,
+});

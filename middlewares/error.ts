@@ -1,17 +1,17 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from "express"
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 
-import { ApiError } from "../errors/ApiError"
+import { ApiError } from "../errors/ApiError";
 
 export function apiErrorHandler(
   error: typeof ApiError | Error,
   req: Request,
   res: Response,
-  _: NextFunction
+  _: NextFunction,
 ) {
   if (error instanceof ApiError) {
-    res.status(error.code).json({ msg: error.message })
-    return
+    res.status(error.code).json({ msg: error.message });
+    return;
   }
 
-  res.status(500).json({ msg: "Something went wrong" })
+  res.status(500).json({ msg: "Something went wrong" });
 }

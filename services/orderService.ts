@@ -11,7 +11,7 @@ async function getPaginatedOrder(pageNumber: number, pageSize: number) {
 async function getPaginatedUserOrder(
   userId: string,
   pageNumber: number,
-  pageSize: number
+  pageSize: number,
 ) {
   const orders = await OrderRepo.find({ userId })
     .skip(pageNumber)
