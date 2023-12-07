@@ -21,7 +21,7 @@ async function getPaginatedUserOrder(
 }
 
 async function findAll() {
-  const orders = await OrderRepo.find().exec();
+  const orders = await OrderRepo.find().populate("userId").exec();
 
   return orders;
 }

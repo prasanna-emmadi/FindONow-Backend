@@ -9,7 +9,10 @@ async function getPaginatedOrderDetail(pageNumber: number, pageSize: number) {
 }
 
 async function findAll() {
-  const orderDetails = await OrderDetailRepo.find().exec();
+  const orderDetails = await OrderDetailRepo.find()
+    .populate("orderId")
+    .populate("productId")
+    .exec();
 
   return orderDetails;
 }
