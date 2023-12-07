@@ -15,14 +15,14 @@ export async function getOffsetUser(req:Request, res: Response, next: NextFuncti
   if(!users) {
     next(ApiError.internal("Internal Server error"));
   }
-  next(ResponseHandler.resourceFetched(JSON.stringify(users)))
-  //res.json(users);
+  //next(ResponseHandler.resourceFetched(JSON.stringify(users)))
+  res.json(users);
   
 }
 
 export async function findAllUser(_: Request, res: Response) {
   const users = await UsersService.findAll();
-  res.json({ users });
+  res.json(users);
 }
 
 export async function findOneUser(req: Request, res: Response, next: NextFunction) {
@@ -37,8 +37,8 @@ export async function findOneUser(req: Request, res: Response, next: NextFunctio
     next(ApiError.resourceNotFound("User not found."))
     return;
   }
-  next(ResponseHandler.resourceFetched(JSON.stringify(user)))
- // res.json({ user });
+  //next(ResponseHandler.resourceFetched(JSON.stringify(user)))
+  res.json(user);
 }
 
 export async function createOneUser(req: Request, res: Response, next:NextFunction) {
@@ -47,8 +47,8 @@ export async function createOneUser(req: Request, res: Response, next:NextFuncti
     next(ApiError.internal("Details are Required"))
   }
   const user = await UsersService.createOne(newUser);
-  next(ResponseHandler.resourceCreated(JSON.stringify(user), `User with ${user._id} has been added`))
- // res.status(201).json({ user });
+  //next(ResponseHandler.resourceCreated(JSON.stringify(user), `User with ${user._id} has been added`))
+  res.status(201).json(user);
 }
 
 export async function findOneAndUpdate(req: Request,res: Response,next: NextFunction) {
@@ -60,8 +60,8 @@ export async function findOneAndUpdate(req: Request,res: Response,next: NextFunc
       next(ApiError.resourceNotFound("User not found."));
       return;
     }
-    next(ResponseHandler.resourceUpdated(JSON.stringify(updatedUser), `User with ${updatedUser._id} has been updated`))
-     //res.status(200).json({ updatedUser });
+    //next(ResponseHandler.resourceUpdated(JSON.stringify(updatedUser), `User with ${updatedUser._id} has been updated`))
+    res.status(200).json(updatedUser);
 }
 
 export async function findOneAndDelete( req: Request, res: Response, next: NextFunction ) {
@@ -72,8 +72,8 @@ export async function findOneAndDelete( req: Request, res: Response, next: NextF
         next(ApiError.resourceNotFound("User not found."));
         return;
     }
-    next(ResponseHandler.resourceDeleted(JSON.stringify(deletedUser), `User with ${deletedUser._id} has been Deleted`))
-   // res.status(200).json("User deleted ...");
+    //next(ResponseHandler.resourceDeleted(JSON.stringify(deletedUser), `User with ${deletedUser._id} has been Deleted`))
+    res.status(200).json(deletedUser);
 }
 
 //SignUp

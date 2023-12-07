@@ -1,8 +1,6 @@
 import request from "supertest";
-
 import app from "../..";
 import connect, { MongoHelper } from "../db-helper";
-import { number, string } from "zod";
 
 describe("User controller", () => {
   let mongoHelper: MongoHelper;
@@ -11,66 +9,67 @@ describe("User controller", () => {
     mongoHelper = await connect();
   });
 
-  afterEach(async () => {
-    //await mongoHelper.clearDatabase();
-  });
 
   afterAll(async () => {
     await mongoHelper.closeDatabase();
   });
 
-  it("Should create a user", async () => {
+  async function createUser(emailPrefix: string) {
+    const email = emailPrefix + "@gmail.com"
     const response = await request(app).post("/api/v1/users").send({
-        _id: "655e2273fe4c4f58b6a80113", 
-        name: "Test user", 
-        email:"test@gmail.com",
+        name: "Test user",
+        email,
         password:"test123",
         role:"User"
     });
-    expect(response.body.data).toHaveProperty("name");
-    expect(response.body.data.name).toEqual('Test user');
-    expect(response.body.data).toHaveProperty("email");
-    expect(response.body.data.email).toEqual("test@gmail.com");
-    expect(response.body.data).toHaveProperty("role");
-    expect(response.body.data.role).toEqual("User");
-  });
+    // console.log(response.body)
+    expect(response.body).toHaveProperty("name");
+    expect(response.body.name).toEqual('Test user');
+    expect(response.body).toHaveProperty("email");
+    expect(response.body.email).toEqual(email);
+    expect(response.body).toHaveProperty("role");
+    expect(response.body.role).toEqual("User");
+    return response;
+  }
+
+   it("Should create a user", async () => {
+     await createUser("create");
+   });
 
 
-// it("should get the user", async () => {
-//     const response = await request(app).get("/api/v1/users/655e2273fe4c4f58b6a80113");
+   it("should get the user", async () => {
+     const userResponse = await createUser("get");
+     console.log("userId", userResponse.body)
+     const userId = userResponse.body._id;
+     const response = await request(app).get("/api/v1/users/" + userId);
    
-//     expect(response.body.data).toMatchObject({
-//       _id: "655e2273fe4c4f58b6a80113",
-//     });
-//   });
+     expect(response.body).toMatchObject({
+       _id: userId
+     });
+   });
 
-it("should update the user", async () => { 
-   // let user:any = {name: "Updated user"}
+   it("should update the user", async () => {
+     const userResponse = await createUser("update");
+     const userId = userResponse.body._id.toString();
+
     const response = await request(app).
-    put("/api/v1/users/655e2273fe4c4f58b6a80113")
-    .send({
-        name: "Updated user",
-        email:"update@gmail.com",
-        password:"test123",
-        role:"User",
-    });
-    //expect(response.body.user).toEqual({   
-    expect(response.body.data).toEqual({
-      name: "Updated user",
-      email: "update@gmail.com",
-      password: "test123",
-      role: "User",
-      _id: "655e2273fe4c4f58b6a80113",
-      __v: 0,
-    });
-});
+        put("/api/v1/users/" + userId)
+        .send({
+            name: "Updated user",
+            email:"update@gmail.com",
+            password:"test123",
+            role:"User",
+        });
+    expect(response.body.name).toEqual('Updated user');
+    expect(response.body.email).toEqual("update@gmail.com");
+   });
 
-it("should delete the user", async () => {
+   it("should delete the user", async () => {
+     const userResponse = await createUser("delete");
+     const userId = userResponse.body._id.toString();
+
     const response = await request(app)
-      .delete("/api/v1/users/655e2273fe4c4f58b6a80113");
-      expect(response.body.data._id).toEqual("655e2273fe4c4f58b6a80113");
-    });
-
+      .delete("/api/v1/users/" + userId);
+      expect(response.body._id).toEqual(userId);
+   });
 });
-
-
