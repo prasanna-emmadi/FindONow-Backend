@@ -7,7 +7,7 @@ describe("Product service", () => {
   // product is dependent on
   // category
   // create category
-  let categoryId: string;
+  let category: string;
 
   beforeAll(async () => {
     mongoHelper = await connect();
@@ -15,8 +15,8 @@ describe("Product service", () => {
     const categoryObj: any = {
       name: "test",
     };
-    const category: any = await categoryService.createOne(categoryObj);
-    categoryId = category._id;
+    const categoryResponse: any = await categoryService.createOne(categoryObj);
+    category = categoryResponse._id;
   });
   afterAll(async () => {
     await mongoHelper.closeDatabase();
@@ -29,7 +29,7 @@ describe("Product service", () => {
       price: 19.99,
       image: "test-image-url.jpg",
     };
-    const newProduct = await ProductService.createOne(product, categoryId);
+    const newProduct = await ProductService.createOne(product, category);
     expect(newProduct).toHaveProperty("_id");
     expect(newProduct.name).toEqual("Test Product");
     expect(newProduct.description).toEqual("This is a test product.");
@@ -63,7 +63,7 @@ describe("Product service", () => {
     const newProduct = await ProductService.updateOne(
       id,
       updatedproduct,
-      categoryId,
+      category,
     );
     if (newProduct) {
       expect(newProduct).toHaveProperty("_id");

@@ -4,17 +4,19 @@ import connect, { MongoHelper } from "../db-helper";
 
 describe("Product controller", () => {
   let mongoHelper: MongoHelper;
-  let categoryId: string;
+  let category: string;
 
   beforeAll(async () => {
     mongoHelper = await connect();
     const categoryObj: any = {
+      id: 1,
       name: "category1",
+      image: "Image",
     };
     const response = await request(app)
       .post("/api/v1/categories")
       .send(categoryObj);
-    categoryId = response.body._id.toString();
+    category = response.body._id.toString();
   });
 
   afterAll(async () => {
@@ -27,21 +29,21 @@ describe("Product controller", () => {
       description: "High-end smartphone with advanced features",
       price: 799.99,
       image: "https://example.com/smartphone.jpg",
-      categoryId,
+      category,
     });
 
     expect(response.body).toHaveProperty("name");
     expect(response.body.name).toEqual("Smartphone");
     expect(response.body).toHaveProperty("description");
     expect(response.body.description).toEqual(
-      "High-end smartphone with advanced features",
+      "High-end smartphone with advanced features"
     );
     expect(response.body).toHaveProperty("price");
     expect(response.body.price).toEqual(799.99);
     expect(response.body).toHaveProperty("image");
     expect(response.body.image).toEqual("https://example.com/smartphone.jpg");
-    expect(response.body).toHaveProperty("categoryId");
-    expect(response.body.categoryId).toEqual(categoryId);
+    expect(response.body).toHaveProperty("category");
+    expect(response.body.category).toEqual(category);
     return response;
   }
 
@@ -58,13 +60,13 @@ describe("Product controller", () => {
     expect(response.body.name).toEqual("Smartphone");
     expect(response.body).toHaveProperty("description");
     expect(response.body.description).toEqual(
-      "High-end smartphone with advanced features",
+      "High-end smartphone with advanced features"
     );
     expect(response.body).toHaveProperty("price");
     expect(response.body.price).toEqual(799.99);
     expect(response.body).toHaveProperty("image");
     expect(response.body.image).toEqual("https://example.com/smartphone.jpg");
-    expect(response.body).toHaveProperty("categoryId");
+    expect(response.body).toHaveProperty("category");
   });
 
   it("Should update the product", async () => {
@@ -78,22 +80,22 @@ describe("Product controller", () => {
         description: "Updated description for the smartphone",
         price: 899.99,
         image: "https://example.com/updated-smartphone.jpg",
-        categoryId: "655e9e08106158f8d895ccbe",
+        category: "655e9e08106158f8d895ccbe",
       });
 
     expect(response.body).toHaveProperty("name");
     expect(response.body.name).toEqual("Updated Smartphone");
     expect(response.body).toHaveProperty("description");
     expect(response.body.description).toEqual(
-      "Updated description for the smartphone",
+      "Updated description for the smartphone"
     );
     expect(response.body).toHaveProperty("price");
     expect(response.body.price).toEqual(899.99);
     expect(response.body).toHaveProperty("image");
     expect(response.body.image).toEqual(
-      "https://example.com/updated-smartphone.jpg",
+      "https://example.com/updated-smartphone.jpg"
     );
-    expect(response.body).toHaveProperty("categoryId");
+    expect(response.body).toHaveProperty("category");
   });
 
   it("Should delete the product", async () => {
