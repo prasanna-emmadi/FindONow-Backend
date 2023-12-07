@@ -13,10 +13,14 @@ describe("Category controller", () => {
   async function createCategory() {
     const category: any = {
       name: "test",
+      id: 1,
+      image: "Image",
     };
     const newCategory = await CategoryService.createOne(category);
     expect(newCategory).toHaveProperty("_id");
+    expect(newCategory.id).toEqual(1);
     expect(newCategory.name).toEqual("test");
+    expect(newCategory.image).toEqual("Image");
     return newCategory;
   }
   it("should create a new category", async () => {

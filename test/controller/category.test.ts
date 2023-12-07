@@ -17,7 +17,9 @@ describe("Category controller", () => {
 
   async function createCategory() {
     const response = await request(app).post("/api/v1/categories").send({
+      id: 1,
       name: "Test category",
+      image: "Image"
     });
 
     expect(response.body).toHaveProperty("name");
