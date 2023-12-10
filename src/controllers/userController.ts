@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import UsersService from "../services/userService";
 import { ApiError } from "../errors/ApiError";
 import { ResponseHandler } from "../responses/ResponeHandler";
+import { Role, UserProfile } from "user";
+import { WithAuthRequest } from "../middlewares/checkAuth";
 
 export async function getOffsetUser(
   req: Request,
@@ -105,10 +107,8 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     });
     return;
   }
-  next(
-    ResponseHandler.resourceCreated(JSON.stringify(user), `User has been added`)
-  );
-  // res.status(201).json({message: "user created",user,})
+
+  res.json(user);
 }
 
 //login
@@ -125,6 +125,31 @@ export async function login(req: Request, res: Response) {
   res.json({ message: login.message, accessToken: login.accessToken });
 }
 
+export async function profile(
+  req: WithAuthRequest,
+  res: Response,
+  next: NextFunction
+) {
+  const userId = req.decoded?.userId;
+  if (!userId) {
+    next(ApiError.resourceNotFound("User not found."));
+  } else {
+    const user = await UsersService.findOne(userId);
+
+    if (!user) {
+      next(ApiError.resourceNotFound("User not found."));
+      return;
+    }
+    const role = user.role as Role;
+    const profile: UserProfile = {
+      name: user.name,
+      email: user.email,
+      role,
+    };
+    res.json(profile);
+  }
+}
+
 export default {
   getOffsetUser,
   findOneUser,
@@ -134,4 +159,5 @@ export default {
   findOneAndDelete,
   login,
   signup,
+  profile,
 };

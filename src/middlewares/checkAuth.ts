@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { ApiError } from "../errors/ApiError";
 import { DecodedUser } from "../types/user";
+import { TOKEN_SECRET } from "./secret";
 
 export interface WithAuthRequest extends Request {
   decoded?: DecodedUser;
@@ -20,10 +21,7 @@ export function checkAuth(
   }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.TOKEN_SECRET as string
-    ) as DecodedUser;
+    const decoded = jwt.verify(token, TOKEN_SECRET) as DecodedUser;
     req.decoded = decoded;
     next();
   } catch (err) {

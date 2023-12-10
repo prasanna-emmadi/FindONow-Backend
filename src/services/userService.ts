@@ -1,9 +1,9 @@
-import mongoose, { ObjectId } from "mongoose";
-import UserRepo from "../models/User";
-//import { User } from "../types/users.js"
-import { User } from "../types/users";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
+import { TOKEN_SECRET } from "../middlewares/secret";
+import UserRepo from "../models/User";
+import { User } from "../types/users";
 
 const usersRepo = new UserRepo();
 
@@ -100,7 +100,7 @@ async function login(email: string, password: string) {
     email: user.email,
     role: user.role,
   };
-  const accessToken = jwt.sign(payload, process.env.TOKEN_SECRET as string, {
+  const accessToken = jwt.sign(payload, TOKEN_SECRET as string, {
     expiresIn: "1h",
   });
 

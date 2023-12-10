@@ -70,4 +70,34 @@ describe("User controller", () => {
     const response = await request(app).delete(USERS_URL + userId);
     expect(response.body._id).toEqual(userId);
   });
+
+  it("should login and get profile", async () => {
+    const email = "login_profile@gmail.com";
+    const password = "test123";
+    const name = "loginProfile";
+    const signupResponse = await request(app)
+      .post(USERS_URL + "signup")
+      .send({
+        name: name,
+        email: email,
+        password: password,
+      });
+    const newUser = signupResponse.body;
+    expect(newUser.name).toEqual(name);
+    expect(newUser.email).toEqual(email);
+    const loginResponse = await request(app)
+      .post(USERS_URL + "login")
+      .send({
+        email: email,
+        password: password,
+      });
+    const auth = loginResponse.body;
+    console.log("auth", auth);
+    const profileResponse = await request(app)
+      .get(USERS_URL + "profile")
+      .set("Authorization", "bearer " + auth.accessToken);
+    const userProfile = profileResponse.body;
+    expect(userProfile.name).toEqual(name);
+    expect(userProfile.email).toEqual(email);
+  });
 });
