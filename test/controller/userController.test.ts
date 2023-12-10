@@ -92,7 +92,6 @@ describe("User controller", () => {
         password: password,
       });
     const auth = loginResponse.body;
-    console.log("auth", auth);
     const profileResponse = await request(app)
       .get(USERS_URL + "profile")
       .set("Authorization", "bearer " + auth.accessToken);

@@ -31,28 +31,11 @@ describe("User service", () => {
     expect(newUser.name).toEqual("Test user");
   });
 
-  //   it("should return a user list", async () => {
-  //     // create new user
-  //     const newUser = new UserRepo({
-  //       name: "test user",
-  //       email:"test@gmail.com",
-  //       password:"test123",
-  //       role:"User"
-  //     });
-
-  //     await newUser.save();
-
-  //     const users = await UserService.findAll();
-  //     expect(users.length).toEqual(1);// check length
-  //     expect(users[0]).toHaveProperty("name", "test user");
-  //   });
-
   it("should update a User", async () => {
     // create new User
     const user1: any = {
-      _id: "655e2273fe4c4f58b6a80113",
       name: "Test user",
-      email: "test@gmail.com",
+      email: "test_update@gmail.com",
       password: "test123",
       role: "User",
     };
@@ -67,7 +50,7 @@ describe("User service", () => {
     };
     const newUser = await UserService.findOneAndUpdate(
       "655e1356be9cf967bdead01f",
-      user,
+      user
     );
     if (newUser) {
       expect(newUser).toHaveProperty("_id");
@@ -86,7 +69,7 @@ describe("User service", () => {
     const userObj = await UserService.createOne(user);
 
     const deleteUser = await UserService.findOneAndDelete(
-      userObj._id.toString(),
+      userObj._id.toString()
     );
     expect(deleteUser).toHaveProperty("_id");
     expect(deleteUser).toHaveProperty("name", "tester");
