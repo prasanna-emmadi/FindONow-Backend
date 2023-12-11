@@ -14,6 +14,7 @@ describe("Product controller", () => {
 
   let category: string;
   let user: any;
+  let accessToken: string;
 
   beforeAll(async () => {
     mongoHelper = await connect();
@@ -32,8 +33,10 @@ describe("Product controller", () => {
       name: "category1",
       image: "Image",
     };
+    accessToken = await getAccessToken(app, email, password);
     const response = await request(app)
       .post("/api/v1/categories")
+      .set("Authorization", "bearer " + accessToken)
       .send(categoryObj);
     category = response.body._id.toString();
   });
@@ -43,7 +46,6 @@ describe("Product controller", () => {
   });
 
   async function createProduct() {
-    const accessToken = await getAccessToken(app, email, password);
     const response = await request(app)
       .post(PRODUCTS_URL)
       .set("Authorization", "bearer " + accessToken)
@@ -69,7 +71,7 @@ describe("Product controller", () => {
     ]);
     expect(response.body).toHaveProperty("category");
     expect(response.body.category).toEqual(category);
-    return [response, accessToken];
+    return response;
   }
 
   it("Should create a product", async () => {
@@ -77,7 +79,7 @@ describe("Product controller", () => {
   });
 
   it("Should get the product", async () => {
-    const [productResponse, accessToken] = await createProduct();
+    const productResponse = await createProduct();
     const productId = productResponse.body._id.toString();
     const response = await request(app).get(PRODUCTS_URL + productId);
 
@@ -97,7 +99,7 @@ describe("Product controller", () => {
   });
 
   it("Should update the product", async () => {
-    const [productResponse, accessToken] = await createProduct();
+    const productResponse = await createProduct();
     const productId = productResponse.body._id.toString();
 
     const response = await request(app)
@@ -127,7 +129,7 @@ describe("Product controller", () => {
   });
 
   it("Should delete the product", async () => {
-    const [productResponse, accessToken] = await createProduct();
+    const productResponse = await createProduct();
     const productId = productResponse.body._id.toString();
 
     const response = await request(app)

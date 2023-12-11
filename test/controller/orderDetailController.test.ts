@@ -47,6 +47,7 @@ describe("OrderDetail controller", () => {
     orderId = orderResponse.body._id;
     const categoryResponse = await request(app)
       .post(CATEGORIES_URL)
+      .set("Authorization", "bearer " + accessToken)
       .send({
         name: " Test cat",
       })

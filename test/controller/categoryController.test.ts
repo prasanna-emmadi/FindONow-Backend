@@ -1,14 +1,22 @@
 import request from "supertest";
-
 import app from "../../src";
 import connect, { MongoHelper } from "../db-helper";
-import { number, string } from "zod";
+import { signupUserAndGetToken } from "../login-helper";
 
 describe("Category controller", () => {
   let mongoHelper: MongoHelper;
+  let email = "order_controller@gmail.com";
+  let password = "test123";
+  let accessToken: string;
 
   beforeAll(async () => {
     mongoHelper = await connect();
+    const [fetchedUserId, fetchedAccessToken] = await signupUserAndGetToken(
+      app,
+      email,
+      password
+    );
+    accessToken = fetchedAccessToken;
   });
 
   afterAll(async () => {
@@ -16,11 +24,14 @@ describe("Category controller", () => {
   });
 
   async function createCategory() {
-    const response = await request(app).post("/api/v1/categories").send({
-      id: 1,
-      name: "Test category",
-      image: "Image"
-    });
+    const response = await request(app)
+      .post("/api/v1/categories")
+      .send({
+        id: 1,
+        name: "Test category",
+        image: "Image",
+      })
+      .set("Authorization", "bearer " + accessToken);
 
     expect(response.body).toHaveProperty("name");
     expect(response.body.name).toEqual("Test category");
@@ -47,7 +58,8 @@ describe("Category controller", () => {
       .put("/api/v1/categories/" + categoryId)
       .send({
         name: "Updated category",
-      });
+      })
+      .set("Authorization", "bearer " + accessToken);
     expect(response.body.name).toEqual("Updated category");
   });
 
@@ -55,9 +67,9 @@ describe("Category controller", () => {
     const categoryResponse = await createCategory();
     const categoryId = categoryResponse.body._id.toString();
 
-    const response = await request(app).delete(
-      "/api/v1/categories/" + categoryId,
-    );
+    const response = await request(app)
+      .delete("/api/v1/categories/" + categoryId)
+      .set("Authorization", "bearer " + accessToken);
     expect(response.body._id).toEqual(categoryId);
   });
 });
