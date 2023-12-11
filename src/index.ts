@@ -1,8 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 import "dotenv/config";
-
-import itemsRoute from "./routes/itemsRoute";
 import categoryRoute from "./routes/categoriesRoute";
 import productsRoute from "./routes/productsRoute";
 import usersRoute from "./routes/usersRoute";
@@ -13,7 +14,6 @@ import { checkAuth } from "./middlewares/checkAuth";
 import { responseHandler } from "./middlewares/responsehandler";
 import orderDetailsRoute from "./routes/orderDetailsRoute";
 import authRoute from "./routes/authRoute";
-import cors from "cors";
 
 const PORT = 8080;
 const app = express();
@@ -43,6 +43,36 @@ app.get("/api/v1/protected", checkAuth, (req, res) => {
 
 app.use(responseHandler);
 app.use(routeNotFound);
+
+const options = {
+  definition: {
+    openapi: "3.1.0",
+    info: {
+      title: "LogRocket Express API with Swagger",
+      version: "0.1.0",
+      description:
+        "This is a simple CRUD API application made with Express and documented with Swagger",
+      license: {
+        name: "MIT",
+        url: "https://spdx.org/licenses/MIT.html",
+      },
+      contact: {
+        name: "LogRocket",
+        url: "https://logrocket.com",
+        email: "info@email.com",
+      },
+    },
+    servers: [
+      {
+        url: "http://localhost:3000",
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
+
+const specs = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   app.listen(PORT, () => {
