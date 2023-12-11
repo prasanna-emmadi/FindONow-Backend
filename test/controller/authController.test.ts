@@ -38,7 +38,7 @@ describe("User controller", () => {
     const auth = loginResponse.body;
     const profileResponse = await request(app)
       .get(AUTH_URL + "profile")
-      .set("Authorization", "bearer " + auth.accessToken);
+      .set("Authorization", "bearer " + auth.token.accessToken);
     const userProfile = profileResponse.body;
     expect(userProfile.name).toEqual(name);
     expect(userProfile.email).toEqual(email);

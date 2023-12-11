@@ -14,7 +14,7 @@ export async function getAccessToken(
     });
   expect(loginResponse.status).toBe(200);
   const auth = loginResponse.body;
-  return auth.accessToken;
+  return auth.token.accessToken;
 }
 
 export async function signupUserAndGetToken(
