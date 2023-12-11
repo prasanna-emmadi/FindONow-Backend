@@ -71,6 +71,7 @@ async function createNewOne({
 
   await user.save();
   const userWithoutPass = {
+    _id: user._id,
     name: user.name,
     email: user.email,
     role: user.role,

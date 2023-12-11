@@ -2,23 +2,32 @@ import express from "express";
 
 import OrderDetailController from "../controllers/orderDetailsController";
 import { validateOrderDetail } from "../middlewares/orderDetailValidate";
+import { checkAuth } from "../middlewares/checkAuth";
 
 const router = express.Router();
 
-router.get("/", OrderDetailController.findAllOrderDetail);
-router.get("/:orderDetailId", OrderDetailController.findOneOrderDetail);
-router.get("/offset", OrderDetailController.findOrderDetailOffset);
+router.get("/", [checkAuth], OrderDetailController.findAllOrderDetail);
+router.get(
+  "/:orderDetailId",
+  [checkAuth],
+  OrderDetailController.findOneOrderDetail
+);
+router.get("/offset", [checkAuth], OrderDetailController.findOrderDetailOffset);
 router.post(
   "/",
-  validateOrderDetail,
+  [checkAuth, validateOrderDetail],
   OrderDetailController.createOneOrderDetail
 );
 router.put(
   "/:orderDetailId",
-  validateOrderDetail,
+  [checkAuth, validateOrderDetail],
   OrderDetailController.findOneAndUpdate
 );
-router.delete("/:orderDetailId", OrderDetailController.findOneAndDelete);
+router.delete(
+  "/:orderDetailId",
+  [checkAuth],
+  OrderDetailController.findOneAndDelete
+);
 router.use((req, res, next) => {
   res.on("finish", () => {
     console.log("Record created:", {

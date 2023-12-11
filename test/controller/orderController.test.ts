@@ -18,7 +18,7 @@ describe("Order controller", () => {
       name: "Test cat",
       email: "test_order_controller@g.com",
       password: "hello",
-      role: "User",
+      role: "ADMIN",
     });
     expect(response.statusCode).toBe(201);
     userId = response.body._id;

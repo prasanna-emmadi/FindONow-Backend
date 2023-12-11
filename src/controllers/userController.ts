@@ -108,7 +108,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     return;
   }
 
-  res.json(user);
+  res.status(201).json(user);
 }
 
 //login

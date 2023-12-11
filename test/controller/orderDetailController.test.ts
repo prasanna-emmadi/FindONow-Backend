@@ -2,6 +2,7 @@ import request from "supertest";
 
 import app from "../../src";
 import connect, { MongoHelper } from "../db-helper";
+import { signupUserAndGetToken } from "../login-helper";
 
 const BASE_URL = "/api/v1";
 const ORDERDETAILS_URL = BASE_URL + "/orderDetails";
@@ -17,6 +18,9 @@ describe("OrderDetail controller", () => {
   let orderId: string;
   let categoryId: string;
   let productId: string;
+  let email = "order_detail_controller@gmail.com";
+  let password = "test123";
+  let accessToken: string;
 
   beforeAll(async () => {
     mongoHelper = await connect();
@@ -24,28 +28,36 @@ describe("OrderDetail controller", () => {
     // create order
     // create category
     // create product
-    const userResponse = await request(app).post(USERS_URL).send({
-      name: "Test cat",
-      email: "test_order_detail_controller@g.com",
-      password: "hello",
-      role: "USER",
-    });
-    expect(userResponse.statusCode).toBe(201);
-    userId = userResponse.body._id;
-    const orderResponse = await request(app).post(ORDERS_URL).send({
-      userId: userId,
-      date: "2011-10-05T14:48:00.000Z",
-      totalAmount: 100,
-    });
+    const [userId, fetchedAccessToken] = await signupUserAndGetToken(
+      app,
+      email,
+      password
+    );
+    accessToken = fetchedAccessToken;
+    console.log({ userId, accessToken });
+    const orderResponse = await request(app)
+      .post(ORDERS_URL)
+      .send({
+        userId: userId,
+        date: "2011-10-05T14:48:00.000Z",
+        totalAmount: 100,
+        orderIds: [],
+      })
+      .set("Authorization", "bearer " + accessToken);
+
     expect(orderResponse.statusCode).toBe(201);
     orderId = orderResponse.body._id;
-    const categoryResponse = await request(app).post(CATEGORIES_URL).send({
-      name: " Test cat",
-    });
+    const categoryResponse = await request(app)
+      .post(CATEGORIES_URL)
+      .send({
+        name: " Test cat",
+      })
+      .set("Authorization", "bearer " + accessToken);
     expect(categoryResponse.statusCode).toBe(201);
     categoryId = categoryResponse.body._id;
     const productResponse = await request(app)
       .post(PRODUCTS_URL)
+      .set("Authorization", "bearer " + accessToken)
       .send({
         title: " Test cat",
         description: "Animal",
@@ -55,19 +67,22 @@ describe("OrderDetail controller", () => {
       });
     expect(productResponse.statusCode).toBe(201);
     productId = productResponse.body._id;
-  }, 60000);
+  }, 100000);
 
   afterAll(async () => {
     await mongoHelper.closeDatabase();
   });
 
   async function createOrderDetail() {
-    const response = await request(app).post(ORDERDETAILS_URL).send({
-      orderId: orderId,
-      productId: productId,
-      quantity: 230,
-      priceAtPurchase: 200,
-    });
+    const response = await request(app)
+      .post(ORDERDETAILS_URL)
+      .send({
+        orderId: orderId,
+        productId: productId,
+        quantity: 230,
+        priceAtPurchase: 200,
+      })
+      .set("Authorization", "bearer " + accessToken);
     expect(response.statusCode).toBe(201);
     return response;
   }
@@ -92,9 +107,9 @@ describe("OrderDetail controller", () => {
       // get a category
       const response = await createOrderDetail();
       const orderDetailId = response.body._id;
-      const singleResponse = await request(app).get(
-        ORDERDETAILS_URL + "/" + orderDetailId
-      );
+      const singleResponse = await request(app)
+        .get(ORDERDETAILS_URL + "/" + orderDetailId)
+        .set("Authorization", "bearer " + accessToken);
       expect(singleResponse.body._id).toEqual(orderDetailId);
     },
     TEST_TIMEOUT
@@ -116,7 +131,8 @@ describe("OrderDetail controller", () => {
           productId: productId,
           quantity: 120,
           priceAtPurchase: 130,
-        });
+        })
+        .set("Authorization", "bearer " + accessToken);
 
       expect(putResponse.body.quantity).toEqual(120);
       expect(putResponse.body.priceAtPurchase).toEqual(130);
@@ -132,9 +148,9 @@ describe("OrderDetail controller", () => {
       // get and checkDetail
       const response = await createOrderDetail();
       const orderDetailId = response.body._id;
-      const deleteResponse = await request(app).delete(
-        ORDERDETAILS_URL + "/" + orderDetailId
-      );
+      const deleteResponse = await request(app)
+        .delete(ORDERDETAILS_URL + "/" + orderDetailId)
+        .set("Authorization", "bearer " + accessToken);
       expect(deleteResponse.body._id).toEqual(orderDetailId);
     },
     TEST_TIMEOUT

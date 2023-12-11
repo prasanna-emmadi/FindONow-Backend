@@ -1,6 +1,7 @@
 import request from "supertest";
 import app from "../../src";
 import connect, { MongoHelper } from "../db-helper";
+import { getAccessToken } from "../login-helper";
 
 const PRODUCTS_URL = "/api/v1/products/";
 const USERS_URL = "/api/v1/users/";
@@ -41,19 +42,8 @@ describe("Product controller", () => {
     await mongoHelper.closeDatabase();
   });
 
-  async function getAccessToken() {
-    const loginResponse = await request(app)
-      .post(USERS_URL + "login")
-      .send({
-        email: email,
-        password: password,
-      });
-    const auth = loginResponse.body;
-    return auth.accessToken;
-  }
-
   async function createProduct() {
-    const accessToken = await getAccessToken();
+    const accessToken = await getAccessToken(app, email, password);
     const response = await request(app)
       .post(PRODUCTS_URL)
       .set("Authorization", "bearer " + accessToken)
