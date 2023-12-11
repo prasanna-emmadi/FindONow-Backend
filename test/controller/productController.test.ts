@@ -3,13 +3,28 @@ import app from "../../src";
 import connect, { MongoHelper } from "../db-helper";
 
 const PRODUCTS_URL = "/api/v1/products/";
+const USERS_URL = "/api/v1/users/";
 
 describe("Product controller", () => {
   let mongoHelper: MongoHelper;
+  const password = "test123";
+  const name = "loginProfile";
+  const email = "login_profile@gmail.com";
+
   let category: string;
+  let user: any;
 
   beforeAll(async () => {
     mongoHelper = await connect();
+    const signupResponse = await request(app)
+      .post(USERS_URL + "signup")
+      .send({
+        name: name,
+        email: email,
+        password: password,
+      });
+    user = signupResponse.body;
+
     const categoryObj: any = {
       id: 1,
       name: "category1",
@@ -25,9 +40,22 @@ describe("Product controller", () => {
     await mongoHelper.closeDatabase();
   });
 
+  async function getAccessToken() {
+    const loginResponse = await request(app)
+      .post(USERS_URL + "login")
+      .send({
+        email: email,
+        password: password,
+      });
+    const auth = loginResponse.body;
+    return auth.accessToken;
+  }
+
   async function createProduct() {
+    const accessToken = await getAccessToken();
     const response = await request(app)
       .post(PRODUCTS_URL)
+      .set("Authorization", "bearer " + accessToken)
       .send({
         title: "Smartphone",
         description: "High-end smartphone with advanced features",
@@ -50,7 +78,7 @@ describe("Product controller", () => {
     ]);
     expect(response.body).toHaveProperty("category");
     expect(response.body.category).toEqual(category);
-    return response;
+    return [response, accessToken];
   }
 
   it("Should create a product", async () => {
@@ -58,7 +86,7 @@ describe("Product controller", () => {
   });
 
   it("Should get the product", async () => {
-    const productResponse = await createProduct();
+    const [productResponse, accessToken] = await createProduct();
     const productId = productResponse.body._id.toString();
     const response = await request(app).get(PRODUCTS_URL + productId);
 
@@ -78,11 +106,12 @@ describe("Product controller", () => {
   });
 
   it("Should update the product", async () => {
-    const productResponse = await createProduct();
+    const [productResponse, accessToken] = await createProduct();
     const productId = productResponse.body._id.toString();
 
     const response = await request(app)
       .put(PRODUCTS_URL + productId)
+      .set("Authorization", "bearer " + accessToken)
       .send({
         title: "Updated Smartphone",
         description: "Updated description for the smartphone",
@@ -107,10 +136,12 @@ describe("Product controller", () => {
   });
 
   it("Should delete the product", async () => {
-    const productResponse = await createProduct();
+    const [productResponse, accessToken] = await createProduct();
     const productId = productResponse.body._id.toString();
 
-    const response = await request(app).delete(PRODUCTS_URL + productId);
+    const response = await request(app)
+      .delete(PRODUCTS_URL + productId)
+      .set("Authorization", "bearer " + accessToken);
 
     const responseBody = JSON.parse(response.text);
     const message = responseBody.message;
