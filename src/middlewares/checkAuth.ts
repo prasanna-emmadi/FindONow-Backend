@@ -28,3 +28,15 @@ export function checkAuth(
     next(ApiError.forbidden("Invalid token"));
   }
 }
+
+export function checkIsAdmin(
+  req: WithAuthRequest,
+  _: Response,
+  next: NextFunction
+) {
+  if (req?.decoded?.role === "ADMIN") {
+    next();
+  } else {
+    next(ApiError.forbidden("Not admin"));
+  }
+}

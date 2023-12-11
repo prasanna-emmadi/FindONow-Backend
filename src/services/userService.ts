@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { TOKEN_SECRET } from "../middlewares/secret";
 import UserRepo from "../models/User";
 import { User } from "../types/users";
+import { DecodedUser } from "user";
 
 const usersRepo = new UserRepo();
 
@@ -48,10 +49,12 @@ async function createNewOne({
   name,
   email,
   password,
+  role,
 }: {
   name: string;
   email: string;
   password: string;
+  role: string;
 }) {
   const hashedPassword = bcrypt.hashSync(password, 10);
 
@@ -63,7 +66,9 @@ async function createNewOne({
     name,
     email,
     password: hashedPassword,
+    role,
   });
+
   await user.save();
   const userWithoutPass = {
     name: user.name,
@@ -95,11 +100,12 @@ async function login(email: string, password: string) {
     };
   }
 
-  const payload = {
+  const payload: DecodedUser = {
     userId: user.id,
     email: user.email,
     role: user.role,
   };
+
   const accessToken = jwt.sign(payload, TOKEN_SECRET as string, {
     expiresIn: "1h",
   });

@@ -22,6 +22,7 @@ describe("Product controller", () => {
         name: name,
         email: email,
         password: password,
+        role: "ADMIN",
       });
     user = signupResponse.body;
 

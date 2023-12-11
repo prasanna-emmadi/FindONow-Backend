@@ -1,15 +1,15 @@
 import { JwtPayload } from "jsonwebtoken";
-import { Document } from "mongoose";
-
-export interface DecodedUser extends JwtPayload {
-  userId: string;
-  email: string;
-}
 
 export const role = {
   USER: "USER",
   ADMIN: "ADMIN",
 } as const;
+
+export interface DecodedUser extends JwtPayload {
+  userId: string;
+  email: string;
+  role: string;
+}
 
 export type Role = keyof typeof role;
 

@@ -98,8 +98,8 @@ export async function findOneAndDelete(
 
 //SignUp
 export async function signup(req: Request, res: Response, next: NextFunction) {
-  const { name, email, password } = req.body;
-  const user = await UsersService.createNewOne({ name, email, password });
+  const { name, email, password, role } = req.body;
+  const user = await UsersService.createNewOne({ name, email, password, role });
   if (!user) {
     res.status(400).json({
       message: "User exists",
