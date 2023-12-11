@@ -39,8 +39,8 @@ const AuthController = {
 
     res.json({
       message: login.message,
-      accessToken: login.accessToken,
-      refresh_token: login.refreshToken,
+      access_token: login.access_token,
+      refresh_token: login.refresh_token,
     });
   },
 

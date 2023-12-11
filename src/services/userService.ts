@@ -86,8 +86,8 @@ async function login(email: string, password: string) {
     return {
       message: "User not found by email",
       status: false,
-      accessToken: null,
-      refreshToken: null,
+      access_token: null,
+      refresh_token: null,
     };
   }
 
@@ -98,8 +98,8 @@ async function login(email: string, password: string) {
     return {
       message: "bad credentials",
       status: false,
-      accessToken: null,
-      refreshToken: null,
+      access_token: null,
+      refresh_token: null,
     };
   }
 
@@ -109,15 +109,15 @@ async function login(email: string, password: string) {
     role: user.role,
   };
 
-  const accessToken = jwt.sign(payload, TOKEN_SECRET as string, {
+  const access_token = jwt.sign(payload, TOKEN_SECRET as string, {
     expiresIn: "1h",
   });
 
   return {
     message: "valid credentials",
     status: true,
-    accessToken: accessToken,
-    refreshToken: accessToken,
+    access_token: access_token,
+    refresh_token: access_token,
   };
 }
 
