@@ -82,16 +82,12 @@ async function createNewOne({
 //login
 async function login(email: string, password: string) {
   const user = await findOneByEmail(email);
-  const nullAccessToken = {
-    accessToken: null,
-    refreshToken: null,
-  };
-
   if (!user) {
     return {
       message: "User not found by email",
       status: false,
-      token: nullAccessToken,
+      accessToken: null,
+      refreshToken: null,
     };
   }
 
@@ -102,7 +98,8 @@ async function login(email: string, password: string) {
     return {
       message: "bad credentials",
       status: false,
-      token: nullAccessToken,
+      accessToken: null,
+      refreshToken: null,
     };
   }
 
@@ -119,10 +116,8 @@ async function login(email: string, password: string) {
   return {
     message: "valid credentials",
     status: true,
-    token: {
-      accessToken: accessToken,
-      refreshToken: accessToken,
-    },
+    accessToken: accessToken,
+    refreshToken: accessToken,
   };
 }
 

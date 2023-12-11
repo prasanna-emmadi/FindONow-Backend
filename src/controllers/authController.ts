@@ -37,7 +37,11 @@ const AuthController = {
       return;
     }
 
-    res.json({ message: login.message, token: login.token });
+    res.json({
+      message: login.message,
+      accessToken: login.accessToken,
+      refresh_token: login.refreshToken,
+    });
   },
 
   async profile(req: WithAuthRequest, res: Response, next: NextFunction) {
