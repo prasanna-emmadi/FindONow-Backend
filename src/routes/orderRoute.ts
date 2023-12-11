@@ -2,7 +2,9 @@ import { Router } from "express";
 
 import OrderController from "../controllers/orderController";
 import { checkAuth } from "../middlewares/checkAuth";
-import { validateOrder } from "../middlewares/orderValidate";
+import {
+  validateOrder,
+} from "../middlewares/orderValidate";
 
 const router = Router();
 
@@ -16,11 +18,7 @@ router.get(
 );
 router.get("/", [checkAuth], OrderController.getAll);
 router.get("/:id", [checkAuth], OrderController.getOrder);
-router.put(
-  "/:id",
-  [checkAuth, validateOrder],
-  OrderController.updateOrder
-);
+router.put("/:id", [checkAuth, validateOrder], OrderController.updateOrder);
 router.delete("/:id", [checkAuth], OrderController.deleteOrder);
 
 router.use((req, res, next) => {

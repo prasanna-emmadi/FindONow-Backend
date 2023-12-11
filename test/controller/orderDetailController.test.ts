@@ -6,7 +6,6 @@ import { signupUserAndGetToken } from "../login-helper";
 
 const BASE_URL = "/api/v1";
 const ORDERDETAILS_URL = BASE_URL + "/orderDetails";
-const USERS_URL = BASE_URL + "/users";
 const ORDERS_URL = BASE_URL + "/orders";
 const CATEGORIES_URL = BASE_URL + "/categories";
 const PRODUCTS_URL = BASE_URL + "/products";
@@ -14,7 +13,6 @@ const TEST_TIMEOUT = 20000;
 
 describe("OrderDetail controller", () => {
   let mongoHelper: MongoHelper;
-  let userId: string;
   let orderId: string;
   let categoryId: string;
   let productId: string;
