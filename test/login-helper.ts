@@ -1,5 +1,5 @@
 import request from "supertest";
-const USERS_URL = "/api/v1/auth/";
+const AUTH_URL = "/api/v1/auth/";
 
 export async function getAccessToken(
   app: any,
@@ -7,7 +7,7 @@ export async function getAccessToken(
   password: string
 ) {
   const loginResponse = await request(app)
-    .post(USERS_URL + "login")
+    .post(AUTH_URL + "login")
     .send({
       email: email,
       password: password,
@@ -23,7 +23,7 @@ export async function signupUserAndGetToken(
   password: string
 ) {
   const userResponse = await request(app)
-    .post(USERS_URL + "signup")
+    .post(AUTH_URL + "signup")
     .send({
       name: "Test cat",
       email: email,

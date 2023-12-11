@@ -4,7 +4,7 @@ import connect, { MongoHelper } from "../db-helper";
 import { getAccessToken } from "../login-helper";
 
 const PRODUCTS_URL = "/api/v1/products/";
-const USERS_URL = "/api/v1/users/";
+const AUTH_URL = "/api/v1/auth/";
 
 describe("Product controller", () => {
   let mongoHelper: MongoHelper;
@@ -19,7 +19,7 @@ describe("Product controller", () => {
   beforeAll(async () => {
     mongoHelper = await connect();
     const signupResponse = await request(app)
-      .post(USERS_URL + "signup")
+      .post(AUTH_URL + "signup")
       .send({
         name: name,
         email: email,
