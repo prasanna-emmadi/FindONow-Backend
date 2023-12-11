@@ -5,7 +5,6 @@ import { signupUserAndGetToken } from "../login-helper";
 
 const BASE_URL = "/api/v1";
 const ORDERS_URL = BASE_URL + "/orders";
-const USERS_URL = BASE_URL + "/users";
 const TEST_TIMEOUT = 20000;
 
 describe("Order controller", () => {
@@ -25,7 +24,6 @@ describe("Order controller", () => {
     );
     accessToken = fetchedAccessToken;
     userId = fetchedUserId;
-    console.log({ userId, accessToken });
   }, 30000);
 
   afterAll(async () => {
@@ -90,7 +88,6 @@ describe("Order controller", () => {
           totalAmount: 120,
         })
         .set("Authorization", "bearer " + accessToken);
-      console.log("putResponse", putResponse.body);
       expect(putResponse.body.totalAmount).toEqual(120);
     },
     TEST_TIMEOUT

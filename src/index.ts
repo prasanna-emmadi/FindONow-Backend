@@ -12,9 +12,8 @@ import orderRoute from "./routes/orderRoute";
 import { checkAuth } from "./middlewares/checkAuth";
 import { responseHandler } from "./middlewares/responsehandler";
 import orderDetailsRoute from "./routes/orderDetailsRoute";
+import authRoute from "./routes/authRoute";
 import cors from "cors";
-
-const jwt = require("jsonwebtoken");
 
 const PORT = 8080;
 const app = express();
@@ -31,7 +30,7 @@ app.get("/hello", loggingMiddleware, (_, res) => {
   res.json({ msg: "hello, from Express.js!" });
 });
 
-app.use("/api/v1/items", itemsRoute);
+app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/products", productsRoute);
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/users", usersRoute);

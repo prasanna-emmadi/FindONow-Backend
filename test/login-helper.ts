@@ -1,5 +1,5 @@
 import request from "supertest";
-const USERS_URL = "/api/v1/users/";
+const USERS_URL = "/api/v1/auth/";
 
 export async function getAccessToken(
   app: any,

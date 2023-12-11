@@ -32,7 +32,6 @@ describe("OrderDetail controller", () => {
       password
     );
     accessToken = fetchedAccessToken;
-    console.log({ userId, accessToken });
     const orderResponse = await request(app)
       .post(ORDERS_URL)
       .send({
