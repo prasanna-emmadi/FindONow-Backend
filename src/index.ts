@@ -26,24 +26,6 @@ if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   mongoose.connect(mongoURL).then(() => console.log("Connected!"));
 }
 
-app.get("/hello", loggingMiddleware, (_, res) => {
-  res.json({ msg: "hello, from Express.js!" });
-});
-
-app.use("/api/v1/auth", authRoute);
-app.use("/api/v1/products", productsRoute);
-app.use("/api/v1/categories", categoryRoute);
-app.use("/api/v1/users", usersRoute);
-app.use("/api/v1/orders", orderRoute);
-app.use("/api/v1/orderDetails", orderDetailsRoute);
-
-app.get("/api/v1/protected", checkAuth, (req, res) => {
-  res.json({ items: [1, 2, 3, 4, 5] });
-});
-
-app.use(responseHandler);
-app.use(routeNotFound);
-
 const options = {
   definition: {
     openapi: "3.1.0",
@@ -64,7 +46,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "http://localhost:" + PORT,
       },
     ],
   },
@@ -73,6 +55,24 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
+app.get("/hello", loggingMiddleware, (_, res) => {
+  res.json({ msg: "hello, from Express.js!" });
+});
+
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/products", productsRoute);
+app.use("/api/v1/categories", categoryRoute);
+app.use("/api/v1/users", usersRoute);
+app.use("/api/v1/orders", orderRoute);
+app.use("/api/v1/orderDetails", orderDetailsRoute);
+
+app.get("/api/v1/protected", checkAuth, (req, res) => {
+  res.json({ items: [1, 2, 3, 4, 5] });
+});
+
+app.use(responseHandler);
+app.use(routeNotFound);
 
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   app.listen(PORT, () => {
