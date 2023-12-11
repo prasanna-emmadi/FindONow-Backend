@@ -1,8 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
+import { TspecDocsMiddleware } from "tspec";
 import "dotenv/config";
 import categoryRoute from "./routes/categoriesRoute";
 import productsRoute from "./routes/productsRoute";
@@ -26,35 +25,9 @@ if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   mongoose.connect(mongoURL).then(() => console.log("Connected!"));
 }
 
-const options = {
-  definition: {
-    openapi: "3.1.0",
-    info: {
-      title: "LogRocket Express API with Swagger",
-      version: "0.1.0",
-      description:
-        "This is a simple CRUD API application made with Express and documented with Swagger",
-      license: {
-        name: "MIT",
-        url: "https://spdx.org/licenses/MIT.html",
-      },
-      contact: {
-        name: "LogRocket",
-        url: "https://logrocket.com",
-        email: "info@email.com",
-      },
-    },
-    servers: [
-      {
-        url: "http://localhost:" + PORT,
-      },
-    ],
-  },
-  apis: ["./routes/*.js"],
-};
-
-const specs = swaggerJsdoc(options);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/docs", async () => {
+  return await TspecDocsMiddleware();
+});
 
 app.get("/hello", loggingMiddleware, (_, res) => {
   res.json({ msg: "hello, from Express.js!" });
