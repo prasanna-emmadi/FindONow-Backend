@@ -38,7 +38,7 @@ app.use("/api/v1/products", productsRoute);
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/users", usersRoute);
 app.use("/api/v1/orders", orderRoute);
-app.use("/api/v1/orderDetails", orderDetailsRoute);
+app.use("/api/v1/orderItems", orderDetailsRoute);
 
 app.get("/api/v1/protected", checkAuth, (req, res) => {
   res.json({ items: [1, 2, 3, 4, 5] });

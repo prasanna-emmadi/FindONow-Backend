@@ -5,7 +5,7 @@ import connect, { MongoHelper } from "../db-helper";
 import { signupUserAndGetToken } from "../login-helper";
 
 const BASE_URL = "/api/v1";
-const ORDERDETAILS_URL = BASE_URL + "/orderDetails";
+const ORDERDETAILS_URL = BASE_URL + "/orderItems";
 const ORDERS_URL = BASE_URL + "/orders";
 const CATEGORIES_URL = BASE_URL + "/categories";
 const PRODUCTS_URL = BASE_URL + "/products";
