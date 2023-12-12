@@ -18,13 +18,6 @@ const OrderSchema = new Schema({
     type: Number,
     required: true,
   },
-  orderItems: [
-    {
-      type: ObjectId,
-      ref: "OrderDetail",
-      required: true,
-    },
-  ],
 });
 
 const Order = mongoose.model("Order", OrderSchema);

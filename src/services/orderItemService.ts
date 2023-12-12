@@ -18,10 +18,8 @@ async function findAll() {
 }
 
 async function findByOrderId(orderId: string) {
-  const id = new mongoose.Types.ObjectId(orderId);
-  const orderDetail = await OrderDetailRepo.find({ orderId: orderId }).exec();
-
-  return orderDetail;
+  const orderDetails = await OrderDetailRepo.find({ orderId: orderId }).exec();
+  return orderDetails;
 }
 
 async function findone(orderDetailId: string) {

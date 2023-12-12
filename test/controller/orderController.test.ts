@@ -5,11 +5,15 @@ import { signupUserAndGetToken } from "../login-helper";
 
 const BASE_URL = "/api/v1";
 const ORDERS_URL = BASE_URL + "/orders";
+const CATEGORIES_URL = BASE_URL + "/categories";
+const PRODUCTS_URL = BASE_URL + "/products";
 const TEST_TIMEOUT = 20000;
 
 describe("Order controller", () => {
   let mongoHelper: MongoHelper;
   let userId: string;
+  let categoryId: string;
+  let productId: string;
   let email = "order_controller@gmail.com";
   let password = "test123";
   let accessToken: string;
@@ -24,7 +28,28 @@ describe("Order controller", () => {
     );
     accessToken = fetchedAccessToken;
     userId = fetchedUserId;
-  }, 30000);
+    const categoryResponse = await request(app)
+      .post(CATEGORIES_URL)
+      .set("Authorization", "bearer " + accessToken)
+      .send({
+        name: " Test cat",
+      })
+      .set("Authorization", "bearer " + accessToken);
+    expect(categoryResponse.statusCode).toBe(201);
+    categoryId = categoryResponse.body._id;
+    const productResponse = await request(app)
+      .post(PRODUCTS_URL)
+      .set("Authorization", "bearer " + accessToken)
+      .send({
+        title: " Test cat",
+        description: "Animal",
+        price: 10.2,
+        images: ["google.com"],
+        category: categoryId,
+      });
+    expect(productResponse.statusCode).toBe(201);
+    productId = productResponse.body._id;
+  }, 60000);
 
   afterAll(async () => {
     await mongoHelper.closeDatabase();
@@ -37,7 +62,13 @@ describe("Order controller", () => {
         userId: userId,
         date: "2011-10-05T14:48:00.000Z",
         totalAmount: 100,
-        orderItems: [],
+        orderItems: [
+          {
+            productId: productId,
+            quantity: 230,
+            priceAtPurchase: 200,
+          },
+        ],
       })
       .set("Authorization", "bearer " + accessToken);
     expect(response.statusCode).toBe(201);
@@ -67,6 +98,7 @@ describe("Order controller", () => {
       const singleResponse = await request(app)
         .get(ORDERS_URL + "/" + orderId)
         .set("Authorization", "bearer " + accessToken);
+
       expect(singleResponse.body._id).toEqual(orderId);
     },
     TEST_TIMEOUT

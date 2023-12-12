@@ -24,20 +24,31 @@ async function getPaginatedUserOrder(
 
 async function findAll() {
   const orders = await OrderRepo.find().populate("userId").exec();
-
   return orders;
 }
 
 async function findAllForUser(userId: string) {
   const orders = await OrderRepo.find({ userId }).exec();
-
   return orders;
 }
 
 async function findOne(orderId: string) {
   const oid = new mongoose.Types.ObjectId(orderId);
-  const order = await OrderRepo.findById(oid).populate("orderItems").exec();
-  return order;
+  const orderDocument = await OrderRepo.findById(oid).exec();
+  if (orderDocument) {
+    const order = orderDocument.toJSON();
+    const orderItemsDocuments = await orderItemService.findByOrderId(orderId);
+    const orderItems = orderItemsDocuments.map((document) => document.toJSON());
+
+    // how to insert
+    const withOrderItems = {
+      ...order,
+      orderItems,
+    };
+    return withOrderItems;
+  } else {
+    return orderDocument;
+  }
 }
 
 async function createOne(order: CreateOrder) {
