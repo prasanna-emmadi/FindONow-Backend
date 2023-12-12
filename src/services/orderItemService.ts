@@ -17,6 +17,13 @@ async function findAll() {
   return orderDetails;
 }
 
+async function findByOrderId(orderId: string) {
+  const id = new mongoose.Types.ObjectId(orderId);
+  const orderDetail = await OrderDetailRepo.find({ orderId: orderId }).exec();
+
+  return orderDetail;
+}
+
 async function findone(orderDetailId: string) {
   const id = new mongoose.Types.ObjectId(orderDetailId);
   const orderDetail = await OrderDetailRepo.findById(id).exec();
@@ -47,6 +54,7 @@ async function findOneAndDelete(orderDetailId: string) {
 export default {
   findone,
   findAll,
+  findByOrderId,
   createOne,
   findOneAndUpdate,
   findOneAndDelete,

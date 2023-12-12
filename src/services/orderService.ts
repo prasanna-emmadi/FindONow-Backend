@@ -1,6 +1,8 @@
 import mongoose, { ObjectId } from "mongoose";
 import OrderRepo from "../models/Order";
-import { Order } from "../types/order";
+import { CreateOrder, Order } from "../types/order";
+import orderItemService from "./orderItemService";
+import { OrderDetail } from "../types/orderItems";
 
 async function getPaginatedOrder(pageNumber: number, pageSize: number) {
   const orders = await OrderRepo.find().skip(pageNumber).limit(pageSize).exec();
@@ -40,9 +42,25 @@ async function findOne(orderId: string) {
   return category;
 }
 
-async function createOne(order: Order) {
+async function createOne(order: CreateOrder) {
+  // remove the orderIds
+  // create orderItems
+  //
+
   const newOrder = new OrderRepo(order);
-  return await newOrder.save();
+  const createdOrder = await newOrder.save();
+  const createdOrderId = createdOrder._id.toString();
+  if (order.orderItems) {
+    const promises = order.orderItems.map((orderItem) => {
+      const newOrderItem: OrderDetail = {
+        ...orderItem,
+        orderId: createdOrderId,
+      };
+      return orderItemService.createOne(newOrderItem);
+    });
+    await promises;
+  }
+  return createdOrder;
 }
 
 async function updateOne(orderId: string, updatedOrder: Order) {

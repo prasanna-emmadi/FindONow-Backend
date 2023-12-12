@@ -38,10 +38,9 @@ describe("OrderDetail controller", () => {
         userId: userId,
         date: "2011-10-05T14:48:00.000Z",
         totalAmount: 100,
-        orderIds: [],
+        orderItems: [],
       })
       .set("Authorization", "bearer " + accessToken);
-
     expect(orderResponse.statusCode).toBe(201);
     orderId = orderResponse.body._id;
     const categoryResponse = await request(app)

@@ -4,4 +4,4 @@ import { orderDetailSchema } from "../schemas/orderItemSchema";
 
 type OrderDetailDTO = z.infer<typeof orderDetailSchema>;
 
-export type OrderDetail = OrderDetailDTO & { id: string };
+export type OrderDetail = OrderDetailDTO;

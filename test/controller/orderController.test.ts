@@ -37,6 +37,7 @@ describe("Order controller", () => {
         userId: userId,
         date: "2011-10-05T14:48:00.000Z",
         totalAmount: 100,
+        orderItems: [],
       })
       .set("Authorization", "bearer " + accessToken);
     expect(response.statusCode).toBe(201);
@@ -86,6 +87,7 @@ describe("Order controller", () => {
           userId: userId,
           date: "2011-10-05T14:48:00.000Z",
           totalAmount: 120,
+          orderItems: [],
         })
         .set("Authorization", "bearer " + accessToken);
       expect(putResponse.body.totalAmount).toEqual(120);

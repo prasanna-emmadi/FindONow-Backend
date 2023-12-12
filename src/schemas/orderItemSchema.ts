@@ -15,6 +15,11 @@ export const orderDetailSchema = z.object({
   }),
 });
 
+export const orderDetailWithoutOrderIdSchema = orderDetailSchema.omit({
+  orderId: true
+});
+
+
 export const requestSchema = z.object({
   body: orderDetailSchema,
 });

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { orderDetailWithoutOrderIdSchema } from "./orderItemSchema";
 
 export const orderSchema = z.object({
   userId: z.string({
@@ -12,6 +13,10 @@ export const orderSchema = z.object({
   }),
 });
 
+export const requestBodySchema = orderSchema.extend({
+  orderItems: z.array(orderDetailWithoutOrderIdSchema),
+});
+
 export const requestSchema = z.object({
-  body: orderSchema,
+  body: requestBodySchema,
 });
