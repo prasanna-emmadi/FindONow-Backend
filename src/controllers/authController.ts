@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import UsersService from "../services/userService";
+import BlackListService from "../services/blackListService";
 import { ApiError } from "../errors/ApiError";
 import { Role, UserProfile } from "user";
 import { WithAuthRequest } from "../middlewares/checkAuth";
@@ -42,6 +43,27 @@ const AuthController = {
       access_token: login.access_token,
       refresh_token: login.refresh_token,
     });
+  },
+
+  async logout(req: Request, res: Response) {
+    try {
+      const accessToken = req.headers.authorization?.split(" ")[1]; // get the session cookie from request header
+      if (!accessToken) return res.sendStatus(204); // No content
+      const checkIfBlacklisted = await BlackListService.findOne(accessToken); // Check if that token is blacklisted
+      // if true, send a no content response.
+      if (checkIfBlacklisted) return res.sendStatus(204);
+      // otherwise blacklist token
+      await BlackListService.createOne({ token: accessToken });
+      // Also clear request cookie on client
+      res.setHeader("Clear-Site-Data", '"cookies"');
+      res.status(200).json({ message: "You are logged out!" });
+    } catch (err) {
+      res.status(500).json({
+        status: "error",
+        message: "Internal Server Error",
+      });
+    }
+    res.end();
   },
 
   async profile(req: WithAuthRequest, res: Response, next: NextFunction) {
