@@ -8,7 +8,7 @@ const ProductController = {
   async findAllProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const pageNumber = Number(req.query.pageNumber) || 1;
-      const pageSize = Number(req.query.pageSize) || 10;
+      const pageSize = Number(req.query.pageSize) || 150;
       const products = await ProductsService.paginateProducts(
         pageNumber,
         pageSize
