@@ -4,7 +4,7 @@ export const orderDetailSchema = z.object({
   orderId: z.string({
     required_error: "OrderId is required",
   }),
-  productId: z.string({
+  product: z.string({
     required_error: "ProductId is required",
   }),
   quantity: z.number({
@@ -16,9 +16,8 @@ export const orderDetailSchema = z.object({
 });
 
 export const orderDetailWithoutOrderIdSchema = orderDetailSchema.omit({
-  orderId: true
+  orderId: true,
 });
-
 
 export const requestSchema = z.object({
   body: orderDetailSchema,

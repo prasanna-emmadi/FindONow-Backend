@@ -27,15 +27,9 @@ async function findAll() {
   return orders;
 }
 
-async function findAllForUser(userId: string) {
-  const orders = await OrderRepo.find({ userId }).exec();
-  return orders;
-}
-
-async function findOne(orderId: string) {
-  const oid = new mongoose.Types.ObjectId(orderId);
-  const orderDocument = await OrderRepo.findById(oid).exec();
+async function updateOrderWithOrderItems(orderDocument: any) {
   if (orderDocument) {
+    const orderId = orderDocument._id.toString();
     const order = orderDocument.toJSON();
     const orderItemsDocuments = await orderItemService.findByOrderId(orderId);
     const orderItems = orderItemsDocuments.map((document) => document.toJSON());
@@ -49,6 +43,20 @@ async function findOne(orderId: string) {
   } else {
     return orderDocument;
   }
+}
+
+async function findAllForUser(userId: string) {
+  const orders = await OrderRepo.find({ userId }).exec();
+  const updatedOrderPromises = orders.map((order) =>
+    updateOrderWithOrderItems(order)
+  );
+  return await Promise.all(updatedOrderPromises);
+}
+
+async function findOne(orderId: string) {
+  const oid = new mongoose.Types.ObjectId(orderId);
+  const orderDocument = await OrderRepo.findById(oid).exec();
+  return updateOrderWithOrderItems(orderDocument);
 }
 
 async function createOne(order: CreateOrder) {
@@ -65,7 +73,7 @@ async function createOne(order: CreateOrder) {
       };
       return orderItemService.createOne(newOrderItem);
     });
-    await promises;
+    await Promise.all(promises);
   }
   return createdOrder;
 }

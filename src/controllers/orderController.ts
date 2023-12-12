@@ -1,7 +1,6 @@
-import express, { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import OrderService from "../services/orderService";
 import { ApiError } from "../errors/ApiError";
-import { ResponseHandler } from "../responses/ResponeHandler";
 import { WithAuthRequest } from "../middlewares/checkAuth";
 
 const OrderController = {
@@ -22,8 +21,6 @@ const OrderController = {
       return;
     }
     const list = await OrderService.getPaginatedOrder(pageNumber, pageSize);
-    //res.json({ list });
-    //next(ResponseHandler.resourceFetched(JSON.stringify(list)))
     res.json(list);
   },
   async getAllUserOrdersOffset(
@@ -52,8 +49,6 @@ const OrderController = {
       pageNumber,
       pageSize
     );
-    //res.json({ list });
-    //next(ResponseHandler.resourceFetched(JSON.stringify(list)))
     res.json(list);
   },
   async getAllUserOrders(req: Request, res: Response, next: NextFunction) {
@@ -67,8 +62,6 @@ const OrderController = {
       return;
     }
     const list = await OrderService.findAllForUser(userId);
-    //res.json({ list });
-    //next(ResponseHandler.resourceFetched(JSON.stringify(list)))
     res.json(list);
   },
   async getOrder(req: Request, res: Response, next: NextFunction) {
@@ -85,7 +78,6 @@ const OrderController = {
     if (!item) {
       next(ApiError.resourceNotFound(`OrderId ${orderId} is not found`));
     }
-    //next(ResponseHandler.resourceFetched(JSON.stringify(item)))
     res.json(item);
   },
   async createOrder(req: WithAuthRequest, res: Response, next: NextFunction) {
@@ -126,7 +118,6 @@ const OrderController = {
       next(ApiError.resourceNotFound("Order not found"));
       return;
     }
-    //next(ResponseHandler.resourceUpdated(JSON.stringify(order), `Order with ${order._id} has been updated`))
     res.status(201).json(order);
   },
   async deleteOrder(req: Request, res: Response, next: NextFunction) {
@@ -144,7 +135,6 @@ const OrderController = {
       next(ApiError.resourceNotFound("Order not found"));
       return;
     }
-    //next(ResponseHandler.resourceDeleted(JSON.stringify(order), `Order with ${order._id} has been deleted`))
     res.status(201).json(order);
   },
 };

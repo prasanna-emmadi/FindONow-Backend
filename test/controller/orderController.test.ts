@@ -12,7 +12,7 @@ const TEST_TIMEOUT = 20000;
 describe("Order controller", () => {
   let mongoHelper: MongoHelper;
   let categoryId: string;
-  let productId: string;
+  let product: string;
   let email = "order_controller@gmail.com";
   let password = "test123";
   let accessToken: string;
@@ -46,7 +46,7 @@ describe("Order controller", () => {
         category: categoryId,
       });
     expect(productResponse.statusCode).toBe(201);
-    productId = productResponse.body._id;
+    product = productResponse.body._id;
   }, 60000);
 
   afterAll(async () => {
@@ -61,7 +61,7 @@ describe("Order controller", () => {
         totalAmount: 100,
         orderItems: [
           {
-            productId: productId,
+            product: product,
             quantity: 230,
             priceAtPurchase: 200,
           },
@@ -110,7 +110,6 @@ describe("Order controller", () => {
       const orderResponse = await request(app)
         .get(ORDERS_URL)
         .set("Authorization", "bearer " + accessToken);
-
       expect(orderResponse.body.length).toEqual(3);
       expect(orderResponse.body[2]._id).toEqual(orderId);
     },

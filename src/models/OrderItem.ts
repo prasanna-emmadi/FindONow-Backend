@@ -8,7 +8,7 @@ const OrderDetailSchema = new Schema({
     ref: "Order",
     required: true,
   },
-  productId: {
+  product: {
     type: ObjectId,
     ref: "Product",
     required: true,

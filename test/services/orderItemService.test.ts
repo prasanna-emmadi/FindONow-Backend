@@ -10,7 +10,7 @@ describe("OrderDetail controller", () => {
   let userId: string;
   let orderId: string;
   let categoryId: string;
-  let productId: string;
+  let product: string;
 
   beforeAll(async () => {
     mongoHelper = await connect();
@@ -39,11 +39,11 @@ describe("OrderDetail controller", () => {
       price: 10.2,
       image: "google.com",
     };
-    const product: any = await productsService.createOne(
+    const productDocument: any = await productsService.createOne(
       productObj,
       categoryId
     );
-    productId = product._id;
+    product = productDocument._id;
   });
 
   afterAll(async () => {
@@ -53,7 +53,7 @@ describe("OrderDetail controller", () => {
   async function createOrderDetail() {
     const orderDetail: any = {
       orderId: orderId,
-      productId: productId,
+      product: product,
       quantity: 120,
       priceAtPurchase: 200,
     };

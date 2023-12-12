@@ -15,7 +15,7 @@ describe("OrderDetail controller", () => {
   let mongoHelper: MongoHelper;
   let orderId: string;
   let categoryId: string;
-  let productId: string;
+  let product: string;
   let email = "order_detail_controller@gmail.com";
   let password = "test123";
   let accessToken: string;
@@ -26,7 +26,7 @@ describe("OrderDetail controller", () => {
     // create order
     // create category
     // create product
-    const [userId, fetchedAccessToken] = await signupUserAndGetToken(
+    const [_userId, fetchedAccessToken] = await signupUserAndGetToken(
       app,
       email,
       password
@@ -62,7 +62,7 @@ describe("OrderDetail controller", () => {
         category: categoryId,
       });
     expect(productResponse.statusCode).toBe(201);
-    productId = productResponse.body._id;
+    product = productResponse.body._id;
   }, 100000);
 
   afterAll(async () => {
@@ -74,7 +74,7 @@ describe("OrderDetail controller", () => {
       .post(ORDERDETAILS_URL)
       .send({
         orderId: orderId,
-        productId: productId,
+        product: product,
         quantity: 230,
         priceAtPurchase: 200,
       })
@@ -124,7 +124,7 @@ describe("OrderDetail controller", () => {
         .put(ORDERDETAILS_URL + "/" + orderDetailId)
         .send({
           orderId: orderId,
-          productId: productId,
+          product: product,
           quantity: 120,
           priceAtPurchase: 130,
         })
