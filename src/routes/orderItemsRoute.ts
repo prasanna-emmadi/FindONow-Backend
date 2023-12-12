@@ -1,6 +1,6 @@
 import express from "express";
 
-import OrderDetailController from "../controllers/orderDetailsController";
+import OrderDetailController from "../controllers/orderItemsController";
 import { validateOrderDetail } from "../middlewares/orderDetailValidate";
 import { checkAuth } from "../middlewares/checkAuth";
 
