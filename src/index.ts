@@ -11,7 +11,7 @@ import { routeNotFound } from "./middlewares/routeNotFound";
 import orderRoute from "./routes/orderRoute";
 import { checkAuth } from "./middlewares/checkAuth";
 import { responseHandler } from "./middlewares/responsehandler";
-import orderDetailsRoute from "./routes/orderDetailsRoute";
+import orderDetailsRoute from "./routes/orderItemsRoute";
 import authRoute from "./routes/authRoute";
 
 const PORT = 8080;
