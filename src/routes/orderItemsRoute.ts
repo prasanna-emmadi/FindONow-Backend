@@ -1,7 +1,7 @@
 import express from "express";
 
 import OrderDetailController from "../controllers/orderItemsController";
-import { validateOrderDetail } from "../middlewares/orderDetailValidate";
+import { validateOrderDetail } from "../middlewares/orderItemValidate";
 import { checkAuth } from "../middlewares/checkAuth";
 
 const router = express.Router();

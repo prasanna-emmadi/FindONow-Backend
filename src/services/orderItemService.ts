@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import OrderDetailRepo from "../models/OrderDetail";
-import { OrderDetail } from "../types/orderDetails";
+import OrderDetailRepo from "../models/OrderItem";
+import { OrderDetail } from "../types/orderItems";
 
 async function getPaginatedOrderDetail(pageNumber: number, pageSize: number) {
   const skip = (pageNumber - 1) * pageSize;

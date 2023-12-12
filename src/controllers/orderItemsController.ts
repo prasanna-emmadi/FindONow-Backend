@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import orderDetailService from "../services/orderDetailService";
+import orderDetailService from "../services/orderItemService";
 import { ApiError } from "../errors/ApiError";
 import { ResponseHandler } from "../responses/ResponeHandler";
 

@@ -1,10 +1,6 @@
-import request from "supertest";
-
 import OrderService from "../../src/services/orderService";
 import userService from "../../src/services/userService";
-
 import connect, { MongoHelper } from "../db-helper";
-import OrderRepo from "../../src/models/Order";
 
 describe("Order controller", () => {
   let mongoHelper: MongoHelper;
@@ -54,17 +50,16 @@ describe("Order controller", () => {
       totalAmount: 500,
     };
 
-    await OrderService.createOne(order);
+    const createdOrder = await OrderService.createOne(order);
 
     const updatedorder: any = {
-      _id: "655e1356be9cf967bdead01f",
       userId: "655e1356be9cf967bdead01f",
       totalAmount: 300,
     };
 
     const newOrder = await OrderService.updateOne(
-      "655e1356be9cf967bdead01f",
-      updatedorder,
+      createdOrder._id.toString(),
+      updatedorder
     );
     if (newOrder) {
       expect(newOrder).toHaveProperty("_id");
@@ -81,14 +76,12 @@ describe("Order controller", () => {
     };
     const user: any = await userService.createOne(usrObj);
     const order: any = {
-      _id: "655e1356be9cf967bdead01f",
       userId: "655e1356be9cf967bdead01f",
       totalAmount: 400,
     };
 
-    await OrderService.createOne(order);
-
-    const newOrder = await OrderService.deleteOne("655e1356be9cf967bdead01f");
+    const createdOrder = await OrderService.createOne(order);
+    const newOrder = await OrderService.deleteOne(createdOrder._id.toString());
     if (newOrder) {
       expect(newOrder).toHaveProperty("_id");
       expect(newOrder.totalAmount).toEqual(400);

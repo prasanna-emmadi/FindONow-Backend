@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { orderDetailSchema } from "../schemas/orderDetailSchema";
+import { orderDetailSchema } from "../schemas/orderItemSchema";
 
 type OrderDetailDTO = z.infer<typeof orderDetailSchema>;
 

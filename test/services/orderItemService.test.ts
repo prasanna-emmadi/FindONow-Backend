@@ -1,4 +1,4 @@
-import OrderDetailService from "../../src/services/orderDetailService";
+import OrderDetailService from "../../src/services/orderItemService";
 import userService from "../../src/services/userService";
 import orderService from "../../src/services/orderService";
 import categoryService from "../../src/services/categoryService";

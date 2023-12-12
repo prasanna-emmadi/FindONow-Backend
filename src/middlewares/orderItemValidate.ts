@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 
-import { requestSchema } from "../schemas/orderDetailSchema";
+import { requestSchema } from "../schemas/orderItemSchema";
 
 export async function validateOrderDetail(
   req: Request,
