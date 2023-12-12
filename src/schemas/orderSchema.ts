@@ -11,6 +11,11 @@ export const orderSchema = z.object({
   totalAmount: z.number({
     required_error: "Total amount is required",
   }),
+  orderItems: z.array(
+    z.string({
+      required_error: "OrderItemId is required",
+    })
+  ),
 });
 
 export const requestBodySchema = orderSchema.extend({

@@ -36,17 +36,13 @@ async function findAllForUser(userId: string) {
 
 async function findOne(orderId: string) {
   const oid = new mongoose.Types.ObjectId(orderId);
-
-  const category = await OrderRepo.findById(oid).exec();
-
-  return category;
+  const order = await OrderRepo.findById(oid).populate("orderItems").exec();
+  return order;
 }
 
 async function createOne(order: CreateOrder) {
   // remove the orderIds
   // create orderItems
-  //
-
   const newOrder = new OrderRepo(order);
   const createdOrder = await newOrder.save();
   const createdOrderId = createdOrder._id.toString();
