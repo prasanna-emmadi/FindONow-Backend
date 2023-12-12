@@ -35,7 +35,6 @@ describe("OrderDetail controller", () => {
     const orderResponse = await request(app)
       .post(ORDERS_URL)
       .send({
-        userId: userId,
         date: "2011-10-05T14:48:00.000Z",
         totalAmount: 100,
         orderItems: [],

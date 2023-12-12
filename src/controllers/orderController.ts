@@ -2,12 +2,17 @@ import express, { NextFunction, Request, Response } from "express";
 import OrderService from "../services/orderService";
 import { ApiError } from "../errors/ApiError";
 import { ResponseHandler } from "../responses/ResponeHandler";
+import { WithAuthRequest } from "../middlewares/checkAuth";
 
 const OrderController = {
-  async getAll(req: Request, res: Response, next: NextFunction) {
-    const list = await OrderService.findAll();
-    //res.json({ list });
-    next(ResponseHandler.resourceFetched(JSON.stringify(list)));
+  async getAll(req: WithAuthRequest, res: Response, next: NextFunction) {
+    if (req.decoded) {
+      const userId = req.decoded.userId;
+      const list = await OrderService.findAllForUser(userId);
+      res.json(list);
+    } else {
+      next(ApiError.forbidden("user not found"));
+    }
   },
   async getAllOffset(req: Request, res: Response, next: NextFunction) {
     const pageNumber = Number(req.query.pageNumber) || 1;
@@ -83,15 +88,23 @@ const OrderController = {
     //next(ResponseHandler.resourceFetched(JSON.stringify(item)))
     res.json(item);
   },
-  async createOrder(req: Request, res: Response, next: NextFunction) {
+  async createOrder(req: WithAuthRequest, res: Response, next: NextFunction) {
     const order = req.body;
     if (!order) {
       next(ApiError.internal("Details are Required"));
       return;
     }
-    const newOrder = await OrderService.createOne(order);
-    //next(ResponseHandler.resourceCreated(JSON.stringify(newOrder), `Order with ${newOrder._id} has been added`))
-    res.status(201).json(newOrder);
+    if (req.decoded) {
+      const userId = req.decoded.userId;
+      const orderWithUserId = {
+        ...order,
+        userId,
+      };
+      const newOrder = await OrderService.createOne(orderWithUserId);
+      res.status(201).json(newOrder);
+    } else {
+      next(ApiError.forbidden("User not found"));
+    }
   },
   async updateOrder(req: Request, res: Response, next: NextFunction) {
     const orderId = req.params.id;

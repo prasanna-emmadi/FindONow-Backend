@@ -11,7 +11,6 @@ const TEST_TIMEOUT = 20000;
 
 describe("Order controller", () => {
   let mongoHelper: MongoHelper;
-  let userId: string;
   let categoryId: string;
   let productId: string;
   let email = "order_controller@gmail.com";
@@ -21,13 +20,12 @@ describe("Order controller", () => {
   beforeAll(async () => {
     mongoHelper = await connect();
     // create user
-    const [fetchedUserId, fetchedAccessToken] = await signupUserAndGetToken(
+    const [_fetchedUserId, fetchedAccessToken] = await signupUserAndGetToken(
       app,
       email,
       password
     );
     accessToken = fetchedAccessToken;
-    userId = fetchedUserId;
     const categoryResponse = await request(app)
       .post(CATEGORIES_URL)
       .set("Authorization", "bearer " + accessToken)
@@ -59,7 +57,6 @@ describe("Order controller", () => {
     const response = await request(app)
       .post(ORDERS_URL)
       .send({
-        userId: userId,
         date: "2011-10-05T14:48:00.000Z",
         totalAmount: 100,
         orderItems: [
@@ -105,6 +102,22 @@ describe("Order controller", () => {
   );
 
   it(
+    "should get all user orders",
+    async () => {
+      // get a category
+      const response = await createOrder();
+      const orderId = response.body._id;
+      const orderResponse = await request(app)
+        .get(ORDERS_URL)
+        .set("Authorization", "bearer " + accessToken);
+
+      expect(orderResponse.body.length).toEqual(3);
+      expect(orderResponse.body[2]._id).toEqual(orderId);
+    },
+    TEST_TIMEOUT
+  );
+
+  it(
     "should update the order",
     async () => {
       // update a category
@@ -116,7 +129,6 @@ describe("Order controller", () => {
       const putResponse = await request(app)
         .put(ORDERS_URL + "/" + orderId)
         .send({
-          userId: userId,
           date: "2011-10-05T14:48:00.000Z",
           totalAmount: 120,
           orderItems: [],

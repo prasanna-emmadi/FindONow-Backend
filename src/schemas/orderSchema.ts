@@ -2,9 +2,6 @@ import { z } from "zod";
 import { orderDetailWithoutOrderIdSchema } from "./orderItemSchema";
 
 export const orderSchema = z.object({
-  userId: z.string({
-    required_error: "User ID is required",
-  }),
   date: z.string({
     required_error: "Date is required",
   }),
