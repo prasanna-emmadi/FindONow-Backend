@@ -14,30 +14,30 @@ import { responseHandler } from "./middlewares/responsehandler";
 import orderDetailsRoute from "./routes/orderItemsRoute";
 import authRoute from "./routes/authRoute";
 
-const PORT = 8081;
+const PORT = 8080;
 const app = express();
 
-const initServer = async () => {
-  app.use(express.json());
-  app.use(cors());
-  // TODO: Validate .env using Zod
-  if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
-    const mongoURL = process.env.DB_URL as string;
-    mongoose.connect(mongoURL).then(() => console.log("Connected!"));
-  }
+app.use(express.json());
+app.use(cors());
 
+if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
+  const mongoURL = process.env.DB_URL as string;
+  mongoose.connect(mongoURL).then(() => console.log("Connected!"));
+}
+
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/products", productsRoute);
+app.use("/api/v1/categories", categoryRoute);
+app.use("/api/v1/users", usersRoute);
+app.use("/api/v1/orders", orderRoute);
+app.use("/api/v1/orderItems", orderDetailsRoute);
+
+const initServer = async () => {
   app.use("/api/v1/docs", await TspecDocsMiddleware());
 
   app.get("/hello", loggingMiddleware, (_, res) => {
     res.json({ msg: "hello, from Express.js!" });
   });
-
-  app.use("/api/v1/auth", authRoute);
-  app.use("/api/v1/products", productsRoute);
-  app.use("/api/v1/categories", categoryRoute);
-  app.use("/api/v1/users", usersRoute);
-  app.use("/api/v1/orders", orderRoute);
-  app.use("/api/v1/orderItems", orderDetailsRoute);
 
   app.get("/api/v1/protected", checkAuth, (req, res) => {
     res.json({ items: [1, 2, 3, 4, 5] });
@@ -52,6 +52,10 @@ const initServer = async () => {
     });
   }
 };
-
-initServer().catch((e) => console.error(e));
+if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
+  initServer().catch((e) => console.error(e));
+} else {
+  app.use(responseHandler);
+  app.use(routeNotFound);
+}
 export default app;
