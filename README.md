@@ -44,7 +44,17 @@ The API should be deployed before the **`DEADLINE`** which is end of Week 47 24t
 - [ ] Testing
 - [x] Deployment
 
-
 ## Docker
+
 - docker build -t fs16-backend .
 - docker run -dp 127.0.0.1:8080:8080 fs16-backend
+
+## Docker notes
+
+- backend docker was exiting, upon careful observation I noticed the location of index.js
+  in a the docker container is different from the local build
+- I have created a different script in package.json for starting backend from docker
+- Then .env file in the full stack project has the environment variables for
+  SERVER_URL and DB_URL which are pointing the server and mongodb database
+- The frontend starts at localhost:80
+- The backend starts at localhost:8080
