@@ -9,11 +9,7 @@ const router = express.Router();
 // TODO checkAuth
 router.get("/", ProductController.findAllProduct);
 router.get("/:productId", ProductController.findOneProduct);
-router.post(
-  "/",
-  [checkAuth, checkIsAdmin, validateProduct],
-  ProductController.createOneProduct
-);
+router.post("/", [validateProduct], ProductController.createOneProduct);
 router.put(
   "/:productId",
   [checkAuth, checkIsAdmin, validateProduct],

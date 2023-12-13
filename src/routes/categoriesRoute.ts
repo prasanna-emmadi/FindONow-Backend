@@ -5,7 +5,7 @@ import { checkAuth, checkIsAdmin } from "../middlewares/checkAuth";
 
 const router = Router();
 
-router.post("/", [checkAuth, checkIsAdmin], CategoryController.createCategory);
+router.post("/", CategoryController.createCategory);
 
 router.get("/", CategoryController.getAllCategories);
 router.get("/offset/", CategoryController.getOffset);
@@ -42,7 +42,12 @@ export type CategoryApiSpec = Tspec.DefineApiSpec<{
       post: {
         summary: "Creates category";
         body: Category;
-        responses: { 201: Category; 400: "bad request", 403: "Forbidden"; 404: "Not found" };
+        responses: {
+          201: Category;
+          400: "bad request";
+          403: "Forbidden";
+          404: "Not found";
+        };
       };
     };
     "/categories/{id}": {
