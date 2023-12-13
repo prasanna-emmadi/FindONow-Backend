@@ -43,3 +43,8 @@ The API should be deployed before the **`DEADLINE`** which is end of Week 47 24t
 - [x] Error Handling
 - [ ] Testing
 - [x] Deployment
+
+
+## Docker
+- docker build -t fs16-backend .
+- docker run -dp 127.0.0.1:8080:8080 fs16-backend
