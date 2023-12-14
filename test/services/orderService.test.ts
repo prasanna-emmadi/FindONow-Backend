@@ -4,56 +4,46 @@ import connect, { MongoHelper } from "../db-helper";
 
 describe("Order controller", () => {
   let mongoHelper: MongoHelper;
+  let userId: string;
 
   beforeAll(async () => {
     mongoHelper = await connect();
-  });
-
-  afterEach(async () => {
-    await mongoHelper.clearDatabase();
+    const usrObj: any = {
+      name: "Test cat",
+      email: "testcat@testcat.com",
+      password: "1234",
+    };
+    const user: any = await userService.createOne(usrObj);
+    userId = user._id;
   });
 
   afterAll(async () => {
     await mongoHelper.closeDatabase();
   });
 
-  it("should create a new order", async () => {
-    const usrObj: any = {
-      _id: "655e1356be9cf967bdead01f",
-      name: "Test cat",
-      email: "testcat@testcat.com",
-      password: "1234",
-    };
-    const user: any = await userService.createOne(usrObj);
+  async function createOrder() {
     const order: any = {
-      _id: "655e1356be9cf967bdead01f",
-      userId: "655e1356be9cf967bdead01f",
-      totalAmount: 500,
+      userId: userId,
+      date: "2011-10-05T14:48:00.000Z",
+      totalAmount: 100,
     };
     const newOrder = await OrderService.createOne(order);
 
     expect(newOrder).toHaveProperty("_id");
-    expect(newOrder.totalAmount).toEqual(500);
+    expect(newOrder.totalAmount).toEqual(100);
+    return newOrder;
+  }
+
+  it("should create a new order", async () => {
+    await createOrder();
   });
 
   it("should update a new order", async () => {
-    const usrObj: any = {
-      _id: "655e1356be9cf967bdead01f",
-      name: "Test cat",
-      email: "testcat@testcat.com",
-      password: "1234",
-    };
-    const user: any = await userService.createOne(usrObj);
-    const order: any = {
-      _id: "655e1356be9cf967bdead01f",
-      userId: "655e1356be9cf967bdead01f",
-      totalAmount: 500,
-    };
-
-    const createdOrder = await OrderService.createOne(order);
+    const createdOrder = await createOrder();
 
     const updatedorder: any = {
-      userId: "655e1356be9cf967bdead01f",
+      userId: userId,
+      date: createdOrder.date,
       totalAmount: 300,
     };
 
@@ -68,23 +58,11 @@ describe("Order controller", () => {
   });
 
   it("should delete a order", async () => {
-    const usrObj: any = {
-      _id: "655e1356be9cf967bdead01f",
-      name: "Test cat",
-      email: "testcat@testcat.com",
-      password: "1234",
-    };
-    const user: any = await userService.createOne(usrObj);
-    const order: any = {
-      userId: "655e1356be9cf967bdead01f",
-      totalAmount: 400,
-    };
-
-    const createdOrder = await OrderService.createOne(order);
+    const createdOrder = await createOrder();
     const newOrder = await OrderService.deleteOne(createdOrder._id.toString());
     if (newOrder) {
       expect(newOrder).toHaveProperty("_id");
-      expect(newOrder.totalAmount).toEqual(400);
+      expect(newOrder.totalAmount).toEqual(100);
     }
   });
 });
