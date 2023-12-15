@@ -90,9 +90,6 @@ describe("OrderDetail controller", () => {
       // create orders
       // get and check orders
       await createOrderDetail();
-
-      //const ordersResponse = await request(app).get(ORDERS_URL);
-      //expect(ordersResponse.body.length).toBe(1);
     },
     TEST_TIMEOUT
   );

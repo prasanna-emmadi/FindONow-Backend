@@ -6,7 +6,6 @@ import { checkAuth, checkIsAdmin } from "../middlewares/checkAuth";
 
 const router = express.Router();
 
-// TODO checkAuth
 router.get("/", ProductController.findAllProduct);
 router.get("/:productId", ProductController.findOneProduct);
 router.post("/", [validateProduct], ProductController.createOneProduct);

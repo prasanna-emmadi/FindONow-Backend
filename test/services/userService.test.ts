@@ -60,7 +60,6 @@ describe("User service", () => {
 
   it("should delete a user", async () => {
     const user: any = {
-      //// create new user
       name: "tester",
       email: "test@gmail.com",
       password: "test123",

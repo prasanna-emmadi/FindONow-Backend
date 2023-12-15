@@ -75,13 +75,7 @@ describe("Order controller", () => {
   it(
     "Should create a order",
     async () => {
-      // no orders
-      // create orders
-      // get and check orders
       await createOrder();
-
-      //const ordersResponse = await request(app).get(ORDERS_URL);
-      //expect(ordersResponse.body.length).toBe(1);
     },
     TEST_TIMEOUT
   );
@@ -89,7 +83,6 @@ describe("Order controller", () => {
   it(
     "should get the order",
     async () => {
-      // get a category
       const response = await createOrder();
       const orderId = response.body._id;
       const singleResponse = await request(app)
@@ -104,7 +97,6 @@ describe("Order controller", () => {
   it(
     "should get all user orders",
     async () => {
-      // get a category
       const response = await createOrder();
       const orderId = response.body._id;
       const orderResponse = await request(app)

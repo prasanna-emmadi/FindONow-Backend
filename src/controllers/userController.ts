@@ -14,7 +14,6 @@ const UserController = {
     if (!users) {
       next(ApiError.internal("Internal Server error"));
     }
-    //next(ResponseHandler.resourceFetched(JSON.stringify(users)))
     res.json(users);
   },
 
@@ -25,17 +24,12 @@ const UserController = {
 
   async findOneUser(req: Request, res: Response, next: NextFunction) {
     const userId = req.params.userId;
-    // if(userId.length!==24){
-    //   next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
-    //   return
-    // }
     const user = await UsersService.findOne(userId);
 
     if (!user) {
       next(ApiError.resourceNotFound("User not found."));
       return;
     }
-    //next(ResponseHandler.resourceFetched(JSON.stringify(user)))
     res.json(user);
   },
 
@@ -45,7 +39,6 @@ const UserController = {
       next(ApiError.internal("Details are Required"));
     }
     const user = await UsersService.createOne(newUser);
-    //next(ResponseHandler.resourceCreated(JSON.stringify(user), `User with ${user._id} has been added`))
     res.status(201).json(user);
   },
 
@@ -58,7 +51,6 @@ const UserController = {
       next(ApiError.resourceNotFound("User not found."));
       return;
     }
-    //next(ResponseHandler.resourceUpdated(JSON.stringify(updatedUser), `User with ${updatedUser._id} has been updated`))
     res.status(200).json(updatedUser);
   },
 
@@ -70,7 +62,6 @@ const UserController = {
       next(ApiError.resourceNotFound("User not found."));
       return;
     }
-    //next(ResponseHandler.resourceDeleted(JSON.stringify(deletedUser), `User with ${deletedUser._id} has been Deleted`))
     res.status(200).json(deletedUser);
   },
 };

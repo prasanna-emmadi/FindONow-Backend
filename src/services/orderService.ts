@@ -34,7 +34,6 @@ async function updateOrderWithOrderItems(orderDocument: any) {
     const orderItemsDocuments = await orderItemService.findByOrderId(orderId);
     const orderItems = orderItemsDocuments.map((document) => document.toJSON());
 
-    // how to insert
     const withOrderItems = {
       ...order,
       orderItems,

@@ -16,12 +16,10 @@ const CategoryController = {
       pageSize
     );
 
-    //next(ResponseHandler.resourceFetched(JSON.stringify(categories)));
     res.json(categories);
   },
   async getAllCategories(req: Request, res: Response, next: NextFunction) {
     const categories = await CategoryService.findAll();
-    // next(ResponseHandler.resourceFetched(JSON.stringify(categories)));
     res.json(categories);
   },
   async getCategoryById(req: Request, res: Response, next: NextFunction) {
@@ -39,7 +37,6 @@ const CategoryController = {
       next(ApiError.resourceNotFound(`Category ${categoryId} is not found`));
       return;
     }
-    //next(ResponseHandler.resourceFetched(JSON.stringify(item)));
     res.json(item);
   },
   async createCategory(req: Request, res: Response, next: NextFunction) {
@@ -48,14 +45,7 @@ const CategoryController = {
       next(ApiError.internal("Details are Required"));
     }
     const newCategory = await CategoryService.createOne(category);
-    //next(
-    //  ResponseHandler.resourceCreated(
-    //    JSON.stringify(newCategory),
-    //    `Category with ${newCategory._id} has been added`
-    //  )
-    //);
     res.status(201).json(newCategory);
-    //res.status(201).json({message: `Category with ${newCategory._id} has been added`});
   },
   async updateCategory(req: Request, res: Response, next: NextFunction) {
     const categoryId = req.params.id;
@@ -79,12 +69,6 @@ const CategoryController = {
       next(ApiError.resourceNotFound("Category not found"));
       return;
     }
-    //next(
-    //  ResponseHandler.resourceUpdated(
-    //    JSON.stringify(category),
-    //    `Category with ${category._id} has been updated`
-    //  )
-    //);
     res.status(201).json(category);
   },
   async deleteCategory(req: Request, res: Response, next: NextFunction) {
@@ -103,12 +87,6 @@ const CategoryController = {
       next(ApiError.resourceNotFound("Category not found"));
       return;
     }
-    //next(
-    //  ResponseHandler.resourceDeleted(
-    //    JSON.stringify(category),
-    //     `Category with ${category._id} has been Deleted`
-    //   )
-    // );
     res.status(201).json(category);
   },
 };
