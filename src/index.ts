@@ -22,6 +22,8 @@ app.use(cors());
 
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   const mongoURL = process.env.DB_URL as string;
+  console.log("mongoURL", mongoURL);
+  console.log("process.env", process.env);
   mongoose.connect(mongoURL).then(() => console.log("Connected!"));
 }
 
