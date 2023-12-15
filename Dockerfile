@@ -9,6 +9,7 @@ RUN npm run build_ci
 FROM node:18-alpine
 WORKDIR /app
 COPY --from=builder /app/dist /app
+COPY --from=builder /app/tsconfig.json /app
 COPY package.json /app/package.json
 RUN apk --no-cache add --virtual builds-deps build-base python3
 RUN npm install --only=prod
