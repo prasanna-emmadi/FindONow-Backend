@@ -1,4 +1,6 @@
 FROM node:18-alpine as builder
+ARG DB_URL
+ENV DB_URL $DB_URL
 WORKDIR /app
 COPY package.json /app/package.json
 RUN apk --no-cache add --virtual builds-deps build-base python3
