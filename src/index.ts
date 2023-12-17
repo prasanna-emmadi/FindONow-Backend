@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import { TspecDocsMiddleware } from "tspec";
@@ -13,6 +13,10 @@ import { checkAuth } from "./middlewares/checkAuth";
 import { responseHandler } from "./middlewares/responsehandler";
 import orderDetailsRoute from "./routes/orderItemsRoute";
 import authRoute from "./routes/authRoute";
+import upload from "./middlewares/fileUploader";
+import multer from "multer";
+
+const mupload = upload.single("file");
 
 const PORT = 8080;
 const app = express();
@@ -23,7 +27,6 @@ app.use(cors());
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   const mongoURL = process.env.DB_URL as string;
   console.log("mongoURL", mongoURL);
-  console.log("process.env", process.env);
   mongoose.connect(mongoURL).then(() => console.log("Connected!"));
 }
 
@@ -33,6 +36,35 @@ app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/users", usersRoute);
 app.use("/api/v1/orders", orderRoute);
 app.use("/api/v1/orderItems", orderDetailsRoute);
+app.post(
+  "/api/v1/upload",
+  upload.single("file"),
+  /*function (req, res) {
+    mupload(req, res, function (err: any) {
+      if (err instanceof multer.MulterError) {
+        console.error("multer error", err);
+        // A Multer error occurred when uploading.
+      } else if (err) {
+        // An unknown error occurred when uploading.
+        console.error("multer unknown error", err);
+      }
+
+      // Everything went fine.
+    });
+  },*/
+  (req: Request, res: Response) => {
+    // Handle the uploaded file
+    console.log("filename", req?.file?.filename);
+
+    res.json({
+      message: "File uploaded successfully!",
+      fileName: req?.file?.filename,
+    });
+  }
+);
+
+app.use(express.static("uploads"));
+app.use("/static", express.static("uploads"));
 
 const initServer = async () => {
   app.use("/api/v1/docs", await TspecDocsMiddleware());
