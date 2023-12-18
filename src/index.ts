@@ -39,19 +39,6 @@ app.use("/api/v1/orderItems", orderDetailsRoute);
 app.post(
   "/api/v1/upload",
   upload.single("file"),
-  /*function (req, res) {
-    mupload(req, res, function (err: any) {
-      if (err instanceof multer.MulterError) {
-        console.error("multer error", err);
-        // A Multer error occurred when uploading.
-      } else if (err) {
-        // An unknown error occurred when uploading.
-        console.error("multer unknown error", err);
-      }
-
-      // Everything went fine.
-    });
-  },*/
   (req: Request, res: Response) => {
     // Handle the uploaded file
     console.log("filename", req?.file?.filename);

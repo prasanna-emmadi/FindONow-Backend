@@ -17,11 +17,11 @@ describe("User service", () => {
     await mongoHelper.closeDatabase();
   });
 
-  it("should create a new User", async () => {
-    // create new user
+  async function createUser(emailPrefix: string) {
+    const email = emailPrefix + "@gmail.com";
     const user: any = {
       name: "Test user",
-      email: "test@gmail.com",
+      email: email,
       password: "test123",
       role: "User",
     };
@@ -29,19 +29,19 @@ describe("User service", () => {
 
     expect(newUser).toHaveProperty("_id");
     expect(newUser.name).toEqual("Test user");
+    expect(newUser.email).toEqual(email);
+    return newUser;
+  }
+
+  it("should create a new User", async () => {
+    await createUser("create");
   });
 
   it("should update a User", async () => {
     // create new User
-    const user1: any = {
-      name: "Test user",
-      email: "test_update@gmail.com",
-      password: "test123",
-      role: "User",
-    };
-    await UserService.createOne(user1);
+    const createdUser = await createUser("update");
 
-    // create new user
+    // update new user
     const user: any = {
       name: "Updated user",
       email: "update@gmail.com",
@@ -49,29 +49,22 @@ describe("User service", () => {
       role: "User",
     };
     const newUser = await UserService.findOneAndUpdate(
-      "655e1356be9cf967bdead01f",
+      createdUser._id.toString(),
       user
     );
     if (newUser) {
       expect(newUser).toHaveProperty("_id");
-      expect(newUser.name).toEqual("tester");
+      expect(newUser.name).toEqual("Updated user");
+      expect(newUser.email).toEqual("update@gmail.com");
     }
   });
 
   it("should delete a user", async () => {
-    const user: any = {
-      name: "tester",
-      email: "test@gmail.com",
-      password: "test123",
-      role: "User",
-    };
-    const userObj = await UserService.createOne(user);
-
+    const createdUser = await createUser("delete");
     const deleteUser = await UserService.findOneAndDelete(
-      userObj._id.toString()
+      createdUser._id.toString()
     );
     expect(deleteUser).toHaveProperty("_id");
-    expect(deleteUser).toHaveProperty("name", "tester");
-    expect(deleteUser).toHaveProperty("email", "test@gmail.com");
+    expect(deleteUser).toHaveProperty("name", "Test user");
   });
 });
