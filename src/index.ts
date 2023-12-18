@@ -14,9 +14,6 @@ import { responseHandler } from "./middlewares/responsehandler";
 import orderDetailsRoute from "./routes/orderItemsRoute";
 import authRoute from "./routes/authRoute";
 import upload from "./middlewares/fileUploader";
-import multer from "multer";
-
-const mupload = upload.single("file");
 
 const PORT = 8080;
 const app = express();
